@@ -1,0 +1,467 @@
+{block title}{_'Přehled produktů v košíku'}{/block}
+{block content}
+
+    {form recapForm}
+        <div id="basket">
+            {if !$isMobile}
+                {include 'navigation.latte', 'step' => 3}
+                {else}
+                <dv id="navigation">
+                    <div class="breadcrumb">
+                        <a n:href="Basket:one#step1"><img src="{$basePath}/assets/img/icons/basket.png" alt=""></a>
+                        <a n:href="Basket:one#step2">Doprava a platba</a>
+                        <a n:href="Basket:one#step3">Osobní údaje</a>
+                        <a n:href="Basket:recap" class="active">Souhrn</a>
+                    </div>
+                </dv>
+                {/if}
+
+            <div id="userDetail">
+                <div class="cols">
+                    <div class="col">
+                        <h4>{_'Osobní údaje'}</h4>
+                        <table>
+                            <tr n:if="$order->company">
+                                <td>{_'firma'}:</td>
+                                <td>{$order->company}</td>
+                            </tr>
+                            <tr>
+                                <td>{_'jméno'}:</td>
+                                <td>{$order->name}</td>
+                            </tr>
+                            <tr>
+                                <td>{_'telefon'}:</td>
+                                <td>{$order->phone}</td>
+                            </tr>
+                            <tr>
+                                <td>{_'email'}:</td>
+                                <td>{$order->email}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <h4>{_'Fakturační údaje'}</h4>
+                        <table>
+                            <tr n:if="$order->company">
+                                <td>{_'firma'}:</td>
+                                <td>{$order->company}</td>
+                            </tr>
+                            <tr n:if="!$order->company">
+                                <td>{_'jméno'}:</td>
+                                <td>{$order->name}</td>
+                            </tr>
+                            <tr n:if="$order->idNo">
+                                <td>{_'IČ'}:</td>
+                                <td>{$order->idNo}</td>
+                            </tr>
+                            <tr n:if="$order->vatNo">
+                                <td>{_'DIČ'}:</td>
+                                <td>{$order->vatNo}</td>
+                            </tr>
+                            <tr n:if="$order->vatNo2">
+                                <td>{_'IČ DPH'}:</td>
+                                <td>{$order->vatNo2}</td>
+                            </tr>
+                            {*<tr n:if="$order->payVat">
+                                <td>{_'plátce DPH'}:</td>
+                                <td>{_'Ano'}</td>
+                            </tr>*}
+                            <tr>
+                                <td>{_'ulice'}:</td>
+                                <td>{$order->street}</td>
+                            </tr>
+                            <tr>
+                                <td>{_'město'}:</td>
+                                <td>{$order->zip} {$order->city}</td>
+                            </tr>
+                            <tr>
+                                <td>{_'země'}:</td>
+                                <td>{$order->country}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    {*<div class="col">
+                        <h4>{_'Expedujeme'}</h4>
+                        <table>
+                            {if $order->deliveryToOther}
+                                <tr n:if="$order->contactPerson">
+                                    <td>{_'jméno'}:</td>
+                                    <td>{$order->contactPerson}</td>
+                                </tr>
+                                <tr>
+                                    <td>{_'ulice'}:</td>
+                                    <td>{$order->streetDelivery}</td>
+                                </tr>
+                                <tr>
+                                    <td>{_'město'}:</td>
+                                    <td>{$order->zipDelivery} {$order->cityDelivery}</td>
+                                </tr>
+                                <tr>
+                                    <td>{_'země'}:</td>
+                                    <td>{$order->countryDelivery}</td>
+                                </tr>
+                            {/if}
+                            {*<tr>
+                                <td>{_'datum'}:</td>
+                                <td>
+                                    {if $productUnavailable}
+                                        {_'Datum expedice upřesníme'}
+                                    {else}
+                                        {control stockExpedition:time $order->expeditionToday, $order->deliveryMethod->days, true}
+                                    {/if}
+                                </td>
+                            </tr>*}
+                       {* </table>
+                    </div>*}
+                </div>
+            </div>
+
+            <div id="products">
+                <h2>{_'Vaše objednávka obsahuje'}:</h2>
+                <div class="dragscroll products_tab">
+                    <table width="100%" class="product product_items">
+                        <thead>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{_'za 1 ks bez DPH'}</td>
+                            <td>{_'za 1 ks s DPH'}</td>
+                            <td>{_'celkem s DPH'}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $products as $productInOrder}
+                            {var $product = $productInOrder['product']}
+                            {var $packageItem = $productInOrder['packageItem']}
+                            {var $salePercent = $productInOrder['salePercent']}
+                            {if $packageItem}
+                                {$helper->setProduct($product, $actualCurrency, false, $actualCurrency['code'] == 'CZK' ? $packageItem->discountCZK : $packageItem->discountEUR)}
+                            {else}
+                                {$helper->setProduct($product, $actualCurrency)}
+                            {/if}
+
+                            {if $helper->specialExists() && isset($specialView[$product->id])}
+                                {var $priceWithoutDPH = $helper->getSpecialWithoutDPH()}
+                                {var $priceDPH = $helper->getSpecialPrice()}
+                            {else}
+                                {var $priceWithoutDPH = $helper->getWithoutDPH()}
+                                {var $priceDPH = $helper->getPrice()}
+                            {/if}
+
+                            {var $saleCoef = 1}
+                            {if $salePercent}
+                                {var $saleCoef = 1 - $salePercent / 100}
+                            {/if}
+
+                            <tr class="details details_product">
+                                <td>
+                                    {if !empty($product->mainImage)}
+                                        <img n:img="$product->mainImage, '120x80', 'shrink_only', null" title="" alt="">
+                                    {else}
+                                        <img n:img="'front/images/produkty/no-photo.png', '120x80', 'shrink_only'" title="{_'Bez obrázku'}" alt="{_'Bez obrázku'}">
+                                    {/if}
+                                </td>
+                                <td colspan="1">
+                                    <div class="title">
+                                        <h3>
+                                            <a href="{link 'ProductDetail:detail' id => $product->id, slug => $helper->getSlug()}"> {$product->name} </a>
+                                        </h3>
+                                    </div>
+                                </td>
+                                <td>
+                                    {$productInOrder['count']} {$unitParser::parse($product->unit, $productInOrder["count"])}
+                                </td>
+                                <td>
+                                    <div class="cena_bet_dph">
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_bez_dph_value castka">{$priceWithoutDPH|number:$actualCurrency['countDecimal']:',':' '}</span>
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cena_s_dph" style="text-decoration: none; font-weight: normal;">
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_s_dph_value castka" style="font-weight: normal;">
+                                            {$priceDPH|number:$actualCurrency['countDecimal']:',':' '}
+                                        </span>
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cena_s_dph" style="text-decoration: none; font-weight: bold;width: 100%; color: #de0037; margin: 0 0 5px;" n:if="$salePercent">
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_s_dph_sum_value castka">
+                                            {$priceDPH * $productInOrder['count'] * $saleCoef|number:$actualCurrency['countDecimal']:',':' '}
+                                        </span>
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                    <div class="cena_s_dph" style="width: 100%;{if $salePercent}text-decoration: line-through;{else}text-decoration: none; font-weight: bold;{/if}">
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_s_dph_sum_value castka">
+                                            {$priceDPH * $productInOrder['count']|number:$actualCurrency['countDecimal']:',':' '}
+                                        </span>
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            {ifset $productInOrder['pojisteni-active']}
+                                <tr class="details services">
+                                    {var $pojisteni = $productInOrder[ 'pojisteni' ]}
+
+                                    <td class="border-none">
+
+                                    </td>
+                                    <td class="border-none" style="padding-bottom: 5px; padding-top: 0px;">
+                                        <div class="pojisteniContainer flexElem flexWrap">
+                                            <div class="pojisteni flexElem pojisteniTyp">
+
+                                             <span class="blue_price">
+                                                 {var $monthsCount = 36}
+                                                 {if $product && $product->productMark && $product->productMark->extendedWarranty}
+                                                     {var $monthsCount = 12 * $product->productMark->extendedWarranty}
+                                                 {/if}
+                                                 {_'Prodloužení záruky na'} {$monthsCount} {_'měsíců'}
+                                              </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="border-none">
+                                        {$productInOrder["count"]} {_'ks'}
+                                    </td>
+                                    <td class="border-none">
+                                        <div class="cena_s_dph forShow" style="text-decoration: none; font-size: 80%;">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="cena_ks_bez_dph_value castka" style="font-weight:normal">
+                                                {$pojisteni->getTotalWithoutDPH()|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+
+                                        </div>
+                                    </td>
+                                    <td class="border-none">
+                                        <div class="cena_s_dph forShow" style="text-decoration: none; font-size: 80%;">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="cena_bez_dph_value castka" style="font-weight:normal">
+                                               {$pojisteni->getTotalPrice()|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+                                        </div>
+                                    </td>
+                                    <td class="border-none">
+                                        <div class="cena_s_dph forShow" style="text-decoration: none; font-weight: bold; font-size: 80%; color: #de0037; margin: 0 0 5px;" n:if="$salePercent">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="pojisteni_cena_s_dph_value castka">
+                                               {$pojisteni->getTotalPrice() * $productInOrder['count'] * $saleCoef|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+                                        </div>
+                                        <div class="cena_s_dph forShow" style="font-size: 80%;{if $salePercent}text-decoration: line-through;{else}text-decoration: none; font-weight: bold;{/if}">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="pojisteni_cena_s_dph_value castka">
+                                               {$pojisteni->getTotalPrice() * $productInOrder['count']|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {/ifset}
+
+                            {ifset $productInOrder['nastaveni-active']}
+                                <tr class="details services">
+                                    {var $nastaveni = $productInOrder[ 'nastaveni' ]}
+
+                                    <td class="border-none">
+
+                                    </td>
+                                    <td class="border-none" style="padding-bottom: 5px; padding-top: 0px;">
+                                        <div class="pojisteniContainer flexElem flexWrap">
+                                            <div class="pojisteni flexElem pojisteniTyp">
+                                               <span class="blue_price">
+                                                  {_'Instalace a nastavení produktu'}
+                                               </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="border-none">
+                                        {$productInOrder['count']} {_'ks'}
+                                    </td>
+                                    <td class="border-none">
+                                        <div class="cena_s_dph forShow" style="text-decoration: none; font-size: 80%;">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="cena_s_dph_sum_value castka" style="font-weight:normal">
+                                                {$nastaveni->getTotalWithoutDPH()|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+                                        </div>
+                                    </td>
+                                    <td class="border-none">
+                                        <div class="cena_s_dph forShow" style="text-decoration: none; font-size: 80%;">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="cena_s_dph_sum_value castka" style="font-weight:normal">
+                                                {$nastaveni->getTotalPrice()|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+                                        </div>
+                                    </td>
+                                    <td class="border-none">
+                                        <div class="cena_s_dph forShow" style="text-decoration: none; font-weight: bold; font-size: 80%; color: #de0037; margin: 0 0 5px;" n:if="$salePercent">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="instalace_cena_s_dph_value castka">
+                                                {$nastaveni->getTotalPrice() * $productInOrder['count'] * $saleCoef|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+                                        </div>
+                                        <div class="cena_s_dph forShow" style="font-size: 80%; {if $salePercent}text-decoration: line-through;{else}text-decoration: none; font-weight: bold;{/if}">
+                                            {$actualCurrency['markBefore']}
+                                            <span class="instalace_cena_s_dph_value castka">
+                                                {$nastaveni->getTotalPrice() * $productInOrder['count']|number:$actualCurrency['countDecimal']:',':' '}
+                                            </span>
+                                            {$actualCurrency['markBehind']}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {/ifset}
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="deliveryPayment">
+                <div class="nadpis darkblue">
+                    <h2>{_'Vybraná doprava a platba'}</h2>
+                    <div class="line full"></div>
+                </div>
+                <div class="dragscroll">
+                    <table width="100%" class="product">
+                        <tr class="details details_product">
+                            <td>
+                                <div class="flexElem flexWrap">
+                                    <div class="flexElem">
+                                        <span class="blue_price">
+                                            {$order->deliveryMethod->name}
+                                            {if $order->deliveryPlace}
+                                                {if $order->deliveryMethod->isDPD}
+                                                    - {(isset($dpdPickups[$order->deliveryPlace]) ? $dpdPickups[$order->deliveryPlace] : '')}
+                                                {elseif $order->deliveryMethod->isUlozenka}
+                                                    - {(isset($ulozenkaPickups[$order->deliveryPlace]) ? $ulozenkaPickups[$order->deliveryPlace] : '')}
+                                                {/if}
+                                            {/if}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td align="right">
+                                <div class="cena_s_dph" style="text-decoration: none; font-weight: bold;width: 100%;">
+                                    {$actualCurrency['markBefore']}
+                                    <span class="cena_s_dph_sum_value castka">
+                                        {$order->payDeliveryPrice|number:$actualCurrency['countDecimal']:',':' '}
+                                    </span>
+                                    {$actualCurrency['markBehind']}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="details details_product">
+                            <td>
+                                <div class="flexElem flexWrap">
+                                    <div class="flexElem">
+                                        <span class="blue_price">
+                                            {$order->paymentMethod->name}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td align="right">
+                                <div class="cena_s_dph" style="text-decoration: none; font-weight: bold;width: 100%;">
+                                    {$actualCurrency['markBefore']}
+                                    <span class="cena_s_dph_sum_value castka">
+                                        {$order->payMethodPrice / $actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:',':' '}
+                                    </span>
+                                    {$actualCurrency['markBehind']}
+                                </div>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="summary">
+                <div>
+                    <div class="line">
+                        <div class="left">{_'Celkem bez DPH'}</div>
+                        <div class="right">
+                            {$actualCurrency['markBefore']}
+                            {$prices['totalWithoutDPHWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                            {$actualCurrency['markBehind']}
+                        </div>
+                    </div>
+                    <div class="line">
+                        <div class="left">{_'Celkem s DPH'}</div>
+                        <div class="right">
+                            {$actualCurrency['markBefore']}
+                            {$prices['totalWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                            {$actualCurrency['markBehind']}
+                        </div>
+                    </div>
+                    <div class="line" n:ifset="$prices['sale']">
+                        <div class="left">{_'Sleva: '}
+                            {$prices['sale']->discount->name}
+                            - {$prices['sale']->percent} %
+                        </div>
+                        <div class="right">
+                            {$actualCurrency['markBefore']}
+                            {$prices['totalSaleWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                            {$actualCurrency['markBehind']}
+                        </div>
+                    </div>
+                    <hr>
+                    <input n:if="!isset($discount)" name="cena_sleva_percent55555555" type="hidden" value="0"/>
+                    <div class="line summary">
+                        {if $order->euVat}
+                            <div class="left">{_'Cena k úhradě bez DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalWithoutDPHWithSaleWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                            <p>
+                                {_'Dle zákona České republiky č.234/2004 Sb. § 33 příjemce faktury musí stanovit a zaplatit DPH na svém území.'}
+                            </p>
+                        {else}
+                            <div class="left">{_'Cena k úhradě s DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalWithSaleWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+
+            <div id="confirmRules">
+                {_'Při pokračování v nákupu souhlasíte a potvrzujete, že jste se seznámil/a s'}
+                <a href="{if $pageTerms}{link :Page:default wslug => $pageTerms->slug}{/if}" target="_blank"><strong>{_'obchodními podmínkami'}</strong></a>.
+            </div>
+
+            <div id="btns">
+                <div>
+                    <a n:href=":Basket:one" class="btn btn-default">
+                        {_'Zpět'}
+                    </a>
+                </div>
+                <div class="text-center">
+                    <div>
+                        <input type="submit" name="send" class="btn btn-danger" value="{_'Dokončit objednávku'}">
+                    </div>
+                    <div class="button-note">{_'S povinností platby'}</div>
+                </div>
+            </div>
+        </div>
+    {/form}
+
+{/block}

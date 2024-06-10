@@ -1,0 +1,130 @@
+<div id="slider">
+
+    <div id="swiper" class="swiper-container">
+
+        <div class="swiper-wrapper">
+
+            <!-- Slides -->
+            {foreach $banners as $baner}
+                {var $product = $baner->product}
+                {if $product}
+                    {continueIf $product->saleTerminated}
+                {php $productHelper->setProduct($product, $actualCurrency)}
+
+                {var $slug = \Nette\Utils\Strings::webalize($product->name)}
+
+                <div class="swiper-slide" n:if="!$isMobile">
+
+                    <div class="wrap product_container_slider_uvod">
+
+                        <div class="product flexElem flexWrap flex100">
+
+                            <div class="details">
+
+                                <a n:href="ProductDetail:detail id => $product->id, slug => $slug">
+
+                                    <div class="upoutavaci_text">
+                                        {$baner->text|noescape}
+                                    </div>
+
+                                    <div class="cena flexElem alignCenter">
+
+                                        <div class="flexElem">
+                                            <img src="{$basePath}/front/design/icons/logo/logo_big.png?v={$ver}"/></div>
+                                        <div class="cena_s_dph">
+                                            {$productHelper->renderPrice()}
+                                            {*$actualCurrency['markBefore']}
+                                            {$sellPrice/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:',':' '}
+                                            {$actualCurrency['markBehind']*} <span>{_'s DPH'}</span>
+                                        </div>
+
+                                    </div>
+                                </a>
+
+                            </div>
+
+                            <div class="details flexElem flexWrap valignBottom alignLeft">
+                                <div class="title">
+                                    <a n:href="ProductDetail:detail id => $product->id, slug => $slug">
+                                        <h3>{$product->name}</h3></a>
+                                </div>
+
+                                {form addToBasketForm-Slider$product->id}
+                            {input productId value => $product->id}
+                            {input count value => '1'}
+
+                                <div class="flexElem alignCenter valignCenter flex100">
+                                    <button n:name="addToBasket" class="buy_btn" data-href="{link 'addToCart!'}" style="border: 0; font-weight: normal;">
+                                    {*<a href="{plink 'addToCart!' productId => $product->id}" class="buy_btn">*}
+                                        <div class="flexElem valignCenter">
+                                            {_'Koupit'}
+                                            &nbsp;<img src="{$basePath}/front/design/icons/arrow_right_big.png" alt="{_'Koupit'}" title="{_'Koupit'}"/>
+                                        </div>
+                                    </button>
+                                    {*</a>*}
+                                </div>
+
+                                {/form}
+
+                            </div>
+
+                            <div class="product_view flexElem valignCenter alignCenter">
+                                <div class="photo">
+                                    <a n:href="ProductDetail:detail id => $product->id, slug => $slug">
+                                        {if count($product->images)}
+                                            {var $isOk = false}
+                                            {foreach $product->images as $img}
+                                                {if $img->isMain}
+                                                    <img n:img="$img->path, '320x240', 'shrink_only', null" alt="{$product->name}" title="{$product->name}"/>
+                                                    {var $isOk = true}
+                                                {/if}
+
+                                            {/foreach}
+                                            {if !$isOk}
+                                                {var $img = $product->images[0]}
+                                                <img n:img="$img->path, '320x240', 'shrink_only', null" alt="{$product->name}" title="{$product->name}"/>
+                                            {/if}
+                                        {else}
+
+                                            <img src="{$basePath}/front/images/produkty/no-photo.jpg?v={$ver}" alt="{$product->name}" title="{$product->name}"/>
+                                        {/if}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {else}
+                {if $baner->image && file_exists($baner->image)}
+            <div class="swiper-slide">
+                <div class="img-container">
+                {if $baner->link}
+                    {var $link = stripos($baner->link, 'http') !== false ? $baner->link : 'http://'.$baner->link}
+                    <a href="{$link}"><img src="{$basePath}/{$baner->image}" alt="{$baner->name}"></a>
+                {else}
+                    <img src="{$basePath}/{$baner->image}" alt="{$baner->name}">
+                {/if}
+            </div>
+            </div>
+                {/if}
+            {/if}
+            {/foreach}
+
+        </div>
+        <div id="swiper_pagination" class="swiper-pagination"></div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            //initialize swiper when document ready
+            var swiper = new Swiper('#swiper', {
+                pagination: '#swiper_pagination',
+                paginationClickable: true,
+                loop: true,
+                autoplay: 5000,
+                effect: "fade",
+                speed: 600
+            });
+
+        });
+    </script>
+</div>

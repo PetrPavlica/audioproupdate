@@ -1,0 +1,43 @@
+{block title}{_'Nastavení oprávnění'}{/block}
+{block content}
+<h3 class="page-header">
+    {_'Nastavení oprávnění - skupiny rolí'}
+</h3>
+
+<a n:href=":Group:edit">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    {_'Přidat novou skupinu rolí'}
+</a>
+
+{control table}
+<div class="row">
+    {capture $div}
+        <div style="margin-top: 20px;" class="col-xs-12 col-sm-12 col-md-8">
+            <legend>{_'Ovládací panel Doctrine 2'}</legend>
+            {_'Vypíše SQL pro aktualizaci databáze.'} <br />
+            <a n:href="schemaUpdate! 0" class="btn btn-default"><i class="fa fa-database"></i>
+                Doctrine: orm:schema-tool:update --dump-sql
+            </a>
+        </div>
+    {/capture}
+    {control acl $div, 'Doctrine update schematu akce', 'handleSchemaUpdate', 'Group', 'method'}
+
+    {capture $div}
+        <div style="margin-top: 20px;" class="col-xs-12 col-sm-12 col-md-8">
+            <legend>{_'Vyčistění mapování'}</legend>
+            <a n:href="deleteMapping! 0" class="btn btn-default"><i class="fa fa-trash"></i>
+                {_'Vymazat všechny namapované elementy'}
+            </a>
+        </div>
+    {/capture}
+    {control acl $div, 'Smazání mapovaných elementů akce', 'handleDeleteMapping', 'Group', 'method'}
+</div>
+<div class="row">
+    <div style="margin-top: 20px;" class="col-xs-12 col-sm-12 col-md-12">
+        <pre n:ifset="$sql">
+            {foreach $sql as $s}
+                {$s}
+            {/foreach}
+        </pre>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+{if !$empty}
+<div class="toTransportRemains">
+    {_'Doprava zdarma'}
+</div>
+
+    {*if !$progress}
+        <div class="toTransportRemains">
+            {if $remains > 0}
+                {_'Do dopravy zdarma Vám zbývá'}
+                {$currency["markBefore"]}
+                {$remains|number:$currency['countDecimal']:',':' '}
+                {$currency["markBehind"]} {_'s DPH'}.
+            {else}
+                {_'Gratulujeme, máte dopravu zdarma.'}
+            {/if}
+        </div>
+    {else}
+        <div class="toTransportRemains toTransportRemainsLong">
+            {if $remains > 0}
+                {_'Nakupte ještě za'}
+                {$currency["markBefore"]}
+                {$remains|number:$currency['countDecimal']:',':' '}
+                {$currency["markBehind"]} {_'a získáte dopravu zdarma'}
+            {else}
+                {_'Gratulujeme, máte dopravu zdarma!'}
+            {/if}
+        </div>
+    {/if*}
+{/if}

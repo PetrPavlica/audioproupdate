@@ -1,0 +1,142 @@
+.dataPager {
+    position: relative;
+    display: inline-block;
+    background-color: transparent;
+    color: #000;
+    margin-top: 5px;
+    /*border: 1px #ccc solid;*/
+
+    overflow-x: hidden;
+    width: 300px;
+}
+
+.dataPagerHeader {
+    width: 100%;
+    padding: 3px;
+    color: #000;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+.paginationAdmount{
+    margin-right: 16px;
+}
+
+.dataPagerHeader > div {
+    flex: 0 1 100%;
+}
+
+.dataPagerHeader .zobrazovatPO {
+    padding-left: 8px;
+    line-height: 30px;
+}
+
+.dataPagerBody {
+    padding-top: 5px;
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+.dataPager .dataPagerArrow{
+    padding: 0px 10px;
+}
+
+.dataPagerLeft a, .dataPagerRight a {
+    cursor: pointer;
+}
+
+.dataPagerItem {
+    margin-left: 5px;
+    padding: 4px;
+    /*background-color: #B59A5E;*/
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.dataPagerItem:hover, .dataPagerItem.active{
+    /*background-color: #575757;*/
+}
+
+.dataPagerItem a, .dataPagerItem:hover a, .dataPagerItem a:link, .dataPagerItem a:visited, .dataPagerItem a:active, .dataPagerItem a:hover{
+    color: #B59A5E;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.dataPagerVisible {
+    display: inline-block;
+}
+
+.dataPagerItem.active a, .dataPagerItem.active:hover a, .dataPagerItem.active a:link, .dataPagerItem.active a:visited, .dataPagerItem.active a:active, .dataPagerItem.active a:hover {
+    color: #575757 !important;
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 979px) {
+
+    .dataPagerBody {
+        height: 50px;
+    }
+
+    .dataPagerItem {
+        font-size: 1.2em;
+        padding: 0px 8px;
+    }
+
+    .dataPagerArrow img {
+        /* width: 40px;*/
+    }
+
+}
+
+@media (max-width: 800px) {
+
+}
+
+@media (max-width: 768px) {
+
+}
+
+@media (max-width: 640px) {
+
+    .dataPager {
+        width: 600px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .dataPager {
+        width: 450px;
+    }
+
+}
+
+@media (max-width: 425px) {
+
+    .dataPager {
+        width: 400px;
+    }
+
+}
+
+@media (max-width: 375px) {
+
+    .dataPager {
+        width: 355px;
+    }
+
+}
+
+@media (max-width: 320px) {
+
+    .dataPager {
+        width: 310px;
+    }
+
+}

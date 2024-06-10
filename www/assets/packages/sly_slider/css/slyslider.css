@@ -1,0 +1,168 @@
+/* Frame */
+
+.sly_container .zone{
+    position: relative;
+}
+
+.sly_container .frame {
+    height: 100px;
+    line-height: 100px;
+    overflow: hidden;
+}
+
+.sly_container .frame ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-size: 50px;
+}
+
+.sly_container .frame ul li {
+    position: relative;
+    float: left;
+    height: 100%;
+    margin: 0 1px 0 0;
+    padding: 0;
+    background: #333;
+    color: #ddd;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sly_container .frame ul li img{
+    height: 100px;
+}
+
+.sly_container .frame ul li div{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    /*background-color: #2e2e2e;*/
+    opacity: 0.6;
+    width: 101%;
+    height: 100%;
+    display: none;
+}
+
+.sly_container .frame ul li.active {
+    color: #fff;
+}
+
+.sly_container .frame ul li.active div{
+    opacity: 0;
+}
+
+
+/* Scrollbar */
+
+.sly_container .scrollbar {
+    margin: 0 0 1em 0;
+    height: 2px;
+    background: #ccc;
+    line-height: 0;
+}
+
+.sly_container .scrollbar .handle {
+    width: 100px;
+    height: 100%;
+    background: #292a33;
+    cursor: pointer;
+}
+
+.sly_container .scrollbar .handle .mousearea {
+    position: absolute;
+    top: -9px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+}
+
+
+/* Pages */
+
+.sly_container .pages {
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
+    text-align: center;
+}
+
+.sly_container .pages li {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 4px;
+    text-indent: -999px;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .2);
+}
+
+.sly_container .pages li:hover {
+    background: #aaa;
+}
+
+.sly_container .pages li.active {
+    background: #666;
+}
+
+
+/* Controls */
+
+.sly_container .controls {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.sly_container .controls .btn{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.1);
+    -webkit-transition: 0.8s;
+    transition: 0.8s;
+
+    width: 20px;
+    height: 20px;
+
+    border: 0px;
+}
+
+/*
+.sly_container .controls .btn:hover{
+    background: rgba(0,0,0,0.4);
+}
+*/
+
+.sly_container .controls .prev{
+
+    background: url("../img/left.png") no-repeat;
+    background-position: center center;
+
+    left: -40px;
+}
+
+.sly_container .controls .next{
+
+    background: url("../img/right.png") no-repeat;
+    background-position: center center;
+
+    right: -40px;
+}
+
+#imagePreview{
+    position: relative;
+    width: 100%;
+}

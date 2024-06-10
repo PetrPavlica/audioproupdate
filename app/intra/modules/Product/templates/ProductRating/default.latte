@@ -1,0 +1,14 @@
+{block title}{_'Správa hodnocení produktu'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Správa hodnocení produktu'} - <a n:href=":ProductDetail:detail id=>$product->id" target="_blank">{$product->name}</a>
+</h3>
+
+<a n:href=":ProductRating:edit id => 0, idProduct => $product->id">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    {_'Přidat nové hodnocení'}
+</a>
+
+{control table}
+

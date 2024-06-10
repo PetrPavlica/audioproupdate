@@ -1,0 +1,19 @@
+{block title}{_'Webové notifikace'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Webové notifikace'}
+</h3>
+
+<a n:href="WebPushNotification:edit">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    {_'Vytvořit novou notifikaci'}
+</a>
+
+{control table}
+
+<h3 class="page-header">
+    {_'Přehled přihlášených zařízení'}
+</h3>
+
+{control subscriptionTable}

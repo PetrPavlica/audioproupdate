@@ -1,0 +1,1443 @@
+{block title}{_'Editace produktu'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace produktu'}
+</h3>
+
+<link rel="stylesheet" type="text/css" href="{$basePath}/core/css/dataTableBootstrap.css"/>
+<div class="row">
+<div style="" class="col-xs-12 col-sm-12 col-md-12">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">{_'Základní informace'}</a></li>
+        <li><a data-toggle="tab" href="#category">{_'Kategorie'}</a></li>
+        <li><a data-toggle="tab" href="#action">{_'Cenotvorba'}</a></li>
+        <li><a data-toggle="tab" href="#stockk" id="stockTab">{_'Sklad'}</a></li>
+        <li><a data-toggle="tab" href="#text">{_'Texty v eshopu'}</a></li>
+        <li><a data-toggle="tab" href="#specifications">{_'Specifikace'}</a></li>
+        <li><a data-toggle="tab" href="#foto">{_'Fotogalerie'}</a></li>
+        {*<li><a data-toggle="tab" href="#parameters">{_'Parametry'}</a></li>
+        <li><a data-toggle="tab" href="#filter">{_'Filtry'}</a></li>
+        <li><a data-toggle="tab" href="#accessories">{_'Příslušenství'}</a></li>
+        <li><a data-toggle="tab" href="#package">{_'Balíčky'}</a></li>
+        <li><a data-toggle="tab" href="#product_sets">{_'Specifikace sady'}</a></li>*}
+        <li><a data-toggle="tab" href="#color_variants">{_'Barevné varianty'}</a></li>
+        {*<li><a data-toggle="tab" href="#alternatives">{_'Alternativa'}</a></li>
+        <li><a data-toggle="tab" href="#gifts">{_'Dárky'}</a></li>*}
+        <li><a data-toggle="tab" href="#articles">{_'Články'}</a></li>
+    </ul>
+
+    {snippetArea product}
+        {form form}
+            <button name="send" type="submit" style="display: none;">{_'Uložit'}</button>
+            <div class="tab-content">
+                <div id="home" class="tab-pane active in fade">
+                    <div class="panel-body">
+                        <fieldset class="form-horizontal">
+                            {input id}
+                            <legend>
+                                <small>{_'Základní informace'}</small>
+                            </legend>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'name'}
+                                    {control renderer $form, 'code'}
+                                    {control renderer $form, 'plu'}
+                                    {control renderer $form, 'ean'}
+                                    {control renderer $form, 'productMark'}
+                                    {control renderer $form, 'colorText'}
+                                    {control renderer $form, 'color'}
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'unit'}
+                                    {control renderer $form, 'selingPrice'}
+                                    {control renderer $form, 'type'}
+                                    {control renderer $form, 'vat'}
+                                    {control renderer $form, 'lastPrice'}
+                                    {control renderer $form, 'count'}
+                                    {control renderer $form, 'countOfSell'}
+                                    {control renderer $form, 'totalRating'}
+                                    {control renderer $form, 'sumRating'}
+
+                                </div>
+                            </div>
+                            <legend>
+                                <small>{_'Sklad'}</small>
+                            </legend>
+                            <div class="row">
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'count'}
+                                    {control renderer $form, 'rezerveCount'}
+                                </div>
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'minCount'}
+                                    {control renderer $form, 'maxCount'}
+                                    {control renderer $form, 'stockText'}
+                                </div>
+                            </div>
+                            <legend>
+                                <small>{_'Ostatní (tagy, filtry, řazení)'}</small>
+                            </legend>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'active'}
+                                    {control renderer $form, 'saleTerminated'}
+                                    {control renderer $form, 'isTop'}
+                                    {control renderer $form, 'isNews'}
+                                    {control renderer $form, 'notInFeeds'}
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'audioProMultiroom'}
+                                    {control renderer $form, 'batteryPowered'}
+                                    {control renderer $form, 'chromecast'}
+                                    {control renderer $form, 'ipx4'}
+                                    {control renderer $form, 'bt4'}
+                                    {control renderer $form, 'bt5'}
+                                    {control renderer $form, 'heyGoogle'}
+                                    {control renderer $form, 'airPlay'}
+                                    {*control renderer $form, 'isRecomanded'}
+                                    {control renderer $form, 'orderIdRecomanded'}
+                                    {control renderer $form, 'onFront'}
+                                    {control renderer $form, 'orderOnFront'}
+                                    {control renderer $form, 'ourSortingMostSold'}
+                                    {control renderer $form, 'countOfSellForSearch'}
+                                    {control renderer $form, 'newichProductRef', 'getProducts', '', ''}
+                                    {control renderer $form, 'installSettingAdd'}
+                                    {control renderer $form, 'priceInstallSettingAdd'*}
+                                </div>
+                            </div>
+
+
+                            {*<legend>
+                                <small>{_'Lepší produkt'}</small>
+                            </legend>
+                            <div class="row">
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'betterProduct', 'getProducts', '', ''}
+                                </div>
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'betterProductAdvantages'}
+                                </div>
+                            </div>*}
+
+
+                            <legend>
+                                <small>{_'SEO'}</small>
+                            </legend>
+                            <div class="row">
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'seoTitle'}
+                                </div>
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'seoDescription'}
+                                </div>
+                            </div>
+                            <legend>
+                                <small>{_'CPC'}</small>
+                            </legend>
+                            <div class="row">
+                                <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                                    {control renderer $form, 'zboziCPC'}
+                                    {control renderer $form, 'zboziSearchCPC'}
+                                    {control renderer $form, 'heurekaCPC'}
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div id="category" class="tab-pane fade">
+                    <div class="row">
+                        <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                            <br><br>
+                            {ifset $product}
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'categoriesEshop'}
+                                </div>
+
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    <button name="addCategory" type="submit" class="btn btn-primary ajax">
+                                        <i class="fa fa-plus"></i> Přidat kategorii
+                                    </button>
+                                </div>
+                            {else}
+                                <span style="display:none">{control renderer $form, 'categoriesEshop'}</span>
+                                Kategorie lze přidávat až pokud je produkt poprvé uložen.<br/><br/>
+                            {/ifset}
+                        </div>
+                    </div>
+                    {snippet eshop-category}
+                        {ifset $productEshopCategory}
+                            {if count($productEshopCategory)}
+                                <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Název</th>
+                                                <th>Nadřazená kategorie</th>
+                                                <th>Akce</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {foreach $productEshopCategory as $category}
+                                                <tr>
+                                                    <td>{$iterator->getCounter()}</td>
+                                                    <td>{ifset $category->category->name}{$category->category->name}{/ifset}</td>
+                                                    <td>
+                                                        {ifset $category->category->parentCategory->name}
+                                                            {$category->category->parentCategory->name}
+                                                        {else}
+                                                            -
+                                                        {/ifset}
+                                                    </td>
+                                                    <td>
+                                                        {ifset $category->category->id}<a n:href=":ProductCategory:edit id=>$category->category->id" class="btn btn-sm btn-default" target="_blank"><i class="fa fa-eye"></i></a>{/ifset}
+                                                        <a n:href="deleteCategory! idCategory=>$category->id" class="fa fa-trash btn btn-danger"
+                                                                                                                   data-confirm="modal"
+                                                                                                                   data-ajax="on"></a>
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {/if}
+                        {/ifset}
+                    {/snippet}
+                </div>
+
+                <div id="action" class="tab-pane fade">
+                    <div class="panel-body">
+                        {snippet action-products}
+                            {*<div style="" class="col-xs-12 col-sm-12 col-md-12">
+                                <br>
+                                <legend>
+                                    <small>{_'Ceny produktu'}</small>
+                                </legend>
+                                {if isset($product)}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a n:href="Product:editPrice id=>0, productId => $product->id"><i class="fa fa-plus"></i> {_'Přidat novou cenu'}
+                                            </a>
+                                            <br/><br/>
+                                            <div class="table-responsive">
+                                                <table id="operationTable" class="table table-bordered table-stripped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-left">
+                                                            #
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Cena'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Cena před slevou'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Aktivní'}
+                                                        </th>
+                                                        <th class="text-left">
+                                                            {_'Akce'}
+                                                        </th>
+                                                    </thead>
+                                                    <tbody>
+                                                    {foreach $prices as $action}
+                                                        <tr>
+                                                            <td>
+                                                                {$iterator->getCounter()}
+                                                            </td>
+                                                            <td>
+                                                                {$action->currency->markBefore}
+                                                                {$action->selingPrice}
+                                                                {$action->currency->markBehind}
+                                                            </td>
+                                                            <td>
+                                                                {$action->currency->markBefore}
+                                                                {$action->lastPrice}
+                                                                {$action->currency->markBehind}
+                                                            </td>
+                                                            <td>
+                                                                {if $action->active}
+                                                                    <i class="fa fa-check"></i>
+                                                                {else}
+                                                                    <i class="fa fa-times"></i>
+                                                                {/if}
+                                                            </td>
+                                                            <td>
+                                                                <a n:href="Product:editPrice id => $action->id, productId => $product->id" class="fa fa-edit"></a>
+                                                                &nbsp;|&nbsp;
+                                                                <a n:href="deleteAction! actionId => $action->id" class="fa fa-trash" data-confirm="modal" data-ajax="on"></a>
+                                                            </td>
+                                                        </tr>
+                                                    {/foreach}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/if}
+                            </div>*}
+                            <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                                <br>
+                                <legend>
+                                    <small>{_'Akce produktu'}</small>
+                                </legend>
+                                {if isset($product)}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a n:href="Product:editAction id=>0, productId => $product->id" ><i class="fa fa-plus"></i> {_'Přidat novou akci'}
+                                            </a>
+                                            <br/><br/>
+                                            <div class="table-responsive">
+                                                <table id="operationTable" class="table table-bordered table-stripped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-left">
+                                                            #
+                                                        </th>
+                                                        <th class="text-left">
+                                                            {_'Sleva %'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Cena'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Cena před slevou'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Datum od'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Datum do'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Srovnávač'}
+                                                        </th>
+                                                        <th class="text-center">
+                                                            {_'Aktivní'}
+                                                        </th>
+                                                        <th class="text-left">
+                                                            {_'Akce'}
+                                                        </th>
+                                                    </thead>
+                                                    <tbody>
+                                                    {foreach $actions as $action}
+                                                        <tr>
+                                                            <td>
+                                                                {$iterator->getCounter()}
+                                                            </td>
+                                                            <td>
+                                                                {$action->percent} %
+                                                            </td>
+                                                            <td>
+                                                                {$action->currency->markBefore}
+                                                                {$action->selingPrice}
+                                                                {$action->currency->markBehind}
+                                                            </td>
+                                                            <td>
+                                                                {$action->currency->markBefore}
+                                                                {$action->lastPrice}
+                                                                {$action->currency->markBehind}
+                                                            </td>
+                                                            <td>
+                                                                {$action->dateForm|date:'j. n. Y H:i'}
+                                                            </td>
+                                                            <td>
+                                                                {$action->dateTo|date:'j. n. Y H:i'}
+                                                            </td>
+                                                            <td>
+                                                                {if $action->feedShow}
+                                                                    <i class="fa fa-check"></i>
+                                                                {else}
+                                                                    <i class="fa fa-times"></i>
+                                                                {/if}
+                                                            </td>
+                                                            <td>
+                                                                {if $action->active}
+                                                                    <i class="fa fa-check"></i>
+                                                                {else}
+                                                                    <i class="fa fa-times"></i>
+                                                                {/if}
+                                                            </td>
+                                                            <td>
+                                                                {if !$action->active}
+                                                                    <a n:href="activationAction! actionId => $action->id" class="fa fa-play-circle-o"></a>
+                                                                {else}
+                                                                    <a n:href="stopAction! actionId => $action->id" class="fa fa-stop-circle-o"></a>
+                                                                {/if}
+                                                                &nbsp;|&nbsp;
+                                                                <a n:href="Product:editAction id => $action->id, productId => $product->id" class="fa fa-edit"></a>
+                                                                &nbsp;|&nbsp;
+                                                                <a n:href="deleteAction! actionId => $action->id" class="fa fa-trash" data-confirm="modal" data-ajax="on"></a>
+                                                            </td>
+                                                        </tr>
+                                                    {/foreach}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {else}
+                                    {_'Správa cenotvorby je dostupná až pokud je produkt poprvé uložen.'}<br/><br/>
+                                {/if}
+
+                            </div>
+                            {*<div style="" class="col-xs-12 col-sm-12 col-md-12">
+                                <br>
+                                <legend>
+                                    <small>{_'Speciální akce produktu'}</small>
+                                </legend>
+                                {if isset($product)}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a n:href="Product:editSpecial id=>0, productId => $product->id" ><i class="fa fa-plus"></i> {_'Přidat novou speciální akci'}
+                                            </a>
+                                            <br/><br/>
+                                            <div class="table-responsive">
+                                                <table id="operationTable" class="table table-bordered table-stripped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-left">
+                                                                #
+                                                            </th>
+                                                            <th class="text-left">
+                                                                {_'Sleva %'}
+                                                            </th>
+                                                            <th class="text-center">
+                                                                {_'Cena'}
+                                                            </th>
+                                                            <th class="text-center">
+                                                                {_'Cena před slevou'}
+                                                            </th>
+                                                            <th class="text-center">
+                                                                {_'Datum od'}
+                                                            </th>
+                                                            <th class="text-center">
+                                                                {_'Datum do'}
+                                                            </th>
+                                                            <th class="text-center">
+                                                                {_'Aktivní'}
+                                                            </th>
+                                                            <th class="text-left">
+                                                                {_'Akce'}
+                                                            </th>
+                                                    </thead>
+                                                    <tbody>
+                                                        {foreach $specialActions as $action}
+                                                            <tr>
+                                                                <td>
+                                                                    {$iterator->getCounter()}
+                                                                </td>
+                                                                <td>
+                                                                    {$action->percent} %
+                                                                </td>
+                                                                <td>
+                                                                    {$action->currency->markBefore}
+                                                                    {$action->selingPrice}
+                                                                    {$action->currency->markBehind}
+                                                                </td>
+                                                                <td>
+                                                                    {$action->currency->markBefore}
+                                                                    {$action->lastPrice}
+                                                                    {$action->currency->markBehind}
+                                                                </td>
+                                                                <td>
+                                                                    {$action->dateForm|date:'j. n. Y H:i'}
+                                                                </td>
+                                                                <td>
+                                                                    {$action->dateTo|date:'j. n. Y H:i'}
+                                                                </td>
+                                                                <td>
+                                                                    {if $action->active}
+                                                                        <i class="fa fa-check"></i>
+                                                                    {else}
+                                                                        <i class="fa fa-times"></i>
+                                                                    {/if}
+                                                                </td>
+                                                                <td>
+                                                                    <a n:href="Product:editSpecial id => $action->id, productId => $product->id" class="fa fa-edit"></a>
+                                                                    &nbsp;|&nbsp;
+                                                                    <a n:href="deleteAction! actionId => $action->id" class="fa fa-trash" data-confirm="modal" data-ajax="on"></a>
+                                                                </td>
+                                                            </tr>
+                                                        {/foreach}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {else}
+                                    {_'Správa cenotvorby je dostupná až pokud je produkt poprvé uložen.'}<br/><br/>
+                                {/if}
+
+                            </div>*}
+                        {/snippet}
+                    </div>
+                </div>
+
+                <div id="stockk" class="tab-pane fade">
+                    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                        {snippet eshop-stock-products}
+                            <br>
+                            <legend>
+                                <small>{_'Sklad'}</small>
+                            </legend>
+                        {ifset $product}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>{_'Počet kusů na skladu:'} <strong>{$product->count}</strong> <br/></p>
+                                    <p>{_'Počet rezervovaných kusů na skladu:'}
+                                        <strong>{$product->rezerveCount}</strong> <br/></p>
+                                    <p>{_'Poslední pořizovací cena:'} <strong>{$product->lastPurchasePrice}</strong>
+                                        <br/><br/><br/></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{_'Minimální zásoba:'} <strong>{$product->minCount}</strong> <br/></p>
+                                    <p>{_'Maximální zásoba:'} <strong>{$product->maxCount}</strong> <br/></p>
+                                    <p>{_'Průměrná pořizovací cena:'} <strong>{$product->avaragePurchasePrice}</strong>
+                                        <br/><br/><br/></p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <fieldset class="form-horizontal">
+                                        <legend>
+                                            <small>
+                                                <small>{_'Přidat zboží na sklad'}</small>
+                                            </small>
+                                        </legend>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">{_'Počet kusů'}</label>
+                                            <div class="col-sm-8">
+                                                {input 'countAdd'}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">{_'Pořizovací cena/kus'}</label>
+                                            <div class="col-sm-8">
+                                                {input 'priceAdd'}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">{_'Poznámka'}</label>
+                                            <div class="col-sm-8">
+                                                {input 'commentAdd'}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 col-md-offset-4">
+                                            <button name="addStocks" type="submit" class="btn btn-block btn-primary ">
+                                                <i class="fa fa-plus"></i></button>
+                                        </div>
+                                    </fieldset>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="display: block; position: relative; width: 100%;">
+                                        <legend>
+                                            <small>
+                                                <small>{_'Grafický přehled'}</small>
+                                            </small>
+                                        </legend>
+                                        <div class="ct-chart ct-golden-section" id="chart1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <legend>
+                                        <small>
+                                            <small>{_'Pohyby na skladu'}</small>
+                                        </small>
+                                    </legend>
+                                    <div class="table-responsive">
+                                        <table id="operationTable" class="table table-bordered table-stripped">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-left">
+                                                    #
+                                                </th>
+                                                <th class="text-left">
+                                                    {_'Datum'}
+                                                </th>
+                                                <th class="text-center">
+                                                    {_'Počet'}
+                                                </th>
+                                                <th class="text-center">
+                                                    {_'Cena/kus'}
+                                                </th>
+                                                <th class="text-center">
+                                                    {_'Celkem'}
+                                                </th>
+                                                <th class="text-center">
+                                                    {_'Přidal'}
+                                                </th>
+                                                <th class="text-center">
+                                                    {_'Objednávka/Faktura'}
+                                                </th>
+                                                <th class="text-center">
+                                                    {_'Rezervace?'}
+                                                </th>
+                                                <th class="text-center">
+                                                    {_'Poznámka'}
+                                                </th>
+                                                <th class="text-left">
+                                                    {_'Akce'}
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                            {var $sumCount = $sumPrice = 0}
+                                                {if $operations}
+                                            {foreach $operations as $oper}
+                                                <tr>
+                                                    <td>
+                                                        {$iterator->getCounter()}
+                                                    </td>
+                                                    <td>
+                                                        {$oper->foundedDate|date:'j. n. Y'}
+                                                    </td>
+                                                    <td>
+                                                        {$oper->count}
+                                                        {var $sumCount = $sumCount + $oper->count}
+                                                    </td>
+                                                    <td>
+                                                        {$oper->price|number:2:',':' '}
+                                                    </td>
+                                                    <td>
+                                                        {$oper->sumPrice|number:2:',':' '}
+                                                        {var $sumPrice = $sumPrice + $oper->sumPrice}
+                                                    </td>
+                                                    <td>
+                                                        {if $oper->originator}
+                                                            {$oper->originator->name}
+                                                        {/if}
+                                                    </td>
+                                                    <td>
+                                                        {if $oper->orders}
+                                                            <a n:href=":Order:view id => $oper->orders->id">
+                                                                {if $oper->orders->codeInvoice}
+                                                                    {$oper->orders->codeInvoice}
+                                                                {else}
+                                                                    {$oper->orders->variableSymbol}
+                                                                {/if}
+                                                            </a>
+                                                        {/if}
+                                                    </td>
+                                                    <td>
+                                                        {if  $oper->isReservation}
+                                                            <i class="fa fa-check"></i>
+                                                        {/if}
+                                                    </td>
+                                                    <td>
+                                                        {$oper->comment}
+                                                    </td>
+                                                    <td>
+                                                        {if !$oper->orders || $oper->isReservation}
+                                                            <a n:href="deleteOperation! operId => $oper->id" class="fa fa-trash" data-confirm="modal" data-ajax="on"></a>
+                                                        {/if}
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                            {/if}
+                                            {*<tr>
+                                                <td colspan="2">
+                                                    <strong>{_'Celkem'}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{$sumCount|number:2:',':' '}</strong>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <strong>{$sumPrice|number:2:',':' '}</strong>
+                                                </td>
+                                                <td colspan="3">
+                                                </td>
+                                            </tr>*}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                function printGraf() {
+                                    new Chartist.Bar('.ct-chart', {
+                                        labels: [{_'Minimální zásoba'}, {_'Celkem sklad'}, {_'Sklad bez rezervací'}, {_'Rezervace'}, {_'Maximální zásoba'}],
+                                        series: [
+                                            [
+                                                {$product->minCount},
+                                                {$product->rezerveCount + $product->count},
+                                                {$product->count},
+                                                {$product->rezerveCount},
+                                                {$product->maxCount},
+                                            ]
+                                        ]
+                                    }, {
+                                        seriesBarDistance: 10,
+                                        reverseData: true,
+                                        horizontalBars: true,
+                                        low: 0,
+                                        high: {$product->maxCount},
+                                        axisY: {
+                                            offset: 70
+                                        }
+                                    });
+                                }
+                            </script>
+
+                        {else}
+                            {_'Správa skladu je dostupná až pokud je produkt poprvé uložen.'}<br/><br/>
+                        {/ifset}
+                        {/snippet}
+                    </div>
+                </div>
+
+                <div id="text" class="tab-pane fade">
+                    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <legend>
+                            <small>{_'Informace pro eshop'}</small>
+                        </legend>
+                        <label>{_'Popis produktu v Eshopu'}</label>
+                        {input webDescription}
+                        <br><br>
+                    </div>
+                </div>
+
+                <div id="specifications" class="tab-pane fade">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <legend>
+                            <small>{_'Specifikace'}</small>
+                        </legend>
+                        <label>{_'Informace o produktu'}</label>
+                        {input specInfo}
+                        <br>
+                        <label>{_'Rozměry'}</label>
+                        {input specDimensions}
+                        <br>
+                        <label>{_'Komponenty'}</label>
+                        {input specComponents}
+                        <br>
+                        <label>{_'Vstupy'}</label>
+                        {input specInputs}
+                        <br>
+                        <label>{_'Výstupy'}</label>
+                        {input specOutputs}
+                        <br>
+                        <label>{_'Frekvence'}</label>
+                        {input specFrequency}
+                        <br>
+                        <label>{_'Přehrávané formáty'}</label>
+                        {input specFormats}
+                        <br>
+                        <label>{_'Napájení'}</label>
+                        {input specPowerSupply}
+                        <br>
+                        <label>{_'Multiroom'}</label>
+                        {input specMultiroom}
+                        <br>
+                        <label>{_'Ostatní'}</label>
+                        {input specOther}
+                        <br>
+                        <label>{_'Manuál'}</label>
+                        {input specManual}
+                        <br>
+                    </div>
+                </div>
+
+                <div id="foto" class="tab-pane fade">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        {snippet product-galery}
+                            <br>
+                            <legend>
+                                <small>{_'Fotogalerie produktu'}</small>
+                            </legend>
+                            {ifset $product}
+                                {var $i = 0}
+                                {if $product->images != NULL}
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-stripped">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-left">
+                                                    #
+                                                </th>
+                                                <th class="text-left" width="40%">
+                                                    {_'Fotografie'}
+                                                </th>
+                                                <th></th>
+                                                <th class="text-center" width="25%">
+                                                    {_'Text fotografie (alt)'}
+                                                </th>
+                                                <th class="text-center" width="10%">
+                                                    {_'Pořadí'}
+                                                </th>
+                                                <th class="text-left">
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                            {foreach $product->images as $img}
+                                                {var $i = $iterator->getCounter()}
+                                                <tr>
+                                                    <td>
+                                                        {$i}
+                                                        <input type="hidden" name="imgId[{$i}]" value="{$img->id}"/>
+                                                    </td>
+                                                    <td>
+                                                        {if $img->pathThumb}
+                                                            <img height="150" src="{$basePath}/{$img->pathThumb}" alt="{$img->alt}">
+                                                        {else}
+                                                            <img height="150" src="{$basePath}/{$img->path}" alt="{$img->alt}">
+                                                        {/if}
+                                                    </td>
+                                                    <td>
+                                                        <label for="isMain[{$i}]">
+                                                            <input type="radio" name="isMain" value="{$i}" id="isMain[{$i}]" {if $img->isMain}checked{/if}/>
+                                                            {_'Hlavní obrázek?'}
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" name="imgAlt[{$i}]" value="{$img->alt}"/>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control" name="imgOrder[{$i}]" value="{$img->orderImg}"/>
+                                                    </td>
+                                                    <td>
+                                                        <a n:href="deleteImg! imgId=>$img->id, productId => $product->id" class="fa fa-trash btn btn-danger"
+                                                                                                                          data-confirm="modal"
+                                                                                                                          data-ajax="on"></a>
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {/if}
+
+                                <label>{_'Vyberte fotografie do galerie'}</label>
+                                {*input imageInput*}
+                            {control multiUploader}
+                            {input lastIdImg, value => ($i+1)}
+                                <button name="addFoto" type="submit" class="btn btn-primary ">
+                                    <i class="fa fa-plus"></i> {_'Přidat nahrané obrázky'}</button>
+                            {else}
+                                <label>{_'Fotografie můžete vkládat až bude produkt poprvé uložený'}</label>
+                            {/ifset}
+                            <br><br>
+                        {/snippet}
+                    </div>
+                </div>
+
+                {*<div id="parameters" class="tab-pane fade">
+                    <div style="" class="col-xs-12 col-sm-12 col-md-10">
+                        <br>
+                        {snippet parameter-product}
+                            <legend>
+                                <small>{_'Parametry'}</small>
+                                {ifset $product}
+                                    <a n:href="prepareParametersFromFilters! productId => $product->id " class="btn btn-default btn-sm" style="margin-left: 30px;"
+                                                                                                         data-confirm="modal" data-ajax="on"
+                                                                                                         data-text="{_'Opravdu chcete předvyplnit parametry z filtrů? Touto akcí se nahrají do parametrů všechny hodnoty z filtrů jako nové položky.'}"
+                                                                                                         data-title="{_'Předvyplnění parametrů z filtrů'}">
+                                        <i class="fa fa-files-o"></i>
+                                        {_'Předvyplnit z filtrů'}
+                                    </a>
+                                {/ifset}
+                            </legend>
+                            {ifset $product}
+                                {var $i = 0}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-stripped">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-left" width="5%">
+                                                #
+                                            </th>
+                                            <th class="text-left" width="40%">
+                                                {_'Název'}
+                                            </th>
+                                            <th class="text-center" width="40%">
+                                                {_'Hodnota'}
+                                            </th>
+                                            <th class="text-center" width="10%">
+                                                {_'Pořadí'}
+                                            </th>
+                                            <th class="text-left" width="5%">
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                        {if $parameters != NULL}
+                                            {foreach $parameters as $param}
+                                                {var $i = $iterator->getCounter()}
+                                                <tr>
+                                                    <td>
+                                                        {$i}
+                                                        <input type="hidden" name="paramId[{$i}]" value="{$param->id}"/>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" name="paramName[{$i}]" value="{$param->name}"/>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" name="paramValue[{$i}]" value="{$param->value}"/>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control" name="paramOrder[{$i}]" value="{$param->orderParam}"/>
+                                                    </td>
+                                                    <td>
+                                                        <a n:href="deleteParam! paramId=>$param->id" class="btn btn-link" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                        {/if}
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input type="text" class="form-control" name="paramNewName" placeholder='Jméno' value=""/>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" name="paramNewValue" placeholder='Hodnota' value=""/>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" name="paramNewOrder" value=""/>
+                                            </td>
+                                            <td>
+                                                <button name="addParameter" type="submit" class="btn btn-link ajax">
+                                                    <i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {else}
+                                <label>{_'Parametry můžete vkládat, až bude produkt poprvé uložený.'}</label>
+                            {/ifset}
+                        {/snippet}
+                    </div>
+                </div>
+
+                <div id="filter" class="tab-pane fade">
+                    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <legend>
+                            <small>{_'Filtry produtku'}</small>
+                        </legend>
+                        {if isset($product) && isset($filters) && count($filters)}
+                            {foreach $filters as $f}
+                                <div style="padding-top: 20px;" class="col-xs-12 col-sm-6 col-md-4">
+                                    <legend>
+                                        <small>
+                                            <small>{$f['name']}</small>
+                                        </small>
+                                    </legend>
+                                    {foreach $f['filters'] as $item}
+                                        <fieldset class="form-horizontal">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="filterCheck[{$item['id']}]">
+                                                            <input type="checkbox" name="filterCheck[{$item['id']}]" id="filterCheck[{$item['id']}]" value="{$item['id']}" {ifset $item['check']}checked{/ifset}/>
+                                                            {$item['name']}
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                {if $item['slider']}
+                                                    <div class="col-md-4">
+
+                                                        <input id="filterValue{$item['id']}" type="text" class="form-control input-md" name="filterValue[{$item['id']}]" placeholder="0"
+                                                               {if isset($item['val']) && $item['val'] != ''}value="{$item['val']}"{/if}
+                                                               data-lfv-initialized="true"
+                                                               data-nette-rules='[{"op":"optional"},{"op":":float","msg":"Musí být číslo!"}]'
+                                                               data-lfv-message-id="filterValue{$item['id']}_message"
+                                                        />
+                                                        <span id="filterValue{$item['id']}_message" class="">
+                                                        </span>
+                                                    </div>
+                                                    {if $item['intervalV']}
+                                                        <div class="col-md-4">
+                                                            <input id="filterValueMax{$item['id']}" type="text" class="form-control input-md" name="filterValueMax[{$item['id']}]" placeholder="0"
+                                                                   {if isset($item['valMax']) && $item['valMax'] != ''}value="{$item['valMax']}"{/if}
+                                                                   data-lfv-initialized="true"
+                                                                   data-nette-rules='[{"op":"optional"},{"op":":float","msg":"Musí být číslo!"}]'
+                                                                   data-lfv-message-id="filterValue{$item['id']}_message"
+                                                            />
+                                                            <span id="filterValueMax{$item['id']}_message" class=""></span>
+                                                        </div>
+                                                    {/if}
+
+
+                                                {/if}
+
+                                            </div>
+                                        </fieldset>
+
+                                    {/foreach}
+                                </div>
+                            {/foreach}
+                        {else}
+                            <label>{_'Filtry můžete spravovat, až bude produkt poprvé uložený, bude mít vybranou kategorii a na kategorii bude zadán alespoň jeden filtr.'}</label>
+                        {/if}
+                    </div>
+                </div>
+
+                <div id="accessories" class="tab-pane fade">
+                    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <legend>
+                            <small>{_'Příslušenství'}</small>
+                        </legend>
+                        {ifset $product}
+                            <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                {control renderer $form, 'allProducts', 'getProducts', '', ''}
+                            </div>
+                            <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                <button name="addAccessory" type="submit" class="btn btn-primary ajax">
+                                    <i class="fa fa-plus"></i> {_'Přidat produkt'}</button>
+                            </div>
+                        {else}
+                            {_'Příslušenství lze přidávat až pokud je produkt poprvé uložen.'}<br/><br/>
+                        {/ifset}
+                    </div>
+                    {snippet eshop-accessories-products}
+                        {ifset $product->accessoriesProducts}
+                            {if count($product->accessoriesProducts)}
+                                <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-stripped">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>ID produktu</th>
+                                                <th>Kód</th>
+                                                <th>Název</th>
+                                                <th>Akce</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {foreach $product->accessoriesProducts as $alter}
+                                                <tr>
+                                                    <td>{$iterator->getCounter()}</td>
+                                                    <td>{ifset $alter->products->id}{$alter->products->id}{/ifset}</td>
+                                                    <td>{ifset $alter->products->code}{$alter->products->code}{/ifset}</td>
+                                                    <td>{ifset $alter->products->name}{$alter->products->name}{/ifset}</td>
+                                                    <td>
+                                                        <a n:href="deleteAccessoryProduct! idAccessory=>$alter->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {/if}
+                        {/ifset}
+                    {/snippet}
+                </div>
+
+                <div id="package" class="tab-pane fade">
+
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <legend>
+                            <small>{_'Balíčky'}</small>
+                        </legend>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            {ifset $product}
+                                <a n:href="addPackage! product => $product->id" class="btn btn-primary ajax"><i class="fa fa-plus"></i> {_'Přidat balíček'}</a>
+                            {else}
+                                {_'Součásti produktu lze přidávat až po prvním uložení produktu.'}<br/><br/>
+                            {/ifset}
+                        </div>
+
+                        <div n:snippet="eshop-package-items">
+                            {if isset($product->packages) && count($product->packages)}
+                                    <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                                        {foreach $product->packages as $package}
+                                            <label>Balíček č. {$iterator->getCounter()} &nbsp;&nbsp;&nbsp;<a n:href="deleteProductPackage! idPackage => $package->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a></label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-stripped">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>ID produktu</th>
+                                                    <th>Kód</th>
+                                                    <th>Název</th>
+                                                    <th>Sleva v % (Kč)</th>
+                                                    <th>Sleva v % (€)</th>
+                                                    <th>Akce</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {if $package->products}
+                                                {foreach $package->products as $item}
+                                                    <tr>
+                                                        <td>{$iterator->getCounter()}</td>
+                                                        <td>{ifset $item->product->id}{$item->product->id}{/ifset}</td>
+                                                        <td>{ifset $item->product->code}{$item->product->code}{/ifset}</td>
+                                                        <td>{ifset $item->product->name}{$item->product->name}{/ifset}</td>
+                                                        <td>
+                                                            <input name="packageItem[{$item->id}][CZK]" type="number" min="0" max="100" class="form-control" value="{$item->discountCZK}">
+                                                        </td>
+                                                        <td>
+                                                            <input name="packageItem[{$item->id}][EUR]" type="number" min="0" max="100" class="form-control" value="{$item->discountEUR}">
+                                                        </td>
+                                                        <td>
+                                                            <a n:href="deleteProductPackageItem! idPackage=>$item->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                {/foreach}
+                                                    {/if}
+                                                        <tr>
+                                                            <td></td>
+                                                            <td colspan="3">
+                                                                    <div class="input-group col-sm-12">
+                                                                        <input
+                                                                                data-preload="false" data-suggest="true" data-minlen="3"
+                                                                                class="form-control autocomplete-input" data-toggle="completerr"
+                                                                                autocomplete="off"
+                                                                        data-source="{link getProducts!}"
+                                                                        data-output=".product-ac-{$package->id}-autocomplete" type="text" name="text-product-ac-{$package->id}"
+                                                                        id="text-product-ac-{$package->id}">
+                                                                        <input name="product[{$package->id}]" id="product-ac-{$package->id}" data-success="" class="product-ac-{$package->id}-autocomplete" value="" type="hidden">
+                                                                        <span class="input-group-addon" style="border-radius: 3px;">
+                                                                            <div class="remove-autocomplete-value"><i class="fa fa-times"></i></div>
+                                                                        </span>
+                                                                    </div>
+                                                            </td>
+                                                            <td>
+                                                                <input name="package[{$package->id}][CZK]" type="number" min="0" max="100" class="form-control" value="">
+                                                            </td>
+                                                            <td>
+                                                                <input name="package[{$package->id}][EUR]" type="number" min="0" max="100" class="form-control" value="">
+                                                            </td>
+                                                            <td>
+                                                                <button name="addPackageItem" type="submit" class="btn btn-primary btn-xs ajax">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        {/foreach}
+                                    </div>
+                            {/if}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="product_sets" class="tab-pane fade">
+
+                    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <legend>
+                            <small>{_'Nadefinování sady produktů'}</small>
+                        </legend>
+
+                        <div class="row">
+                            <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                {input isSet}
+                            </div>
+                        </div>
+
+                        <script type="text/javascript">
+
+                            $(document).on("change", "#frm-form-isSet", function () {
+
+                                var toShow = $(document).find(".productSetItems");
+
+                                if ($(this).is(":checked")) {
+                                    toShow.show();
+                                } else {
+                                    toShow.hide();
+                                }
+
+                            });
+
+                        </script>
+
+                        <div class="productSetItems" style="{if !isset($product) || !$product->isSet}display: none;{/if}" class="col-xs-12 col-sm-12 col-md-12">
+                            <br>
+                            <legend>
+                                <small>{_'Položky sady'}</small>
+                            </legend>
+                            {ifset $product}
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'allProducts2', 'getProducts', '', ''}
+                                </div>
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    <button name="addSetItem" type="submit" class="btn btn-primary ajax">
+                                        <i class="fa fa-plus"></i> {_'Přidat produkt'}</button>
+                                </div>
+                            {else}
+                                {_'Položky sady lze přidávat až pokud je produkt(sada) poprvé uložen.'}<br/><br/>
+                            {/ifset}
+                        </div>
+
+                        <div class="productSetItems" n:snippet="eshop-set-items" style="{if !isset($product) || !$product->isSet}display: none;{/if}">
+
+                            {ifset $product->setProducts}
+                                {if count($product->setProducts)}
+                                    <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-stripped">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>ID produktu</th>
+                                                    <th>Kód</th>
+                                                    <th>Název</th>
+                                                    <th>Zobrazit tuto sadu u produktu</th>
+                                                    <th>Akce</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {foreach $product->setProducts as $set}
+                                                    <tr>
+                                                        <td>{$iterator->getCounter()}</td>
+                                                        <td>{ifset $set->products->id}{$set->products->id}{/ifset}</td>
+                                                        <td>{ifset $set->products->code}{$set->products->code}{/ifset}</td>
+                                                        <td>{ifset $set->products->name}{$set->products->name}{/ifset}</td>
+                                                        <td>
+                                                            <input type="hidden" name="setItems[id][{$iterator->counter}]" value="{$set->id}"/>
+                                                            <input type="checkbox" name="setItems[show][{$iterator->counter}]" value="1" {if $set->showSet}checked{/if}/>
+                                                        </td>
+                                                        <td>
+                                                            <a n:href="deleteProductSetItem! idSet=>$set->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                {/foreach}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/ifset}
+
+                        </div>
+
+
+                    </div>
+
+                </div>*}
+
+                <div id="color_variants" class="tab-pane fade">
+
+                    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="productColorsItems" class="col-xs-12 col-sm-12 col-md-12">
+                            <br>
+                            <legend>
+                                <small>{_'Barevné položky'}</small>
+                            </legend>
+                            <span class="text-center help-block">
+                                Pokud nebude vybrána barva, tak nebude u vybraného produktu nastavena.
+                            </span>
+                            {ifset $product}
+                                <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                    {control renderer $form, 'allProducts4', 'getProducts', '', ''}
+                                </div>
+                                <div style="display: inline-block; padding: 0 15px">
+                                    {input colorTextVariant:}
+                                </div>
+                                <div style="display: inline-block; padding: 0 15px">
+                                    {input colorVariant:}
+                                </div>
+                                <div style="display: inline-block;">
+                                    <button name="addColorItem" type="submit" class="btn btn-primary ajax">
+                                        <i class="fa fa-plus"></i> {_'Přidat produkt'}</button>
+                                </div>
+                            {else}
+                                {_'Barevné varianty lze přidávat až pokud je produkt poprvé uložen.'}<br/><br/>
+                            {/ifset}
+                        </div>
+
+                        <div class="productColorsItems" n:snippet="eshop-color-items">
+
+                            {ifset $product->colorProducts}
+                                {if count($product->colorProducts)}
+                                    <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-stripped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>ID produktu</th>
+                                                        <th>Kód</th>
+                                                        <th>Název</th>
+                                                        <th>Barva</th>
+                                                        <th>Akce</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {foreach $product->colorProducts as $c}
+                                                        <tr>
+                                                            <td>{$iterator->getCounter()}</td>
+                                                            <td>{ifset $c->colorVariant->id}<a n:href="Product:edit id=>$c->colorVariant->id">{$c->colorVariant->id}</a>{/ifset}</td>
+                                                            <td>{ifset $c->colorVariant->code}{$c->colorVariant->code}{/ifset}</td>
+                                                            <td>{ifset $c->colorVariant->name}<a n:href="Product:edit id=>$c->colorVariant->id">{$c->colorVariant->name}</a>{/ifset}</td>
+                                                            <td>{ifset $c->colorVariant->color}<div style="width: 30px; height: 30px; background-color: {$c->colorVariant->color|noescape};"></div>{/ifset}</td>
+                                                            <td>
+                                                                <a n:href="deleteProductColorItem! idColor => $c->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    {/foreach}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/ifset}
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                {*<div id="alternatives" class="tab-pane fade">
+                    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <legend>
+                            <small>{_'Alternativa'}</small>
+                        </legend>
+                        {ifset $product}
+                            <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                {control renderer $form, 'allProducts5', 'getProducts', '', ''}
+                            </div>
+                            <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                                <button name="addAlternative" type="submit" class="btn btn-primary ajax">
+                                    <i class="fa fa-plus"></i> {_'Přidat produkt'}</button>
+                            </div>
+                        {else}
+                            {_'Alternativa lze přidávat až pokud je produkt poprvé uložen.'}<br/><br/>
+                        {/ifset}
+                    </div>
+                    {snippet eshop-alternative-products}
+                        {ifset $product->alternativesProducts}
+                            {if count($product->alternativesProducts)}
+                                <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-stripped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>ID produktu</th>
+                                                    <th>Kód</th>
+                                                    <th>Název</th>
+                                                    <th>Akce</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {foreach $product->alternativesProducts as $alter}
+                                                    <tr>
+                                                        <td>{$iterator->getCounter()}</td>
+                                                        <td>{ifset $alter->alternative->id}{$alter->alternative->id}{/ifset}</td>
+                                                        <td>{ifset $alter->alternative->code}{$alter->alternative->code}{/ifset}</td>
+                                                        <td>{ifset $alter->alternative->name}{$alter->alternative->name}{/ifset}</td>
+                                                        <td>
+                                                            <a n:href="deleteAlterProduct! idAlter=>$alter->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                {/foreach}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {/if}
+                        {/ifset}
+                    {/snippet}
+                </div>
+
+                <div id="gifts" class="tab-pane fade">
+                    {include editGifts.latte form => $form}
+                </div>*}
+
+                <div id="articles" class="tab-pane fade">
+                    {include articles.latte form => $form}
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12" style="padding-top: 60px; padding-bottom: 60px;">
+                <a name="sendRemoveAll" class="btn btn-link" href="{link Product:default}"><i class="fa fa-arrow-left"></i> {_'Zpět'}
+                </a>
+                <span style="float: right; padding-right: 40px">
+                    <button name="sendBack" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit a zpět'}</button>
+                    <button name="send" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit'}</button>
+                    <button name="sendNew" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit a nový'}</button>
+                </span>
+            </div>
+        {/form}
+    {/snippetArea}
+</div>
+</div>
+
+<script type="text/javascript" src="{$basePath}/core/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="{$basePath}/core/js/dataTable.bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+    //reinicializing all autocompletes after ajax
+    $(function () {
+        $.ajaxSetup({
+            complete: function (xhr, textStatus) {
+                $(".ckEditor").ckeditor();
+                printGraf();
+                $('#operationTable').DataTable();
+            }
+        });
+    });
+
+
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        printGraf();
+        $('#operationTable').DataTable();
+
+        $(document).find('input[data-toggle="completer"]').completer();
+        $(document).find('input[data-toggle="completer"]').completer('place');
+    });
+
+    $('.nav-tabs li a').on('click', function (event) {
+
+        var id = $(this).attr('href');
+        setTimeout(function () {
+            $(document).find(id).find('.ct-chart').each(function (i, e) {
+                e.__chartist__.update();
+            });
+
+        }, 500);
+
+        setTimeout(function () {
+
+            console.log("completer");
+            $(document).find(id).find('input[data-toggle="completerr"]').completer();
+            $(document).find(id).find('input[data-toggle="completerr"]').completer('place');
+
+        }, 2000);
+
+    });
+
+    $(document).ajaxComplete(function() {
+        $(document).find('input[data-toggle="completer"]').completer();
+        $(document).find('input[data-toggle="completer"]').completer('place');
+        $(document).find('input[data-toggle="completerr"]').completer();
+        $(document).find('input[data-toggle="completerr"]').completer('place');
+    });
+
+</script>
+

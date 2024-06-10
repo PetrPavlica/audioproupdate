@@ -1,0 +1,47 @@
+{contentType application/xml}
+<?xml version="1.0" encoding="UTF-8"?>
+{cache 'sitemap', expire => '360 minutes'}
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <url>
+            <loc>{link //Front:default}</loc>
+        </url>
+        <url>
+            <loc>{link //Compare:list}</loc>
+        </url>
+        <url>
+            <loc>{link //Favourite:list}</loc>
+        </url>
+        <url>
+            <loc>{link //Basket:one}</loc>
+        </url>
+        <url>
+            <loc>{link //RegistrationCustomer:profil}</loc>
+        </url>
+        <url>
+            <loc>{link //RegistrationCustomer:registration}</loc>
+        </url>
+        <url>
+            <loc>{link //RegistrationCustomer:resetPassword}</loc>
+        </url>
+        <url>
+            <loc>{link //SignCustomer:login}</loc>
+        </url>
+        {foreach $webMenus as $w}
+            <url>
+                <loc>{link '//Page:default' wslug => $w->slug}</loc>
+            </url>
+        {/foreach}
+        {foreach $categories as $category}
+            {var $slug = \Nette\Utils\Strings::webalize($category->name)}
+            <url>
+                <loc>{link //ProductList:list id => $category->id, slug => $slug}</loc>
+            </url>
+        {/foreach}
+        {foreach $products as $product}
+            {var $slug = \Nette\Utils\Strings::webalize($product->name)}
+            <url>
+                <loc>{link //ProductDetail:detail id => $product->id, slug => $slug}</loc>
+            </url>
+        {/foreach}
+    </urlset>
+{/cache}

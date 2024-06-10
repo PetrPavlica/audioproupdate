@@ -1,0 +1,43 @@
+{contentType application/xml}
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<ITEMS>
+    {foreach $products as $product}
+        {php $productHelper->setProduct($product, $currencyArr, true)}
+        <ITEM>
+            <ID>{$product->id}</ID>
+            <STAGE>draft</STAGE>
+            <CATEGORY_ID n:if="isset($product->categories[0]->category->mallCategory) && $product->categories[0]->category->mallCategory">{$product->categories[0]->category->mallCategory->categoryId}</CATEGORY_ID>
+            <BRAND_ID n:if="$product->productMark">{$product->productMark->publicName|replace:' ':'-'|upper}</BRAND_ID>
+            {var $mark = ''}
+            {if $product->productMark}
+                {var $mark = $product->productMark->publicName}
+            {/if}
+            <TITLE>{$product->name|replace:$mark:''|trim}</TITLE>
+            <SHORTDESC>{mb_substr(strip_tags($product->description), 0, 300)}</SHORTDESC>
+            <LONGDESC><![CDATA[{$product->webDescription|noescape}]]></LONGDESC>
+            <PRIORITY>1</PRIORITY>
+            <PACKAGE_SIZE>smallbox</PACKAGE_SIZE>
+            <BARCODE n:if="$product->ean">{$product->ean}</BARCODE>
+            {var $sellPrice = $productHelper->getMallPrice()}
+            <PRICE>{$sellPrice|number:2:'.':''}</PRICE>
+            <VAT>{$product->vat->value}</VAT>
+            <RRP>{$sellPrice + 1000|number:2:'.':''}</RRP>
+
+            {foreach $product->images as $img}
+                <MEDIA>
+                    <URL>{$basePath}{$img->path}</URL>
+                    <MAIN>{if $img->isMain}true{else}false{/if}</MAIN>
+                </MEDIA>
+            {/foreach}
+
+            <PARAM n:foreach="$product->parameters as $param">
+                <NAME>{$param->name}</NAME>
+                <VALUE>{$param->value}</VALUE>
+            </PARAM>
+
+            <DELIVERY_DELAY>0</DELIVERY_DELAY>
+            <FREE_DELIVERY>{if $settings['delivery_free'] < $sellPrice}true{else}false{/if}</FREE_DELIVERY>
+        </ITEM>
+        {php $em->clear()}
+    {/foreach}
+</ITEMS>

@@ -1,0 +1,45 @@
+{block title}{_'Editace dobropisu'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace dobropisu'}
+</h3>
+
+<div class="col-xs-12 col-sm-12 col-md-8">
+    {form formEditCreditNote, class=>"form-horizontal"}
+        {control renderer $form, 'id'}
+        {control renderer $form, 'creditNoteDate'}
+        {control renderer $form, 'creditNoteWithDelivery'}
+
+        <label class="col-sm-4 control-label">Produkty v dobropisu</label>
+        <div class="col-md-8">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Název produktu</th>
+                    <th>Počet</th>
+                </tr>
+            </thead>
+            <tbody>
+                {if $order && $order->products}
+                    {foreach $order->products as $p}
+                        <tr>
+                            <td>{$p->name}</td>
+                            <td>
+                                <input type="number" name="product[{$p->id}]" class="form-control" value="{ifset $productInCreditNote[$p->id]}{$productInCreditNote[$p->id]}{else}0{/ifset}" min="0" max="{$p->count}">
+                            </td>
+                        </tr>
+                    {/foreach}
+                {/if}
+            </tbody>
+        </table>
+        </div>
+
+        {control renderer $form, 'send'}
+    {/form}
+    <a n:href="Order:view id=>$order->id" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

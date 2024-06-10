@@ -1,0 +1,17 @@
+{block title}{_'Editace doručovacích údajů objednávky'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace doručovacích údajů objednávky'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form formEditDeliveryInfo, class=>"form-horizontal"}
+        {control renderer $form}
+    {/form}
+    <a n:href=":Order:view id=>$order->id" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

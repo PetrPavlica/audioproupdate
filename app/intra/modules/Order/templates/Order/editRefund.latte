@@ -1,0 +1,28 @@
+{block title}
+{if isset($refund)}
+    {_'Editace úhrady faktury'}
+{else}
+    {_'Přidání nové úhrady faktury'}
+{/if}
+{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {if isset($refund)}
+        {_'Editace úhrady faktury'}
+    {else}
+        {_'Přidání nové úhrady faktury'}
+    {/if}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form formRefund, class=>"form-horizontal"}
+        {control renderer $form}
+    {/form}
+    <a n:href=":Order:view id=> $orderId" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>
+{/block}

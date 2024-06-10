@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="WebRex, s.r.o.">
+</head>
+<body style="margin: 0;">
+    <div style="background-color: #f6f6f6; width: 100%; height: 100%; padding: 25px 0;">
+        <div style="font-family: 'Open Sans'; background-color: #f6f6f6; border: 1px solid #e0e0e0; width: 840px; margin: 0 auto;">
+            <div style="background-color: #fff; padding: 15px; color: #646464; font-size: 18px; font-weight: 400;">
+                <img src="{$baseUri}/front/design/icons/logo/logo.png" alt="Logo">
+                <br><br>
+                    <p>{_'Dobrý den'},<br>
+                    {_'všimli jsme si, že se ve Vašem'} <a n:href="Basket:one" style="color: #00408a; font-weight: bold; text-decoration: none;" target="_blank">{_'nákupním koši'}</a> {_'nachází nedokončená objednávka.'} {_'Váš košík jsme Vám prozatím uložili, takže se z něj nic neztratí a objednávku můžete'} <a n:href="Basket:one" style="color: #00408a; font-weight: bold; text-decoration: none;" target="_blank">{_'dokončit'}</a>.</p>
+                    <p>{_'Pokud si výběrem nejste jisti, nebo k produktům potřebujete více informací, neváhejte nám napsat'} <a href="mailto: {$settings['company_email']}" style="color: #00408a; font-weight: bold; text-decoration: none;">e-mail</a>, {_'nebo můžete zavolat na tel. číslo'} <a href="tel: {$settings['company_phone1']}" style="text-decoration: none; color: #000; font-weight: bold;">{$settings['company_phone1']}</a>. {_'Rádi Vám pomůžeme vybrat produkt, který splní Vaše očekávání'}.</p>
+                    <p>
+                        <a n:href="Front:default" style="color: #00408a; text-decoration: none;" target="_blank">{$settings['company_www']}</a>
+                    </p>
+                <h4>{_'Váš košík obsahuje tyto produkty'}:</h4>
+                <div>
+                    <table style="border-collapse: collapse;" width="100%">
+                        <tr style="background-color: #eaeaea; font-weight: 700; color: #000; font-size: 18px;">
+                            <td style="width: 10%; padding: 5px 10px;"></td>
+                            <td style="width: 60%; padding: 5px 10px;"><strong>{_'Položka'}</strong></td>
+                            <td style="text-align: center; width: 10%; padding: 5px 10px;"><strong>{_'Množství'}</strong></td>
+                            <td style="text-align: right; width: 20%; padding: 5px 10px;"><strong>{_'Celkem'}</strong></td>
+                        </tr>
+                        {var $total = $bezDPHTotal = $dph = $i = 0}
+                        {var $currency = $order->currency}
+
+                        {foreach $products as $item}
+                            {php $dc->setPriceWithDPH($item->selingPrice, $item->product->vat->value, $item->count)}
+                            {php $dc->setDisableDPH($order->euVat)}
+                            {var $dph = $dph * $dc->getTotalDPH()}
+                            {var $bezDPHTotal = $bezDPHTotal + $dc->getTotalWithoutDPH()}
+                            {var $total =  $total + $dc->getTotalPrice()}
+                            {var $slug = Nette\Utils\Strings::webalize($item->name)}
+                            <tr style="border: 1px solid #eaeaea; color: #000;">
+                                <td>
+                                    {if file_exists($item->product->mainImage)}
+                                        <a n:href="ProductDetail:detail id => $item->product->id, slug => $slug">
+                                            <img src="{$baseUri}/{$item->product->mainImage}" alt="" width="100">
+                                        </a>
+                                    {/if}
+                                </td>
+                                <td style="padding: 5px 10px; font-weight: 700;">
+                                    <a n:href="ProductDetail:detail id => $item->product->id, slug => $slug" style="color: #00408a; text-decoration: none;">{$item->name} ({$item->unit})</a>
+                                </td>
+                                <td style="text-align: center; padding: 5px 10px;">
+                                    {$item->count}
+                                </td>
+                                <td style="text-align: right; padding: 5px 10px;">
+                                    {$currency->markBefore}
+                                    {$dc->getTotalPrice()|number:2:'.':' '} {$currency->markBehind}
+                                </td>
+                            </tr>
+                        {/foreach}
+
+                        {php $dc->setPriceWithDPH($order->payMethodPrice, $order->paymentMethod->vat->value, 1)}
+                        {php $dc->setDisableDPH($order->euVat)}
+                        {var $paymentPrice = $dc->getTotalWithoutDPH()}
+                        {var $dph = $dph * $dc->getTotalDPH()}
+                        {var $total = $total + $dc->getTotalPrice()}
+
+                        {php $dc->setPriceWithDPH($order->payDeliveryPrice, $order->deliveryMethod->vat->value, 1)}
+                        {php $dc->setDisableDPH($order->euVat)}
+                        {var $deliveryPrice = $dc->getTotalWithoutDPH()}
+                        {var $dph = $dph * $dc->getTotalDPH()}
+                        {var $total = $total + $dc->getTotalPrice()}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

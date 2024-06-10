@@ -1,0 +1,72 @@
+<!-- koupit zrychlene dialog  -->
+
+<div id="login_dialog" style="display: none;">
+
+    <div id="login_dialog_data">
+
+        <div class="nadpis center bold upper">
+            <h2>{_'Přihlášení zákazníka'}</h2>
+        </div>
+        {form signInForm}
+            <div class="block flexElem flexWrap alignCenter">
+                <div class="sub_block">
+                    <table class="responzive form_table small_fields full_fields_size">
+
+                        <tr>
+                            <td class="required">
+                                <label>{_'Přihlašovací jméno (email):'}</label>
+                            </td>
+                            <td>
+                                {input username}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="required">
+                                <label>{_'Heslo:'}</label>
+                            </td>
+                            <td>
+                                {input password}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="fields_container center">
+                                    <input type="submit" name="send" id="sendLoginForm" value="{_'Přihlásit se'}" class="dialog-handler" data-dialog-options='{"applyAfterClicks":"3","content":"#contact_dialog","isSnippet":"false"}' style=" height: 40px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="fields_container center">
+                                    <a n:href=":RegistrationCustomer:registration">{_'Nemáte u nás ještě účet?'}</a>
+                                </div>
+                                <div class="fields_container center">
+                                    <a id="resetPasswordHref" href="">{_'Zapomněli jste Vaše heslo?'}</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+        {/form}
+
+        <div class="flexElem alignCenter">
+            <div class="fb-login-button" onlogin="checkLoginState()" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).on("click", "#resetPasswordHref", function (e) {
+        e.preventDefault();
+        var val = $(document).find("#frm-signInForm-username").val();
+        window.location.href ={link ':RegistrationCustomer:resetPassword'} +'?email=' + val;
+    });
+
+</script>

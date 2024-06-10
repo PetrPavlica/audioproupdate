@@ -1,0 +1,40 @@
+{block title}{_'Pokračování v přihlášení přes facebook'}{/block}
+{block content}
+
+<div id="content">
+
+    <div id="registrace">
+
+        <div class="nadpis blue bold">
+            <h1>{_'Registrace přes Facebook'}</h1>
+        </div>
+        {form emailRequireForm}
+            <div class="block flexElem flexWrap alignCenter">
+                <div class="sub_block">
+                    <table class="responzive form_table small_fields full_fields_size">
+
+                        <tr>
+                            <td class="required">
+                                <label>{_'Váš email:'}</label>
+                            </td>
+                            <td>
+                                {input email}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="fields_container center">
+                                    <input type="submit" name="send" value="{_'Pokračovat'}" class="dialog-handler" data-dialog-options='{"applyAfterClicks":"3","content":"#contact_dialog"}' style="height: 40px;"/>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+        {/form}
+
+    </div>
+
+</div>

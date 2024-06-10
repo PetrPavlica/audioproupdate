@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="WebRex, s.r.o.">
+</head>
+<body style="margin: 0;">
+    <div style="background-color: #f6f6f6; width: 100%; height: 100%; padding: 25px 0;">
+        <div style="font-family: 'Open Sans'; background-color: #f6f6f6; border: 1px solid #e0e0e0; width: 840px; margin: 0 auto;">
+            <div style="background-color: #fff; padding: 15px; color: #646464; font-size: 18px; font-weight: 400;">
+                <img src="{$baseUri}/front/design/icons/logo/logo.png" alt="Logo">
+                <br><br>
+                <div style="padding: 15px;">
+                    <p>{_'Vážený zákazníku,'}</p>
+                    <p>{_'děkujeme za platbu dobírkové částky přepravci. V příloze Vám zasíláme fakturu a daňový doklad k přijaté platbě.'}</p>
+                </div>
+
+                {include contentOrder.latte}
+
+                <p>{_'V případě viditelného poškození zásilky při převzetí, sepište prosím reklamační protokol přímo s dopravcem a neprodleně nás informujte na telefonu'} {$settings['company_phone1']}</p>
+                <p>{_'Reklamační protokol naleznete také v zákaznické sekci, do které se přihlásíte'}
+                <p><a style="text-decoration: none;" href="{if $pageTerms}{link Page:default wslug => $pageTerms->slug}{/if}" target="_blank">{_'Obchodní podmínky'}</a></p>
+                <a style="color: #021f41; text-decoration: none; font-weight: bold;" href="{link SignCustomer:login}">{_'ZDE'}</a> {_'nebo v'} <a style="font-weight: bold; color: #021f41; text-decoration: none;" href="{link Front:default}">{_'patičce webu'}</a>.</p>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

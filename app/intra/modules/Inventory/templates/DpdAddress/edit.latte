@@ -1,0 +1,23 @@
+{block title}{_'Editace svozové adresy'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Editace svozové adresy'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form form, class=>"form-horizontal"}
+        {control renderer $form, 'id'}
+        {control renderer $form, 'name'}
+        {control renderer $form, 'addressId'}
+        {control renderer $form, 'countryCode'}
+        {control renderer $form, 'city'}
+        {control renderer $form, 'street'}
+        {control renderer $form, 'zipCode'}
+        {control renderer $form, 'send'}
+    {/form}
+    <a n:href="DpdAddress:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

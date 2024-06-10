@@ -1,0 +1,38 @@
+{block content}
+
+<div id="content" class="errorPage">
+    <div class="errorCode">
+        {$code}
+        <div class="text">
+            {_'stránka nebyla nalezena'}
+        </div>
+    </div>
+    <div class="nadpis blue bold">
+        <h3 class="text-center">{_'Omlouváme se, ale požadovaná stránka nebyla bohužel nalezena. Pravděpodobně nastala jedna z následujích situací:'}</h3>
+        <div class="list">
+            <ul>
+                <li>{_'byla špatně napsána www adresa (překlep, zastaralá oblíbená položka atp.),'}</li>
+                <li>{_'odkaz z výsledků vyhledávače byl zastaralý,'}</li>
+                <li>{_'interní odkaz v rámci aktuálního webu byl neplatný'}</li>
+                <li>{_'odkaz z jiného webu byl zastaralý a neplatný'}</li>
+            </ul>
+        </div>
+    </div>
+    <p class="text-center">
+        Dovolíme si doporučit zajímavé <a href="{$basePath}/category/1-audio-sestavy">audio sestavy</a>, případně můžete e-shopem sami
+        brouzdat přes horní menu nebo přes vyhledávání.
+    </p>
+    <p class="text-center">
+        Máme široký sortiment pro vylepšení zvuku a obrazu. Nákup je intuitivní, dodávky objednávek velmi rychlé,
+        reference zákazníků máme výtečné.<br>V případě instalace se domluvíme na nejbližším možném termínu.
+    </p>
+    <p class="text-center"><strong>
+            {_'Pokud chyba přetrvá, tak nás prosím kontaktujte.'}
+        </strong>
+    </p>
+    <div class="text-center">
+        <a class="button-link" href="/">{_'Zpět na úvodní stranu?'}</a>
+    </div>
+</div>
+
+{include ../../../Front/templates/Front/bestSellers.latte}

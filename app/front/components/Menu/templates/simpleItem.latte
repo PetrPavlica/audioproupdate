@@ -1,0 +1,16 @@
+<li>
+    {if $category->webMenu}
+        <a n:href="Page:default id => $child->id, wslug => $category->webMenu->slug, locale=> $locale">
+            {$category->name}
+            <div class="line">
+            </div>
+        </a>
+    {else}
+    {var $slug = \Nette\Utils\Strings::webalize($category->name)}
+        <a n:href="ProductList:list id => $category->id, slug => $slug, locale=> $locale">
+            {$category->name}
+            <div class="line">
+            </div>
+        </a>
+    {/if}
+</li>

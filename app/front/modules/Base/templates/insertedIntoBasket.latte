@@ -1,0 +1,180 @@
+<div id="productAlreadyInBasket">
+    {ifset $productInOrder}
+        {php $productHelper->setProduct($productInOrder->product, $actualCurrency);}
+        <div class="nadpis center"><h2>{_'Produkt byl úspěšně přidán do košíku'}</h2></div>
+        <div class="product">
+            <div class="flexElem valignCenter">
+                <div class="photo">
+                    <img n:img="$productInOrder->product->mainImage, '150x100', 'shrink_only', null">
+                </div>
+                <div class="details">
+                    <div class="title">
+                        <h3>{$productInOrder->product->name}</h3>
+                        {$overView['products'][$productInOrder->id]['count']} *
+                        {if $productHelper->specialExists() && isset($specialView[$productInOrder->product->id])}
+                            {$productHelper->renderSpecialPrice()}
+                        {else}
+                            {$productHelper->renderPrice()}
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {ifset $gift}
+        <div id="darky">
+            <h4>{_'Dárek'}</h4>
+                {php $productHelper->setProduct($gift->gift, $actualCurrency)}
+                <div class="darek">
+                    <div class="image">
+                        {if isset($gift->gift->images[0]->path) && file_exists($gift->gift->images[0]->path)}
+                        <img id="productMainImg" n:img="$gift->gift->images[0]->path, '63x63', 'shrink_only', null" title="{$gift->name}" alt="{$gift->name}">
+                        {/if}
+                    </div>
+                    <div class="title"> 
+                        <p> {$gift->name|noescape} {_'v hodnotě'} {$productHelper->renderPrice()} </p>
+                        <p class="price">0 Kč</p>
+                    </div>              
+                </div>
+        </div>
+        {/ifset}
+    {/ifset}
+
+    {ifset $productsInOrder}
+        <div class="nadpis center"><h2>{_'Produkty byly úspěšně přidány do košíku'}</h2></div>
+        {foreach $productsInOrder as $item}
+            {var $productI = $item->product}
+            {continueIf !isset($overView['products'][$item->id])}
+
+            {php $productHelper->setProduct($productI, $actualCurrency, false, $actualCurrency['code'] == 'CZK' ? $productsI[$item->id]->discountCZK : $productsI[$item->id]->discountEUR)}
+            <div class="product" {if $iterator->first === FALSE}style="border-top: none"{/if}>
+                <div class="flexElem valignCenter">
+                    <div class="photo">
+                        <img n:img="$productI->mainImage, '150x100', 'shrink_only', null">
+                    </div>
+                    <div class="details">
+                        <div class="title">
+                            <h3>{$productI->name}</h3>
+                            {$overView['products'][$item->id]['count']} *
+                            {if $productHelper->specialExists() && isset($specialView[$productI->id])}
+                                {$productHelper->renderSpecialPrice()}
+                            {else}
+                                {$productHelper->renderPrice()}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+    {/ifset}
+
+    {$freeDelivery->renderToString($settings['delivery_free'], $overView['totalPrice'], $actualCurrency, true, $overView['freeDelivery'])|noescape}
+
+    {if isset($productsS) && count($productsS)}
+    <h4>{_'Příslušenství'}</h4>
+    <hr>
+    <div id="swiper3" class="swiper-container">
+
+        <div class="swiper-wrapper">
+
+            {var $i = $needEnd = 0}
+            <!-- Slides -->
+            {foreach $productsS as $p}
+                {var $pr = $p->products}
+                {continueIf !$pr}
+                {if $i == 0}
+                    {var $needEnd = 1}
+                    <div class="swiper-slide">
+                    <div class="products products_slider flexElem">
+                {/if}
+
+                {$productHelper->setProduct($pr, $actualCurrency)}
+                {var $disableTags = false}
+
+                <div class="product_container flexElem">
+
+                    <div class="product product_uvod flexElem flexWrap valignJustify">
+                        {var $slug = \Nette\Utils\Strings::webalize($pr->name)}
+                        <a href="{link 'ProductDetail:detail' id => $pr->id, slug => $slug}">
+                            <div>
+                                <div class="product_labels left" n:if="!$disableTags">
+                                    <div n:if="$productHelper->actionExists()" class="product_label percentage">
+                                        - {$productHelper->renderDiscountPercent()} %
+                                    </div>
+                                    <div n:if="$pr->batteryPowered" class="product_label batteryPowered">
+                                        {_'batteryPowered'}
+                                    </div>
+                                </div>
+                                <div class="product_labels right" n:if="!$disableTags">
+                                    <div n:if="$pr->audioProMultiroom" class="product_label audioProMultiroom">
+                                        {_'audioProMultiroom'}
+                                    </div>
+                                </div>
+
+                                <div class="photo">
+                                    {if $pr->mainImage && file_exists($pr->mainImage)}
+                                        <img n:img="$pr->mainImage, '170x200', 'shrink_only', null" alt="{$pr->name}" title="{$pr->name}"/>
+                                    {else}
+                                        <img n:img="'front/images/produkty/no-photo.png', '170x200', 'shrink_only', null" alt="{$pr->name}" title="{$pr->name}"/>
+                                    {/if}
+                                </div>
+                                <div class="hvezdicky flexElem valignCenter">
+                                    {var $jj = 5}
+                                    {for $ii = 0; $ii < round($pr->totalRating); $ii++}
+                                        <div class="hvezda hvezda_plna"></div>
+                                    {/for}
+                                    {for $ii = 0; $ii < $jj - round($pr->totalRating); $ii++}
+                                        <div class="hvezda"></div>
+                                    {/for}
+                                </div>
+                                <div class="details">
+                                    <div class="title">
+                                        <h3>{$pr->name}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="details">
+                            <div class="bar flexElem alignJustify">
+                                <div>
+                                    <div class="cena flexElem valignCenter">
+                                        <div class="cena_sleva">
+                                            {$productHelper->renderPrice()}
+                                        </div>
+                                        <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                                            {$productHelper->renderLastPrice()}
+                                        </div>
+                                    </div>
+                                    {control stockExpedition $pr, false}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {if $i == 2}
+                    </div>
+                    </div>
+                    {var $needEnd = 0}
+                {/if}
+
+                {var $i = $i + 1}
+                {if $i == 3}
+                    {var $i = 0}
+                {/if}
+
+            {/foreach}
+            {if $needEnd == 1}
+        </div>
+    </div>
+    {/if}
+</div>
+    <div id="swiper3_left" class="swiper-button-next"></div>
+    <div id="swiper3_right" class="swiper-button-prev"></div>
+</div>
+    {/if}
+
+    <div class="fields_container justify">
+        <a class="button white dialog-close-handler">{_'Pokračovat v nákupu'}</a>
+        <a href="{link Basket:one, locale=> $locale}" class="button">{_'Do košíku'}</a>
+    </div>
+</div>

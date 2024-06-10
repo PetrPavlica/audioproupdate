@@ -1,0 +1,15 @@
+{_'Dobrý den'},<br><br>
+{_'děkujeme za poptávku z '}<a href="{$settings['company_www']}">{$settings['company_www']}</a>. {_'V nejbližší době Vás budeme kontaktovat'}.<br><br>
+{if $values->company}{_'Firma'}: {$values->company}<br>{/if}
+{_'Kontaktní osoba'}: {$values->name}<br>
+{_'Adresa'}: {$values->adress}<br>
+{_'Telefon'}: {$values->phone}<br>
+E-mail: {$values->email}<br>
+{_'Dotaz'}: {$values->inquiry}<br><br>
+
+{_'S pozdravem'}<br><br>
+{$settings['company_name']}<br>
+{$settings['company_street']}<br>
+{$settings['company_city']}<br>
+tel.: {$settings['company_phone1']}<br>
+email: <a href="mailto:{$settings['company_email']}">{$settings['company_email']}</a><br>

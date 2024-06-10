@@ -1,0 +1,64 @@
+{if !isset($isBack)} {* toto se nenačte v administraci *}
+    {block title}
+        {if !empty($menu->title)}
+            {$menu->title}
+        {else}
+            {$menu->name}
+        {/if}
+    {/block}
+    {block keywords}{$menu->keywords}{/block}
+    {block description}{$menu->description}{/block}
+{/if}
+
+{block content}
+    {if !isset($isBack)}
+        {include 'breadcrumb.latte'}
+    {/if}
+    <div id="content" class="wrap clanekA">
+        {ifset $subMenu}
+            <div class="grid">
+                <div class="grid-sizer"></div>
+                {foreach $subMenu as $s}
+                    <div class="grid-item {if $iterator->isFirst()}w2{/if}">
+                        <a n:href="Page:default id => $s->id, wslug => $s->slug">
+                            {if file_exists($s->image)}
+                                {if $s->template->id == 3}
+                                    <img src="{$basePath}/front/design/playbutton.png" id="playButton">
+                                {/if}
+                                <img src="{$basePath}/{$s->image}" alt="{$s->name}">
+                            {/if}
+                            <div class="text">
+                                <h2>{$s->name}</h2>
+                            </div>
+                        </a>
+                    </div>
+                {/foreach}
+                <div class="clearfix"></div>
+            </div>
+        {/ifset}
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $('.grid').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-sizer'
+            });
+        });
+
+        var count = 1;
+        var interval = null;
+        function masonry() {
+            $('.grid').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-sizer'
+            });
+            count++;
+            if (count >= 5) {
+                clearInterval(interval);
+            }
+        }
+        interval = setInterval(masonry, 1000);
+    </script>
+{/block}

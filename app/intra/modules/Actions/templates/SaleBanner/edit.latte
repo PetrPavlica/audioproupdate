@@ -1,0 +1,31 @@
+{block title}{_'Editace slevového banneru'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Editace slevového banneru'}
+</h3>
+
+<div class="col-xs-12 col-sm-12 col-md-8">
+    {form form, class => "form-horizontal"}
+        {control renderer $form, 'name'}
+        {control renderer $form, 'product', 'getProducts'}
+        {control renderer $form, 'link'}
+        {control renderer $form, 'orderBanner'}
+        {control renderer $form, 'position'}
+        {control renderer $form, 'languages'}
+        {control renderer $form, 'active'}
+
+        {control renderer $form, 'img'}
+        {ifset $banner}
+            <div n:if="$banner->image" style="margin: 20px 0;">
+                <img src="{$basePath}/{$banner->image}" style="max-width: 100%;" alt="">
+            </div>
+        {/ifset}
+
+        {control renderer $form, 'send'}
+    {/form}
+    <a n:href="SaleBanner:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

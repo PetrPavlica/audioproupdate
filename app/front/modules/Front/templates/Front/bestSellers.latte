@@ -1,0 +1,78 @@
+<div id="slider2" class="wrap">
+
+    <div class="nadpis full bold black">
+        <h1 class="indent">{_'Nově u nás najdete'}</h1>
+        <div class="line full through"></div>
+    </div>
+
+    <div id="swiper2" class="swiper-container">
+        <div class="swiper-wrapper">
+
+            {var $i = $needEnd = 0}
+            <!-- Slides -->
+            {foreach $onFrontMostSold as $product}
+                {if $i == 0}
+                    {var $needEnd = 1}
+                    <div id="large_device" class="swiper-slide">
+                        <div class="products products_slider flexElem">
+                        {/if}
+
+                        {control productTile $product, $sess, 'product_container_uvod', TRUE}
+
+                        {if $i == 2}
+                        </div>
+                    </div>
+                    {var $needEnd = 0}
+                {/if}
+
+                {var $i = $i + 1}
+                {if $i == 3}
+                    {var $i = 0}
+                {/if}
+
+            {/foreach}
+
+            {if $needEnd == 1}
+            </div>
+        </div>
+    {/if}
+
+    <!--mobiles-->
+
+    {var $i = 0}
+    <!-- Slides -->
+    {foreach $onFrontMostSold as $product}
+        <div id="small_device" class="swiper-slide">
+            <div class="products products_slider flexElem alignCenter">
+                {control productTile $product, $sess, 'product_container_mob', TRUE}
+            </div>
+        </div>
+        {var $i = $i + 1}
+    {/foreach}
+
+</div>
+
+<div id="swiper2_left" class="swiper-button-next"></div>
+<div id="swiper2_right" class="swiper-button-prev"></div>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        //initialize swiper when document ready
+        var swiper2 = new Swiper('#swiper2', {
+            nextButton: '#swiper2_left',
+            prevButton: '#swiper2_right',
+            loop: false,
+            autoplay: false,
+            effect: "slide",
+            speed: 600
+
+        });
+
+    });
+
+</script>
+
+</div>

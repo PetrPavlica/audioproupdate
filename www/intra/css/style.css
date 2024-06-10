@@ -1,0 +1,51 @@
+.right-button {
+    margin-left: 15px;
+    float: right;
+    font-size: 22px;
+    line-height: 25px;
+    transition: 0.3s;
+    margin-right: 10px;
+}
+
+.nav-tabs > li > a {
+    color: #A7B1C2;
+    font-weight: 600;
+    padding: 10px 20px 10px 25px;
+}
+.form-control, .single-line {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    display: block;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+    font-size: 14px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    margin: 4px 10px 0 !important;
+}
+.gray-bg,
+.bg-muted {
+    background-color: #f3f3f4 !important;
+}
+
+.ct-bar{
+    stroke: #286090 !important;
+}
+
+.ct-label {
+    font-size: 15px;
+}
+
+
+.cke .cke_contents{
+    min-height: 400px;
+}
+
+.spectrum {
+    display: none;
+}

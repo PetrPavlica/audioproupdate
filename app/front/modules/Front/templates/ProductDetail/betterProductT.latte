@@ -1,0 +1,165 @@
+<link rel="stylesheet" href="{$basePath}/front/css/better_product.css?v={$ver}">
+
+<div id="betterProduct" class="flexElem flexWrap480">
+
+    <div class="product">
+        {var $slug = \Nette\Utils\Strings::webalize($product->betterProduct->name)}
+        <a href="{link 'ProductDetail:detail' id => $product->betterProduct->id, slug => $slug}">
+
+            <div class="photo">
+                {if $product->mainImage && file_exists($product->mainImage)}
+                    <img style="max-height: 150px; width: auto;" n:img="$product->betterProduct->mainImage, '200x150', 'shrink_only', null" alt="{$product->betterProduct->name}" title="{$product->betterProduct->name}"/>
+                {else}
+                    <img style="max-height: 150px; width: auto;" n:img="'front/images/produkty/no-photo.png', '200x150'" alt="{$product->betterProduct->name}" title="{$product->betterProduct->name}"/>
+                {/if}
+            </div>
+
+            <div class="hvezdicky flexElem valignCenter">
+                {var $jj = 5}
+                {for $ii = 0; $ii < round($product->betterProduct->totalRating); $ii++}
+                    <div class="hvezda hvezda_plna"></div>
+                {/for}
+                {for $ii = 0; $ii < $jj - round($product->betterProduct->totalRating); $ii++}
+                    <div class="hvezda"></div>
+                {/for}
+            </div>
+
+        </a>
+
+        {php $productHelper->setProduct($product, $actualCurrency)}
+        {var $productPrice = $productHelper->getPrice()}
+        {php $productHelper->setProduct($product->betterProduct, $actualCurrency)}
+
+        <div class="details">
+
+            <div class="title">
+                <a href="{link 'ProductDetail:detail' id => $product->betterProduct->id, slug => $slug}">
+                    <h3>{$product->betterProduct->name}</h3></a>
+            </div>
+
+            <div class="bar flexElem alignJustify">
+
+                <div>
+
+                    <div class="cena flexElem valignCenter">
+
+                        <div class="cena_sleva">
+                            {$actualCurrency['markBefore']}
+                            {$productHelper->getPrice()|number:$actualCurrency['countDecimal']:',':' '}
+                            {$actualCurrency['markBehind']}
+                        </div>
+                        <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                            {$actualCurrency['markBefore']}
+                            {$productHelper->getLastPrice()|number:$actualCurrency['countDecimal']:',':' '}
+                            {$actualCurrency['markBehind']}
+                        </div>
+                    </div>
+                    {control stockExpedition $product->betterProduct, false}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="advantages">
+
+        <table>
+
+            {var $advantages = explode("\n", $product->betterProductAdvantages)}
+
+            {foreach $advantages as $advantage}
+                <tr>
+                    <td>
+                        <img src="{$basePath}/front/design/icons/operators/plus2.png" title="{_'Výhoda'}" alt="{_'Výhoda'}" width="15px"/>
+                    </td>
+                    <td>{$advantage}</td>
+                </tr>
+            {/foreach}
+
+        </table>
+
+        {var $difference = $productHelper->getPrice() - $productPrice}
+
+        {if $difference > 0}
+            <div class="higher_than">{_'cena vyšší jen'}
+                <br/> {_'o'} {$actualCurrency['markBefore']} {$difference|number:$actualCurrency['countDecimal']:',':' '} {$actualCurrency['markBehind']}
+            </div>
+        {else}
+            <div class="higher_than">{_'ušetříte'} {$actualCurrency['markBefore']} {($difference*-1)|number:$actualCurrency['countDecimal']:',':' '} {$actualCurrency['markBehind']}</div>
+        {/if}
+
+        <div class="product">
+            <div class="drop_down_container" style="width: 100%;">
+                {var $betterProductId = $product->betterProduct->id}
+                {form addToBasketForm-better$betterProductId}
+                    {input productId value => $product->betterProduct->id}
+                    {input count value => '1'}
+                <div class="flexElem alignJustify valignCenter btn-to-up">
+                    <button n:name="addToBasket" class="buy_btn" data-href="{link 'addToCart!'}" style="border: 0;">{_'Koupit'}</button>
+                    {*<a href="{plink 'addToCart!' productId => $product->betterProduct->id}" class="buy_btn">
+                        {_'Koupit'}
+                    </a>*}
+                    <div class="arrow">
+                        <div>
+                            <img src="{$basePath}/front/design/icons/arrow_down.png"/>
+                        </div>
+                    </div>
+                </div>
+                {/form}
+
+                <div class="drop_down" style="max-width: 250px; min-width: 200px;">
+                    {*<div class="row">
+                        {if $user->loggedIn && $user->isInRole('visitor')}
+                        <a class="white rapid_buy_btn dialog-handler" data-dialog-options='{"content":"#rapid_dialog","ajax":{"process":"true","method":"GET"},"snippetName":"rapid-buy-snipp"}' href="{plink rapidBuy:buy! customerId => $user->id, productId => $product->betterProduct->id}">
+                            {else}
+                            <a class="white login_link dialog-handler" data-dialog-options='{"content":"#login_dialog","isSnippet":"false","dropPasteData":"true"}' style="color: #fff;">
+                                {/if}
+                                <div class="flexElem">
+                                    <div>
+                                        <img src="{$basePath}/front/design/icons/double_right_arrow.png"
+                                             title="{_'Koupit zrychleně'}" alt="{_'Koupit zrychleně'}"/>
+                                    </div>
+                                    <div class="text">
+                                        {_'Koupit zrychleně'}
+                                    </div>
+                                </div>
+                            </a>
+                    </div>*}
+                    <div class="row">
+                        {if $user->loggedIn && $user->isInRole('visitor')}
+                        <a href="{plink addFavourite! customerId => $user->id, productId => $product->betterProduct->id}"
+                           class="white ajax">
+                            {else}
+                            <a class="white login_link dialog-handler" data-dialog-options='{"content":"#login_dialog","isSnippet":"false","dropPasteData":"true"}' style="color: #fff;">
+                                {/if}
+                                <div class="flexElem">
+                                    <div>
+                                        <img src="{$basePath}/front/design/icons/heard_blue.png"
+                                             title="{_'Přidat do seznamu'}" alt="{_'Přidat do seznamu'}"/>
+                                    </div>
+                                    <div class="text">
+                                        {_'Přidat do seznamu'}
+                                    </div>
+                                </div>
+                            </a>
+                    </div>
+                    <div class="row">
+                        <a class="white dialog-handler" data-dialog-options='{"content":"#compare_dialog","ajax":{"process":"true","method":"GET"}}' href="{plink addCompare! productId => $product->betterProduct->id}">
+                            <div class="flexElem">
+                                <div>
+                                    <img src="{$basePath}/front/design/icons/compare_blue.png"
+                                         title="{_'Porovnat'}" alt="{_'Porovnat'}"/>
+                                </div>
+                                <div class="text">
+                                    {_'Porovnat'}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

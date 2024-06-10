@@ -1,0 +1,24 @@
+{block title}{_'Správa měny'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Správa měny'}
+</h3>
+
+<a n:href=":Currency:edit">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    {_'Přidat novou měnu'}
+</a>
+{control table}
+
+
+{capture $div}
+    <div style="margin-top: 20px;" class="col-xs-12 col-sm-12 col-md-8">
+        <legend>Aktualizace kurzů dle aktuálních kurzů ČNB</legend>
+        Pozor! stiskem tlačítka přepíšete kurzy v informačním systému za aktuální kurzy ČNB <br /><br />
+        <a n:href="actualizeExchangeRates!" class="btn btn-default"><i class="fa fa-money"></i>
+            Aktualizovat
+        </a>
+    </div>
+{/capture}
+{control acl $div, 'Tlačítko aktualizace kurzů dle ČNB', 'handleActualizeExchangeRates', 'Currency', 'method'}

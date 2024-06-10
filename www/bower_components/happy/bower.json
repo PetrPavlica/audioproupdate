@@ -1,0 +1,32 @@
+{
+  "name": "happy",
+  "version": "1.0.0",
+  "homepage": "https://github.com/paveljanda/happy",
+  "authors": [
+    "Pavel Janda <me@paveljanda.com>"
+  ],
+  "description": "Happy form inputs",
+  "main": [
+    "./dist/js/happy.js",
+    "./dist/js/happy.css"
+  ],
+  "keywords": [
+    "forms",
+    "inputs",
+    "happy",
+    "checkbox",
+    "radio"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "composer.json",
+    "gulpfile.js",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.11.0"
+  }
+}

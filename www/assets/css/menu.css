@@ -1,0 +1,880 @@
+/*-------------------------------------------------------------------
+                             menu styles
+---------------------------------------------------------------------*/
+
+#menu_container{
+    width: 100%;
+    /*background-color: #2e2e2e;*/
+    background-color: #a7905a;
+    pointer-events: all;
+}
+
+/* hamburger */
+
+#menu_container #hamburger{
+    display: none;
+    width: 100%;
+}
+
+#menu_container #hamburger #hamburger_img{
+    margin: 0px auto;
+    width: 35px;
+    height: 35px;
+}
+
+/* <ul> nejvyšší úrověň */
+
+#menu_container #menu{
+    padding: 0px;
+    width: 100%;
+    /*max-width: 900px;*/
+    margin: 0px auto;
+}
+
+#ovladani-menu-mobil  {
+    display: none;
+}
+
+
+
+
+
+#menu_container #menu li{
+
+    list-style-type: none;
+    float: left;
+    line-height: 1em;
+    cursor: pointer;
+    padding: 0px;
+
+}
+
+/* <li> nejvyšší úroveň a jejich odkazy */
+
+ul#menu li.rest,#menu_container #menu li a, ul#menu li:hover a, ul#menu li.active a {
+    position: relative;
+    display: block;
+    padding: 23px 9px;
+    z-index: 300 !important;
+}
+
+#menu_container #menu li:first-child a, ul#menu li:first-child:hover a, ul#menu li:first-child.active a {
+    /* padding-left: 15px; */
+}
+
+/* Rotující šipka vedle odkazu */
+
+#menu_container #menu li.drop_down > a{
+    position: relative;
+   /* padding-right: 25px; */
+}
+
+/* #menu_container #menu li.drop_down > a:after{    
+  
+    position: absolute;
+    right: 5px;
+    margin-top: 1px;
+
+    display: inline-block;
+
+    content: "";
+    width: 12px;
+    height: 12px;
+
+    -webkit-transition: all 300ms 0s ease-in-out;
+    transition: all 300ms 0s ease-in-out;
+} */
+
+/* #menu_container #menu li.drop_down:hover > a:after {
+
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+} */
+
+ul#menu li.rest{
+    float: none !important;
+    overflow: hidden;
+}
+
+ul#menu li.rest:hover{
+    background-color: transparent !important;
+}
+
+ul#menu li.rest a:link, ul#menu li.rest a:visited, ul#menu li.rest a:active, ul#menu li.rest a:hover{
+    background-color: transparent !important;
+    cursor: default !important;
+    padding: 23px 0px;
+}
+
+
+/* clear kvůli float */
+
+#menu_container #menu li.clear{
+    float: none !important;
+    clear: both !important;
+    width: 0px !important;
+    height: 0px !important;
+    padding: 0px !important;
+}
+
+/*--------------------------------------------------------------
+                     sub menu styles (for all)
+----------------------------------------------------------------*/
+
+#menu_container #menu li .sub_menu{
+
+    visibility: hidden;
+
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+
+    position: absolute;
+    left: 0px;
+    width: 100%;
+
+    background-color: transparent;
+
+    z-index: 999;
+/*     transform: translateY(-2em);
+
+    -moz-transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s;
+    -webkit-transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s;
+    -o-transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s;
+    transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s; */
+}
+
+/*#menu_container #menu li:hover .sub_menu {
+    visibility: visible;
+    z-index: 99999;
+    transform: translateY(0%);
+
+    transition-delay: 0s, 0s, 0.3s;
+    -moz-transition-delay: 0s, 0s, 0.3s;
+    -o-transition-delay: 0s, 0s, 0.3s;
+    -webkit-transition-delay: 0s, 0s, 0.3s;
+}*/
+
+#menu_container #menu li .sub_menu .exit-btn {
+    position: absolute;
+    font-size: 2em;
+    right: 10px;
+    top: 10px;
+    color: #ed9535;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#menu_container #menu li .sub_menu.visible {
+    visibility: visible;
+    z-index: 500;
+    transform: translateY(0%);
+
+/*     transition-delay: 0s, 0s, 0.3s;
+    -moz-transition-delay: 0s, 0s, 0.3s;
+    -o-transition-delay: 0s, 0s, 0.3s;
+    -webkit-transition-delay: 0s, 0s, 0.3s; */
+}
+
+#menu_container #menu li .sub_menu > li {
+    width: 100%;
+    background-color: transparent !important;
+    padding: 0px;
+    cursor: default !important;
+}
+
+/* Obal obsahu submenu první úrovně */
+
+#menu_container #menu li .sub_menu .sub_content{
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0px auto;
+    padding: 20px 0px 0px 20px;
+}
+
+/* Jednotlivé bloky v submenu */
+
+#menu_container #menu li .sub_menu .sub_content .category{
+
+    float: left;
+
+    position: relative;
+    display: inline-block;
+    padding: 8px 18px 8px 18px;
+
+    min-width: 100px;
+    max-width: 33%;
+
+    background-color: transparent !important;
+}
+
+/* Titulek bloku */
+
+#menu_container #menu li .sub_menu .sub_content .category .title{
+    display: block;
+    z-index: 9;
+}
+
+#menu_container #menu li .sub_menu .sub_content .category .title label {
+    padding: 5px 25px 5px 15px;
+    text-align: center;
+    z-index: 9;
+}
+
+/* submenu <ul> v bloku */
+
+#menu_container #menu li .sub_menu .sub_content .category ul {
+    margin-top: 14px;
+    padding: 0px;
+    display: inline-block;
+    z-index: 0;
+    width: 100%;
+}
+
+#menu_container #menu li .sub_menu .sub_content .category ul li{
+    float: none;
+    margin-left: 0px;
+    padding: 0px !important;
+    min-width: 150px;
+}
+
+#menu_container #menu li .sub_menu .sub_content .category ul li a{
+    padding: 9px 13px;
+}
+
+/*-------------------------------------------------------------
+                    sub_menu_full styles
+---------------------------------------------------------------*/
+
+#menu_container #menu li .sub_menu_full .sub_content{
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0px auto;
+    background-color: transparent;
+}
+
+/*------------------------------------------------------------------
+                       sub_menu_small styles
+ -------------------------------------------------------------------*/
+
+#menu_container #menu li .sub_menu_small{
+    position: absolute;
+    left: auto;
+    top: auto;
+    width: auto;
+
+    padding: 0px;
+    margin-left: 0px;
+}
+
+#menu_container #menu li .sub_menu_small > li{
+    padding: 0px;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content{
+    padding: 0px;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category{
+    padding: 0px;
+    border: 0px;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul{
+    margin: 0px;
+    padding: 0px;
+
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+
+/* li a odkazy v první úrovni small submenu */
+
+/*
+1. úroveň
+*/
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li{
+
+    position: relative;
+    float: none;
+    margin-left: 0px;
+    padding: 0px 3px;
+    min-width: 180px;
+    cursor: pointer;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li a,
+#menu_container #menu li:hover .sub_menu_small .sub_content .category ul li a{
+    display: block;
+    padding: 14px 20px !important;
+}
+
+/*
+2. úroveň
+*/
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu{
+
+    visibility: hidden;
+    position: absolute;
+
+    left: auto;
+
+    transform: translate(88.5%,-20.5%);
+    z-index: -1;
+
+    -moz-transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s;
+    -webkit-transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s;
+    -o-transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s;
+    transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s,z-index 0s linear 0.01s;
+
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li:hover .sub_menu {
+    visibility: visible;
+    z-index: 99999;
+
+
+    transform: translate(100%,-20%);
+
+    transition-delay: 0s, 0s, 0.3s;
+    -moz-transition-delay: 0s, 0s, 0.3s;
+    -o-transition-delay: 0s, 0s, 0.3s;
+    -webkit-transition-delay: 0s, 0s, 0.3s;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li:hover .sub_menu li{
+    display: block;
+}
+
+/*-----    MENU z footeru se na mobilu presunou do hlavniho menu pomoci jquery    -------*/
+#showroomBlogLink,
+#menu .clone-to-mob-menu {
+    display: none;
+}
+
+
+
+
+/*--------------------------------------------------------------------
+                            Responzivita
+--------------------------------------------------------------------*/
+
+@media (max-width: 1366px) {
+
+}
+
+@media (max-width: 1280px) {
+
+}
+
+@media (max-width: 1024px) {
+
+}
+
+@media (max-width: 800px) {
+
+    #menu_container #menu li .sub_menu .sub_content .category{
+        position: relative;
+        /* width: 60%; */
+        text-align: center;
+    }
+
+    #menu_container #menu li .sub_menu .sub_content .category ul{
+        position: relative;
+        width: auto;
+        display: inline-block;
+    }
+
+
+
+}
+
+
+@media (max-width: 768px) {
+    #menu_container {
+        position: absolute;
+        top:0;
+        /* left:-200vw; */
+        left:0;
+        width:800px;
+        height:100vh;
+
+        pointer-events: none;
+
+        background-color: transparent!important;
+        background-color: white;
+
+        transition: -webkit-transform 0.3s ease-in; /* Chrome 26-35, Safari, Opera 15-23 */
+        transition:         transform 0.3s ease-in; /* IE10+, Firefox 16+, Chrome 36+, Opera 12.10 */
+        -webkit-transform: translateX(-800px);
+                transform: translateX(-800px);
+
+        
+        
+    }
+
+
+    body.visible-menu #menu_container {
+        pointer-events: all;
+    }
+
+    #ovladani-menu-mobil {
+        display: block;
+        position: relative;
+        width:100%;
+        height:58px;
+        background-color: white;
+        overflow: hidden;
+    }
+
+    #ovladani-menu-mobil span {
+        background-color: white;
+        display: block;
+        width: 400px;
+        height: 100%;
+        float: left;
+    }
+
+    #ovladani-menu-mobil span:nth-child(1) {
+        display: flex;
+        justify-content: space-between;
+    }
+
+
+    #ovladani-menu-mobil span i {
+        display: block;
+        top:0;
+        width:58px;
+        height:100%;
+        line-height: 58px;
+        color:#444;
+        font-weight: lighter;
+        font-size: 38px;
+        text-align: center;
+        
+    }
+
+    #ovladani-menu-mobil .currencies { /* -----------  provizorni klon udelany pomoci jquery - melo by se vygenerovat v latte */
+        padding:0 8px 0 0;
+
+    }
+
+    #ovladani-menu-mobil .currencies li {
+        list-style-type: none;
+        float: left;
+        margin-left: 10px;
+
+    }
+
+    #ovladani-menu-mobil #log_reg a { /* -----------  provizorni klon udelany pomoci jquery - melo by se vygenerovat v latte */
+        font-size: 13px;
+    }
+
+    #ovladani-menu-mobil #log_reg img {
+        margin-right: 6px;
+    }
+
+
+    #ovladani-menu-mobil span:nth-of-type(2) {
+        visibility: hidden;
+        background-color: white;
+
+    }
+
+    #ovladani-menu-mobil span:nth-of-type(2) i {
+        position: absolute;
+    }
+
+    #ovladani-menu-mobil.vysun-uroven-1 span:nth-of-type(2) {
+        visibility: visible;
+        border-bottom: 1px solid #333;
+        
+    }
+
+    #menu_zasun_ul_0 {
+        left:0;
+    }
+
+    .menu_zasun_ul_1 {
+        right:0;
+
+    }
+
+    .menu_zpet_na_ul_0 {
+        left:400px;
+    }
+
+
+    #menu_container #menu {
+        /* direction: rtl; */
+        width:800px;
+        height:calc(100vh - 58px);
+        overflow-y:auto;
+        /* overflow: hidden; */
+        margin:0;
+        border-top: 1px solid #444;
+    }
+
+
+
+
+    #menu_container.vysun-uroven-0 {
+        -webkit-transform: translateX(0vw);
+                transform: translateX(0vw);
+    }
+
+    #menu_container.vysun-uroven-1 {
+        -webkit-transform: translateX(-400px);
+                transform: translateX(-400px);
+    }
+
+    #menu_container.zasun-menu-i-submneu {
+        -webkit-transform: translateX(-800px);
+                transform: translateX(-800px);        
+    }
+
+    #menu_container #menu li,
+    #menu .clone-to-mob-menu {  
+        display: block;
+        width:400px;
+        direction: ltr;
+        float: none;
+        border: 0px;
+        border-bottom: 1px solid gray;
+        text-align: center;
+        background-color: white!important;
+        text-align: left;
+        
+
+    }
+
+
+
+    #menu_container #menu li .sub_menu.visible,
+    #menu .clone-to-mob-menu .sub_menu.visible {
+        transform:unset;
+        transition-delay:none;
+        -moz-transition-delay:none;
+        -o-transition-delay:none;
+        -webkit-transition-delay:none;
+        overflow-y: auto;
+    }
+
+    #menu_container #menu li .sub_menu.visible-on-smallscreens,
+    #menu .clone-to-mob-menu .sub_menu.visible-on-smallscreens {
+        display: block!important;
+        visibility: visible;
+
+        /* width: 100vw; */
+        /* background-color: red; */
+           
+    }
+
+
+    #menu_container #menu li a,
+    #menu .clone-to-mob-menu h2 {  /**/
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 300;
+        background-color: white;
+        text-align: left;
+        color:#444;
+        padding:23px 9px 23px 25px;
+        width:100%;
+        cursor: pointer;
+        line-height: 1em;
+    }
+
+    #menu_container #menu > li a .line{
+        display: none !important;
+    }
+
+    #menu_container #menu li > .sub_menu,
+    #menu .clone-to-mob-menu > .sub_menu {
+        position: absolute;
+        display: block;
+
+        /* visibility: visible; */
+        top:58px;
+        left: 400px;
+        width:400px;
+        height:calc(100vh - 58px);
+        overflow-y:hidden;
+        
+    }
+
+    #menu_container #menu li.drop_down {
+        position: static;
+    }
+
+
+   
+    #menu_container #menu li.drop_down > a{ 
+        width:100%;
+
+    }
+
+    #menu_container #menu li.drop_down > a:after,
+    #menu .clone-to-mob-menu h2:after {
+        font-family: FontAwesome;
+        content: "\f054";
+        position: relative;
+        float: right;
+        right:5px;
+        font-weight: normal;
+
+
+        color:#444;
+
+    }
+
+
+    #menu_container #menu li .sub_menu,
+    #menu_container #menu li .sub_menu_full,
+    #menu .clone-to-mob-menu .sub_menu {
+       /*  position: relative; */
+
+        visibility: visible !important;
+        z-index: 1 !important;
+        transform: translateY(0%) !important;
+        display: none;
+        margin: 0px;
+        float: none;
+        background-color: #eee!important;
+    }
+
+    #menu_container #menu li .sub_menu > li {
+        border-bottom: none;
+    }
+
+
+
+/*     #menu_container #menu li:hover .sub_menu, #menu_container #menu li:hover .sub_menu_full{
+        height: auto;
+        border: 0px;
+    } */
+
+    #menu_container #menu li .sub_menu .exit-btn {display: none;}
+
+    #menu_container #menu li .sub_menu .sub_content {
+        border: 0px;
+        padding: 0px;
+        padding-bottom: 15px;
+        padding-top: 0!important;
+    }
+
+    #menu_container #menu li .sub_menu .products_content .category,
+    #menu_container #menu li .sub_menu .sub_content .category{
+        width: 100%!important;
+        max-width:none;
+        padding: 0px 0 0 30px;
+        float: none;
+        border-bottom: 1px solid #444;
+        background-color: white!important;
+    }
+
+    #menu_container #menu li .sub_menu_small .sub_content .category{
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    #menu_container #menu li .sub_menu .sub_content .category .title{
+        margin-top: 0;
+    }
+
+    #menu_container #menu li .sub_menu .sub_content .category ul{
+        display: block;
+        width: 100%;
+        visibility: visible;
+    }
+
+    #menu_container #menu li .sub_menu .sub_content .category ul li{
+        margin: 0px;
+        padding-left: 0px;
+        display: block;
+        width: 100%;
+    }
+
+    #menu_container #menu li .sub_menu .sub_content .category ul li:hover{
+        background-color: transparent;
+    }
+
+    #menu_container #menu li .sub_menu .sub_content .category ul li.drop_down ul.sub_menu{
+        position: relative;
+        z-index: 1;
+        transform: translateX(0%);
+        visibility: visible;
+        margin: 0px;
+        background-color: transparent;
+        display: none;
+    }
+
+    #menu_container #menu li .sub_menu .sub_content .category ul li.drop_down ul li{
+        background-color: transparent !important;
+    }
+
+    #showroomBlogLink {
+        display: block;
+    }
+    
+    #menu_container #menu li.rest{  /*  */
+        height: 0px;
+        border: none;
+
+    }
+
+     /* ----------- MENU z footeru se na mobilu presunou do hlavniho menu pomoci jquery */
+
+
+    #menu .clone-to-mob-menu .nadpis.upper {
+        text-transform: none;
+        margin: 0;
+    }
+
+
+    #menu .clone-to-mob-menu div.obal {
+        display: block;
+    }
+
+    #menu .clone-to-mob-menu .sub_menu div {
+        text-align: center;
+        border-bottom: 1px solid #444;
+        background-color: white;
+    }
+
+    #menu .clone-to-mob-menu .sub_menu a {
+        font-size: 18px;
+        line-height: 65px;
+        height: 65px;
+        display: block;
+        color: #000;
+        text-decoration: none;
+        font-weight: normal;
+
+    }
+
+    #menu_container .odkazy .line,
+    #menu_container .nadpis .line  {
+        display: none;
+    }
+
+    #menu_container #menu .clone-to-mob-menu:last-of-type {
+        padding-bottom: 160px; /*  na iPhonu neslo skrolovat az dolu */
+        border-bottom: none;
+    }
+
+    #menu_container #menu .clone-to-mob-menu:last-of-type .nadpis {
+        border-bottom: 1px solid gray;
+    } 
+
+
+    #menu_container #menu li .sub_menu > li:last-child {
+        padding-bottom: 160px;
+    }
+
+
+
+}
+
+
+
+
+
+
+
+@media (max-width: 640px) {
+
+    #menu_container {
+        width:200vw;
+        -webkit-transform: translateX(-200vw);
+                transform: translateX(-200vw);
+        
+    }
+
+    #menu_container.vysun-uroven-1 {
+        -webkit-transform: translateX(-100vw);
+                transform: translateX(-100vw);
+    }
+
+    #menu_container.zasun-menu-i-submneu {
+        -webkit-transform: translateX(-200vw);
+                transform: translateX(-200vw);        
+    }
+
+    #ovladani-menu-mobil span {
+        width: 100vw;
+    }
+
+    .menu_zasun_ul_1 {
+        right:0;
+
+    }
+
+    .menu_zpet_na_ul_0 {
+        left:100vw;
+    }
+
+
+    #menu_container #menu {
+        width:100vw;
+        clear: both;
+    }
+
+    #menu_container #menu li,
+    #menu .clone-to-mob-menu {
+        width: 100vw;
+    }
+
+    #menu_container #menu li > .sub_menu,
+    #menu .clone-to-mob-menu .sub_menu {
+        left: 100vw;
+        width:100vw;
+    }
+
+
+
+
+
+    #menu_container #menu li .sub_menu .sub_content .category{
+        width: 50%;
+        max-width: 50%;
+        /* padding: 0px; */
+        float: none;
+        visibility: visible;
+    }
+
+
+    
+
+
+}
+
+@media (max-width: 480px) {
+
+    #menu_container #menu li .sub_menu .sub_content .category{
+        width: 100%;
+        max-width: 100%;
+        /* padding: 0px; */
+        float: none;
+        visibility: visible;
+    }
+
+
+
+}
+
+@media (max-width: 320px) {
+
+    #ovladani-menu-mobil #log_reg a {
+        font-size: 11px;
+    }
+
+
+}

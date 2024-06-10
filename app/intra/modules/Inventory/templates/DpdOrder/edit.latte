@@ -1,0 +1,25 @@
+{block title}{_'Editace objednávky svozu'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Editace objednávky svozu'}
+</h3>
+
+<div class="col-xs-12 col-sm-12 col-md-8">
+    {form form, class=>"form-horizontal"}
+        {control renderer $form, 'id'}
+        {control renderer $form, 'dpdAddress'}
+        {control renderer $form, 'date'}
+        {control renderer $form, 'fromTime'}
+        {control renderer $form, 'toTime'}
+        {control renderer $form, 'specialInstruction'}
+        {control renderer $form, 'quantity'}
+        {control renderer $form, 'weight'}
+        {control renderer $form, 'destinationCountryCode'}
+        {control renderer $form, 'send'}
+    {/form}
+    <a n:href="DpdOrder:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

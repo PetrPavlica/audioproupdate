@@ -1,0 +1,46 @@
+<div id="mail_dialog" style="display: none;">
+
+    <div class="nadpis center bold upper">
+        <h2>{_'Poslat produkt známému'}</h2>
+    </div>
+    {form sendProductForm}
+        <div class="block flexElem flexWrap alignCenter">
+            <div class="sub_block">
+                <table class="responzive form_table small_fields full_fields_size">
+                    <tr>
+                        <td>
+                            <label>{_'Komu'}</label>
+                        </td>
+                        <td>
+                            {input to}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>{_'Od koho'}</label>
+                        </td>
+                        <td>
+                            {input from}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>{_'Vzkaz (volitelně):'}</label>
+                        </td>
+                        <td>
+                            {input text}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="fields_container center">
+                                <input type="submit" name="send" value="{_'Odeslat email'}" style="height: 40px;"/>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    {/form}
+
+</div>

@@ -1,0 +1,407 @@
+{capture $li}
+    <li>
+        <a n:href=":Homepage:default"><i class="fa fa-home fa-fw"></i> {_'Domovská stránka'}</a>
+    </li>
+{/capture}
+{control acl $li, 'Domovská stránka', 'menu_homepage_default', 'Homepage', 'menu'}
+{capture $li}
+<li>
+    <a> {_'OBJEDNÁVKY: '}</a>
+</li>
+
+{foreach $orderStates as $orderStateItem}
+    <li>
+        <a n:href=":Order:default slug=>$orderStateItem['slug']">&nbsp&nbsp&nbsp
+            {*<i class="fa fa-arrow-right" style="font-size: 0.8em;"></i>*}
+            - {$orderStateItem['name']|translate} ({$orderStateItem['sumState']})
+        </a>
+    </li>
+{/foreach}
+{/capture}
+{control acl $li, 'Stavy objednávek', 'order_states', 'OrderStates', 'menu'}
+
+{*capture $li}
+    <li>
+        <a n:href=":BalikobotPackage:default" style="font-size: 90%;">
+            <i class="fa fa-truck fa-fw" aria-hidden="true"></i>
+            {_'Objednat dopravu Balíkobot'} ({$balikobotCount})
+        </a>
+    </li>
+{/capture}
+{control acl $li, 'Nezodpovězené dotazy', 'product_discussion_all', 'ProductDiscussion', 'menu'*}
+
+{*capture $li}
+    <li>
+        <a n:href=":ProductDiscussion:all"><i class="fa fa-comment-o fa-fw"
+                                              aria-hidden="true"></i> {_'Nezodpovězené dotazy'}
+            ({$productDiscussionCount})</a>
+    </li>
+{/capture}
+{control acl $li, 'Nezodpovězené dotazy', 'product_discussion_all', 'ProductDiscussion', 'menu'}
+
+{capture $li}
+    <li>
+        <a n:href=":ProductRating:all">
+            <i class="fa fa-star-half-o fa-fw" aria-hidden="true"></i>
+            {_'Hodnocení ke schválení'} ({$productRatingCount})
+        </a>
+    </li>
+{/capture}
+{control acl $li, 'Hodnocení ke schválení', 'product_ratings_all', 'ProductRating', 'menu'*}
+
+{capture $ul}
+    <li>
+        <a href="#"><i class="fa fa-television fa-fw"></i> {_'Produkty, kategorie'}<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+
+    {capture $li}
+        <li>
+            <a n:href=":Product:default"><i class="fa fa-television fa-fw" aria-hidden="true"></i> {_'Správa produktů'}</a>
+        </li>
+    {/capture}
+    {control acl $li, 'Správa produktů', 'product_edit_default', 'Product', 'menu'}
+
+    {capture $li}
+        <li>
+            <a n:href=":ProductCategory:default"><i class="fa fa-object-ungroup fa-fw"></i> {_'Kategorie produktů'}</a>
+        </li>
+    {/capture}
+    {control acl $li, 'Kategorie produktů', 'category_products_default', 'ProductCategory', 'menu'}
+
+    {*capture $li}
+        <li>
+            <a n:href="Product:packages"><i class="fa fa-television fa-fw" aria-hidden="true"></i> {_'Seznam balíčků produktu'}</a>
+        </li>
+    {/capture}
+    {control acl $li, 'Seznam balíčků produktu', 'product_edit_packages', 'ProductPackages', 'menu'}
+
+    {capture $li}
+        <li>
+            <a n:href="Product:sets"><i class="fa fa-television fa-fw" aria-hidden="true"></i> {_'Seznam setů produktu'}</a>
+        </li>
+    {/capture}
+    {control acl $li, 'Seznam setů produktu', 'product_edit_sets', 'ProductSets', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="Product:gifts"><i class="fa fa-television fa-fw" aria-hidden="true"></i> {_'Seznam dárků produktu'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Seznam dárků produktu', 'product_edit_gifts', 'ProductGifts', 'menu'*}
+
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+{/capture}
+{control acl $ul, 'Produkty, kategorie', 'menu_group_products', '', 'global-element'}
+
+{*
+<li>
+    <a href="#"><i class="fa fa-cutlery fa-fw"></i> {_'Správa receptů'}</a>
+</li>
+*}
+{capture $li}
+    <li>
+        <a n:href=":Customer:default"><i class="fa fa-users"></i> {_'Registrovaní zákazníci'}</a>
+    </li>
+{/capture}
+{control acl $li, 'Registrovaní zákazníci', 'customer_menu', 'Customer', 'menu'}
+
+{capture $ul}
+    <li>
+        <a href="#"><i class="fa fa-area-chart fa-fw"></i> {_'Akce, bannery, ostatní'}<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+            {*capture $li}
+                <li>
+                    <a n:href=":SpecialOfferProduct:default"><i class="fa fa-hand-peace-o"></i> {_'Speciální nabídky'}
+                    </a>
+                </li>
+            {/capture}
+            {control acl $li, 'Speciální nabídky', 'menu_special_offer', 'SpecialOfferProduct', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href=":Discount:default"><i class="fa fa-cart-arrow-down"></i> {_'Slevy v košíku'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Slevy v košíku', 'menu_Discounts', 'Discount', 'menu'*}
+            {capture $li}
+                <li>
+                    <a n:href=":BannerProduct:default"><i class="fa fa-columns"></i> {_'Bannery'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Bannery', 'menu_bannerproduct', 'BannerProduct', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href=":NewsletterEmail:default"><i class="fa fa-envelope-o"></i> {_'Newsletter emaily'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Newsletter emaily', 'menu_newsletter_emails', 'NewsletterEmail', 'menu'}
+            {*capture $li}
+                <li>
+                    <a n:href="SaleBanner:"><i class="fa fa-shopping-bag"></i> {_'Slevové bannery'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Slevové bannery', 'menu_salebanner', 'SaleBanner', 'menu'*}
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+{/capture}
+{control acl $ul, 'Akce, bannery, ostatní', 'menu_group_action', '', 'global-element'}
+
+{*capture $ul}
+    <li>
+        <a href="#"><i class="fa fa-filter fa-fw"></i>  {_'Filtry'}<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+            {capture $li}
+                <li>
+                    <a n:href=":ProductFilter:default"><i  class="fa fa-filter"></i>  {_'Filtry produktů'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Filtry produktů', 'ProductFilter_menu', 'ProductFilter', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href=":GroupProductFilter:default"><i  class="fa fa-hashtag"></i>  {_'Skupiny filtrů produtků'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Skupiny filtrů produtků', 'GroupProductFilter_menu', 'GroupProductFilter', 'menu'}
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+
+{/capture}
+{control acl $ul, 'FILTRY', 'menu_group_filter', '', 'global-element'*}
+
+{capture $ul}
+    <li>
+        <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> {_'Administrace'}<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+            {capture $li}
+                <li>
+                    <a n:href="User:default"><i class="glyphicon glyphicon-user"></i> {_'Uživatelé'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Sekce uživatelé', 'menu_users', 'User', 'menu'}
+
+            {*capture $li}
+                <li>
+                    <a href="#"><i class="fa fa-table"></i> {_'Statistiky'}<span class="fa arrow"></span></a>
+                    <ul class="nav nav-third-level" aria-expanded="true" style="">
+                        <li>
+                            <a n:href="Statistic:default">{_'Zisk'}</a>
+                        </li>
+                        <li>
+                            <a n:href="Statistic:cash">{_'Cash Flow'}</a>
+                        </li>
+                    </ul>
+                    <!-- /.nav-third-level -->
+                </li>
+            {/capture}
+            {control acl $li, 'Statistiky', 'admin_Statistic', 'Statistic', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="BalikobotOrder:default"><i class="fa fa-archive"></i> {_'Objednávky Balíkobot'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Objednávky Balíkobot', 'BalikobotOrder_menu', 'BalikobotOrder', 'menu'*}
+
+            {capture $li}
+                <li>
+                    <a n:href="WebMenu:default"><i class="fa fa-bars"></i> {_'Správa ostatních menu'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Správa ostatních menu', 'WebMenu_menu', 'WebMenu', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href=":WebArticles:default"><i class="fa fa-bars"></i> {_'Správa článků'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Správa článků', 'WebArticles_menu', 'WebArticles', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href=":Sellers:default"><i class="fa fa-users"></i> {_'Prodejci'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Prodejci', 'Sellers_menu', 'Sellers', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="ProductMark:default"><i class="fa fa-cc"></i> {_'Značky produktů'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Značky produktů', 'ProductMark_menu', 'ProductMark', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="ProductProducer:default"><i class="fa fa-industry"></i> {_'Výrobci produktů'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Výrobci produktů', 'ProductProducer_menu', 'ProductProducer', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="Currency:default"><i class="fa fa-eur"></i> {_'Měna'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Měna', 'currency_group', 'Currency', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="Vat:default"><i class="fa fa-money"></i> {_'Daňové sazby'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Daňové sazby', 'vat_group', 'Vat', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="Country:default"><i class="fa fa-globe"></i> {_'Státy'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Státy', 'country_group', 'Country', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="DeliveryMethod:default"><i class="fa fa-car"></i> {_'Dodací metody'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Dodací metody', 'admin_delivery_method', 'DeliveryMethod', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href="DeliverySection:default"><i class="fa fa-car"></i> {_'Sekce dodacích metod'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Sekce dodacích metod', 'admin_delivery_method_section', 'DeliverySection', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="PaymentMethod:default"><i class="fa fa-credit-card"></i> {_'Platební metody'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Platební metody', 'admin_payment_method', 'PaymentMethod', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="RedirectRule:default"><i class="fa fa-link"></i> {_'Přesměrování url adres'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Přesměrování url adres', 'redirect_rule_menu', 'RedirectRule', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href="WebTemplate:default"><i class="fa fa-file-o"></i> {_'Správa šablon stránek'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Správa šablon stránek', 'WebTemplate_menu', 'WebTemplate', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="OrderState:default"><i class="fa fa-list-ol"></i> {_'Stavy objednávek'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Stavy objednávek', 'admin_states_order', 'OrderState', 'menu'}
+
+            {*capture $li}
+                <li>
+                    <a n:href="BalikobotShop:default"><i class="fa fa-shopping-basket"></i> {_'Balíkobot e-shopy'}
+                    </a>
+                </li>
+            {/capture}
+            {control acl $li, 'Balíkobot e-shopy', 'admin_BalikobotShop_menu', 'BalikobotShop', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href="HeurekaCart:default"><i class="fa fa-shopping-basket"></i> {_'Heuréka košík'}
+                    </a>
+                </li>
+            {/capture}
+            {control acl $li, 'Heuréka košík', 'admin_HeurekaCart_menu', 'HeurekaCart', 'menu'*}
+
+            {capture $li}
+                <li>
+                    <a n:href="Setting:default"><i class="fa fa-cogs"></i> {_'Uživatelská nastavení'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Uživatelská nastavení', 'menu_user_setting', 'Setting', 'menu'}
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+
+{/capture}
+{control acl $ul, 'ADMINISTRACE', 'menu_group_adm', '', 'global-element'}
+
+{*capture $ul}
+    <li>
+        <a href="#"><i class="fa fa-gift fa-fw"></i>  {_'Moje DPD'}<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+            {capture $li}
+                <li>
+                    <a n:href="DpdPackages:packages">{_'Balíky'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Balíky', 'dpd_packages_packages', 'DpdPackages', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href="DpdOrder:default">{_'Objednávky svozu'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Objednávky svozu', 'dpd_order_default', 'DpdOrder', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href="DpdManifest:default">{_'Seznamy zásilek'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Seznamy zásilek', 'dpd_manifest_default', 'DpdManifest', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href="DpdAddress:default">{_'Svozové adresy'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Svozové adresy', 'dpd_address_default', 'DpdAddress', 'menu'}
+            {capture $li}
+                <li>
+                    <a n:href="DpdPackages:default">{_'Zásilky'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Zásilky', 'dpd_packages_default', 'DpdPackages', 'menu'}
+        </ul>
+    </li>
+{/capture}
+{control acl $ul, 'Moje DPD', 'menu_group_my_dpd', '', 'global-element'*}
+
+{*capture $li}
+    <li>
+        <a n:href="WebPushNotification:"><i class="fa fa-sticky-note fa-fw"></i> {_'Webové notifikace'}</a>
+    </li>
+{/capture}
+{control acl $li, 'Webové notifikace', 'web_push_notification_default', 'WebPushNotification', 'menu'*}
+
+{if $user->getIdentity()->login == 'wadmin'}
+{capture $ul}
+    <li>
+        <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>  {_'Skrytá administrace'}<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+            {capture $li}
+                <li>
+                    <a n:href=":Language:default"><i  class="fa fa-language"></i>  {_'Jazyky'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Jazyky', 'language_group', 'Language', 'menu'}
+
+            {capture $li}
+                <li>
+                    <a n:href=":Group:default"><i  class="glyphicon glyphicon-cog"></i>  {_'Nastavení'}</a>
+                </li>
+            {/capture}
+            {control acl $li, 'Nastavení', 'menu_perm_group', 'Group', 'menu'}
+            <li>
+                <a href="#"><i  class="fa fa-exchange fa-fw"></i>  {_'Překlady'}</a>
+            </li>
+        </ul>
+        <!-- /.nav-second-level -->
+    </li>
+
+{/capture}
+{control acl $ul, 'Skryta_administrace', 'menu_group_hide_adm', '', 'global-element'}
+{/if}

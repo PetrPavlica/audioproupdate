@@ -1,0 +1,116 @@
+{block title}{_'Správa diskuze produktu'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Správa diskuze produktu'} -
+    <a n:href=":ProductDetail:detail id=>$product->id" target="_blank">{$product->name}</a>
+</h3>
+
+<link rel="stylesheet" type="text/css" href="{$basePath}/core/css/dataTableBootstrap.css"/>
+
+<div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+    <a n:href=":ProductDiscussion:default id => $product->id, onlyNonReply => !$onlyNonReply" class="btn btn-default">
+        {if $onlyNonReply}
+            {_'Zobrazit vše'}
+        {else}
+            {_'Zobrazit pouze nezodpovězené'}
+        {/if}
+    </a>
+    <br/>
+    <br/>
+
+    <table id="categoryTbl" class="table table-striped table-bordered" width="100%" cellspacing="0">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>{_'Text'}</th>
+            <th>{_'Datum'}</th>
+            <th>{_'Autor'}</th>
+            <th>Přezdívka</th>
+            <th>{_'Akce'}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {var $i = 1}
+        {foreach $discussions as $item}
+            {continueIf $onlyNonReply && count($item->reply)}
+            <tr>
+                <td>
+                    {$i}
+                    {var $i = $i + 1}
+                </td>
+                <td><span style="
+                             background-color: transparent;
+                             border: none;
+                             border-radius: 0px;
+                             font-family: sans-serif;
+                             ">{$item->text}</span>
+                </td>
+                <td>{$item->foundedDate|date:'j. n. Y'}</td>
+                <td>
+                        <span n:if="$item->customer">
+                            {$item->customer->name}
+                        </span>
+                </td>
+                <td>{$item->nickname}</td>
+                <td>
+                    {if !$item->reply}
+                        <a n:href=":ProductDiscussion:edit id => 0, idProduct => $product->id, idReplayed => $item->id" class="btn btn-xs btn-default">
+                            <span class="fa fa-reply"></span>
+                        </a>
+                    {else}
+                        <a n:href=":ProductDiscussion:edit id => $item->reply[0]->id, idProduct => $product->id" class="btn btn-xs btn-default">
+                            <span class="fa fa-reply"></span>
+                        </a>
+                    {/if}
+                    <a class="btn btn-xs btn-default" n:href=":ProductDiscussion:edit id => $item->id, idProduct => $product->id"><i class="fa fa-pencil"></i>
+                    </a>
+                    <a n:href="delete! id=>$item->id" class="btn btn-xs btn-danger confirmLink"><span class="fa fa-trash"></span></a>
+                </td>
+            </tr>
+            {*<tr n:if="count($item->reply)">
+                <td>
+                    {$i}
+                    {var $i = $i + 1}
+                </td>
+                <td>
+                    {_'Odpověď na č.'} {$i - 2}:
+                    <span style="
+                             background-color: transparent;
+                             border: none;
+                             border-radius: 0px;
+                             font-family: sans-serif;
+                             ">{$item->reply[0]->text}</span>
+                </td>
+                <td>{$item->reply[0]->foundedDate|date:'j. n. Y'}</td>
+                <td>
+                        <span n:if="$item->reply[0]->user">
+                            {$item->reply[0]->user->name}
+                        </span>
+                </td>
+                <td>{$item->nickname}</td>
+                <td>
+                    <a class="btn btn-xs btn-default" n:href=":ProductDiscussion:default id => $item->reply[0]->id, idProduct => $product->id">
+                        <span class="fa fa-pencil"></span>
+                    </a>
+                    <a n:href="delete! id=>$item->reply[0]->id" class="btn btn-xs btn-danger confirmLink">
+                        <span class="fa fa-trash"></span>
+                    </a>
+                </td>
+            </tr>*}
+        {/foreach}
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript" src="{$basePath}/core/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="{$basePath}/core/js/dataTable.bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#categoryTbl').DataTable();
+    });
+</script>
+
+

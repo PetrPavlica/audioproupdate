@@ -1,0 +1,24 @@
+<div n:if="isset($category)" id="horni_lista" class="flexElem flexWrap valignCenter">
+    <div id="menu_path" class="flexElem">
+        <a n:href="Front:default">
+            <div class="domecek"></div>
+        </a>
+        {var $menuPath = $tmp2 = ""}
+        {while}
+            {if !isset($tmp)}
+                {var $tmp = $category}
+            {else}
+                {var $tmp = $tmp->parentCategory}
+            {/if}
+            {capture $tmp2}
+                <div class="arrow"></div>
+            {var $slug = \Nette\Utils\Strings::webalize($tmp->name)}
+                <a n:href="ProductList:list id => $tmp->id, slug => $slug">
+                    {$tmp->name}
+                </a>
+            {/capture}
+            {var $menuPath = $tmp2 . $menuPath}
+        {/while $tmp->parentCategory != NULL}
+        {$menuPath|noescape}
+    </div>
+</div>

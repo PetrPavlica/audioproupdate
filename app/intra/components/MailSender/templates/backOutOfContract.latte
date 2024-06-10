@@ -1,0 +1,49 @@
+
+<h1>Odstoupení od kupní smlouvy</h1>
+
+<table>
+    <tr><td>Moje jméno a příjmení:</td><td> {$data["name"]} {$data["surname"]}</td></tr>
+    <tr><td>Moje adresa:</td><td> {$data["street"]}, {$data["zip"]} {$data["city"]}</td></tr>
+    <tr><td>Můj telefon a e-mail:</td><td> {$data["phone"]}, {$data["email"]}</td></tr>
+
+    <tr><td>&nbsp;</td></tr>
+
+    <tr><td>Jméno a příjmení či název společnosti:</td><td> {$settings["company_name"]}</td></tr>
+    <tr><td>Adresa:</td><td> {$settings["company_street"]},{$settings["company_city"]} </td></tr>
+    <tr><td>IČ:</td><td> {$settings["company_IC"]}</td></tr>
+</table>
+
+<br /><br />
+
+Adresa pro zaslání zboží při odstoupení od smlouvy: {$settings["company_name"]}, {$settings["back_out_contract_adress"]}
+
+<br /><br />
+
+<b>Oznámení o odstoupení od kupní smlouvy</b>
+
+<br /><br />
+
+Vážení,
+
+<br /><br />
+
+dne <u>{$data["conclusion_date"]}</u> jsem prostřednictvím vašeho e-shopu www.audiopro.cz s vámi uzavřel/a kupní
+smlouvu, jejímž předmětem bylo <u>{$data["product"]}</u> (identifikace zboží). Toto zboží jsem
+převzal/a dne <u>{$data["taken_date"]}</u><br /><br />
+
+Vzhledem k tomu, že smlouva byla uzavřena pomocí internetu, tj. typického prostředku
+komunikace na dálku, rozhodl/a jsem se využít svého práva podle ustanovení § 1829 odst. 1
+ve spojení s § 1818 zákona č. 89/2012 Sb., občanský zákoník, v platném znění, a tímto
+oznamuji, že od výše uvedené kupní smlouvy odstupuji.<br /><br />
+
+Zboží vám zasílám zpět v samostatné zásilce, zároveň vás žádám o poukázání kupní ceny
+ve výši <u> {$data["product_price"]}</u> a <u>{$data["postage_price"]}</u> za poštovné ve prospěch mého bankovního účtu č.
+<u>{$data["bank_account"]}</u>, nejpozději do 14 kalendářních dnů od doručení tohoto odstoupení od smlouvy.
+
+{*
+S pozdravem
+
+(vlastnoruční podpis)
+Přílohy:
+Kopie kupního dokladu
+*}

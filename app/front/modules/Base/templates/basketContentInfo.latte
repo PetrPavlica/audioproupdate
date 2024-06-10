@@ -1,0 +1,23 @@
+<div id="productAlreadyInBasket">
+
+    <div class="nadpis center"><h2>{_'V košíku máte již delší dobu vložené zboží'}</h2></div>
+
+    <div class="article">
+        <div class="content">
+            {_'V košíku máte nějaké zboží, nezapomněl/a jste jej objednat?'}
+        </div>
+    </div>
+
+    {var $sum = 0}
+    {foreach $basket as $item}
+        {var $sum = $sum + ($item['selingPrice'] * $item['countItems'])}
+    {/foreach}
+
+    {$freeDelivery->renderToString($settings['delivery_free'], $sum, $currency)|noescape}
+
+    <div class="fields_container justify">
+        <a class="button white dialog-close-handler">{_'Pokračovat v nákupu'}</a>
+        <a href="{link Basket:one, 'locale' => $locale}" class="button">{_'Do košíku'}</a>
+    </div>
+
+</div>

@@ -1,0 +1,18 @@
+{block title}{_'Zrušení objednávky svozu'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Zrušení objednávky svozu'}
+</h3>
+
+<div class="col-xs-12 col-sm-12 col-md-8">
+    {form deleteForm, class=>"form-horizontal"}
+        {control renderer $form, 'id'}
+        {control renderer $form, 'description'}
+        {control renderer $form, 'send'}
+    {/form}
+    <a n:href="DpdOrder:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

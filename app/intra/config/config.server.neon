@@ -1,0 +1,25 @@
+services:
+	EETAdapter:
+		class: Intra\Model\Utils\EET\EETAdapter
+		setup:
+		- setProductionMode(true)
+
+	OrderProcessFacade:
+		class: Front\Model\Facade\OrderProcessFacade
+		setup:
+		- setProduction(true)
+
+	BasketFacade:
+		class: Front\Model\Facade\BasketFacade
+		setup:
+		- setProduction(true)
+
+	BalikobotAdapter:
+		class: Intra\Model\Utils\BalikobotAdapter
+		setup:
+		- setProduction(true)
+
+	HeurekaCart:
+	    class: Intra\Model\Utils\HeurekaCart
+	    setup:
+	        - setProduction(true)

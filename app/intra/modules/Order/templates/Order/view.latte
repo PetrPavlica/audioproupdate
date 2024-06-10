@@ -1,0 +1,584 @@
+{block title}{_'Detail objednávky'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Detail objednávky'} - {$order->orderState->name}{if $order->heurekaId} - objednávka přišla z <strong>Heuréka.cz</strong>{/if}
+</h3>
+<div style="" class="col-xs-12 col-sm-12 col-md-12">
+
+    {control print:invoice, $order->id, 'Stáhnout proformu', true}
+
+    <a class="btn btn-default" n:href="sendProformaEmail! orderId => $order->id"><i class="fa fa-envelope-o"></i> {_'Zaslat znovu proformu'}
+    </a>
+
+    {if $order->codeInvoice}
+        {control print:invoice, $order->id, 'Stáhnout fakturu'}
+        <a class="btn btn-default" n:href="sendInvoiceEmail! orderId => $order->id">
+            <i class="fa fa-envelope-o"></i> {_'Zaslat znovu fakturu'}
+        </a>
+    {/if}
+
+    {if $order->codeCreditNote}
+        {control print:invoice, $order->id, 'Stáhnout dobropis', false, true}
+        <a class="btn btn-default" n:href="sendCreditNoteEmail! orderId => $order->id">
+            <i class="fa fa-envelope-o"></i> {_'Zaslat znovu dobropis'}
+        </a>
+    {/if}
+
+    {control print:stockList, $order->id, 'Stáhnout dodací list', true}
+
+    {control print:offer, $order->id, 'Stáhnout nabídku'}
+
+    {if $order->errorInPayment}
+        <a class="btn btn-default" n:href="deleteError! orderId => $order->id"><i class="fa fa-times"></i> {_'Smazat chybovou hlášku'}
+        </a>
+    {/if}
+
+    <br/><br/>
+</div>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-12">
+    <div class="row">
+        <div class="col-lg-4 col-md-12 col-xl-4">
+            <div class="well well-lg">
+                <a n:href=":Order:editBilingInfo id=>$order->id" class="right-button"><i class="fa fa-edit"></i></a>
+                <h4>{_'Fakturační údaje'}</h4>
+                <p>
+                    <strong>
+                        {if $order->company}
+                            {$order->company} <br/>
+                        {else}
+                        {$order->name} <br/>
+                        {/if}
+                    </strong>
+                    {if $order->idNo} {_'IČ:'} {$order->idNo} <br/> {/if}
+                    {if $order->vatNo} {_'DIČ:'} {$order->vatNo} <br> {/if}
+                    {if $order->vatNo2} {_'IČ DPH:'} {$order->vatNo2} <br> {/if}
+                    {*if $order->payVat} {_'Plátce DPH'} <br>{/if*}
+                    <br/>
+                    {$order->street} <br/>
+                    {$order->zip} {$order->city}<br/>
+                    {$order->country} <br/>
+                </p>
+            </div>
+        </div>
+        {if $order->deliveryToOther}
+            <div class="col-lg-4 col-md-12 col-xl-4">
+                <div class="well well-lg">
+                    <a n:href=":Order:editDeliveryInfo id=>$order->id" class="right-button"><i class="fa fa-edit"></i></a>
+                    <h4>{_'Dodací údaje'}</h4>
+                    <p>
+                        <strong>
+                            {if $order->contactPerson}
+                                {$order->contactPerson}
+                            {elseif $order->company}
+                                {$order->company}
+                            {else}
+                                {$order->name}
+                            {/if}
+                            <br/><br/>
+                        </strong>
+                        {$order->streetDelivery} <br/>
+                        {$order->zipDelivery} {$order->cityDelivery}<br/>
+                        {$order->countryDelivery} <br/>
+                    </p>
+                </div>
+            </div>
+        {/if}
+
+        <div class="col-lg-4 col-md-12 col-xl-4">
+            <div class="well well-lg">
+                <a n:href=":Order:editPayDelInfo id=>$order->id" class="right-button"><i class="fa fa-edit"></i></a>
+                <h4>{_'Dodací a platební podmínky'}</h4>
+                <strong>{_'Způsob dodání'}</strong><br/>
+
+                {php $dc->setDisableDPH($order->euVat)}
+                {if $order->deliveryMethod}
+                    {php $dc->setPriceWithDPH($order->payDeliveryPrice, $order->deliveryMethod->vat->value, 1)}
+                    {$order->deliveryMethod->name}
+                {else}
+                    {php $dc->setPriceWithDPH($order->payDeliveryPrice,  $defaultVat->value, 1)}
+                {/if}
+                {var $priceMethods = $dc->getTotalPrice()}
+                - {$order->currency->markBefore} {$dc->getTotalPrice()|number:2:'.':' '} {$order->currency->markBehind}
+                <br/>
+                {if $order->deliveryPlace}
+                    {if $order->deliveryMethod->isDPD}
+                        {(isset($dpdPickups[$order->deliveryPlace]) ? $dpdPickups[$order->deliveryPlace] : '')}
+                    {elseif $order->deliveryMethod->isUlozenka}
+                        {(isset($ulozenkaPickups[$order->deliveryPlace]) ? $ulozenkaPickups[$order->deliveryPlace] : '')}
+                    {elseif $order->deliveryMethod->isZasilkovna}
+                        {(isset($zasilkovna[$order->deliveryPlace]) ? $zasilkovna[$order->deliveryPlace] : '')}
+                    {else}
+                        {$order->deliveryPlace}
+                    {/if}
+                {/if}
+                <br/><br/>
+                <strong>{_'Platba'}</strong><br/>
+                {if $order->paymentMethod}
+                    {php $dc->setPriceWithDPH($order->payMethodPrice, $order->paymentMethod->vat->value, 1)}
+                    {$order->paymentMethod->name}
+                {else}
+                    {php $dc->setPriceWithDPH($order->payMethodPrice,  $defaultVat->value, 1)}
+                {/if}
+                {php $dc->setDisableDPH($order->euVat)}
+                {var $priceMethods = $priceMethods + $dc->getTotalPrice()}
+
+                - {$order->currency->markBefore} {$dc->getTotalPrice()|number:2:'.':' '} {$order->currency->markBehind}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well well-lg">
+                <a n:href=":Order:editBasketItem productOrderId=>0, orderId=>$order->id" class="right-button"><i
+                            class="fa fa-plus"></i></a>
+                <h4>{_'Obsah objednávky'}</h4>
+                <br>
+                <table class="table">
+                    <tr>
+                        <td><strong>#</strong></td>
+                        <td><strong>{_'Kód produktu'}</strong></td>
+                        <td><strong>{_'Produkt'}</strong></td>
+                        <td><strong>{_'Počet'}</strong></td>
+                        <td><strong>{_'Bez DPH'}</strong></td>
+                        <td><strong>{_'S DPH'}</strong></td>
+                        <td><strong>{_'Celkem'}</strong></td>
+                        <td><strong>{_'Akce'}</strong></td>
+                    </tr>
+
+                    {var $total = 0}
+                    {var $isOldDiscount = true}
+
+                    {foreach $order->products as $item}
+
+                        {var $vat =0}
+                        {if $item->product}
+                            {var $vat = $item->product->vat->value}
+                        {else}
+                            {var $vat = $defaultVat->value}
+                        {/if}
+                        {php $dc->setPriceWithDPH($item->selingPrice, $vat, $item->count)}
+                        {php $dc->setDisableDPH($order->euVat)}
+
+                        {if $item->basePrice && $item->selingPrice != $item->basePrice}
+                            {var $isOldDiscount = false}
+                        {/if}
+
+                        <tr>
+                            <td>
+                                {$iterator->getCounter()}
+                            </td>
+                            <td>
+                                <span n:if="$item->product">
+                                {$item->product->code}
+                                </span>
+                            </td>
+                            <td>
+                                {if $item->product}
+                                    <a n:href=":Product:edit id=> $item->product->id" target="_blank">
+                                        {$item->name} ({$item->unit})
+                                    </a>
+                                {else}
+                                    {$item->name}
+                                {/if}
+                            </td>
+                            <td>
+                                {$dc->getCount()}
+                            </td>
+                            <td>
+                                <span>{$order->currency->markBefore} {$dc->getOneWithoutDPH()|number:2:'.':' '} {$order->currency->markBehind}</span>
+                            </td>
+
+                            <td class="sDPH">
+                                <span>{$order->currency->markBefore}
+                                    <span class="priceProduct">{$dc->getOnePrice()|number:2:'.':' '}</span>
+                                    {$order->currency->markBehind}
+                                </span>
+                            </td>
+                            <td class="Count">
+                                <div>
+                                {$order->currency->markBefore}
+                                    <span class="totPriceProduct">{$dc->getTotalPrice()|number:2:'.':' '}</span>
+                                    {$order->currency->markBehind}
+                                </div>
+                                <div n:if="$item->basePrice && $item->selingPrice != $item->basePrice" style="text-decoration: line-through;">
+                                    {$order->currency->markBefore}
+                                    <span class="totPriceProduct">{$item->basePrice|number:2:'.':' '}</span>
+                                    {$order->currency->markBehind}
+                                </div>
+                                {var $total = $total + $dc->getTotalPrice()}
+                            </td>
+                            <td>
+                                <a n:href=":Order:editBasketItem productOrderId=>$item->id">
+                                    <i class="fa fa-edit"></i>
+                                </a> &nbsp;&nbsp;
+                                <a n:href="deleteProductOrder! productOrderId=>$item->id" class="confirmLink">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {/foreach}
+
+                    {var $total = $total + $priceMethods}
+                    <tr>
+                        <td colspan="5"></td>
+                        <td><strong>{_'Doprava a platba:'} </strong></td>
+                        <td>
+                            <strong>{$order->currency->markBefore} {$priceMethods} {$order->currency->markBehind}</strong>
+                        </td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="5"></td>
+                        {var $discount = NULL}
+                        {ifset $order->discount[0]}{var $discount = $order->discount[0]}{/}
+                        <td>
+                            <strong>{_'Sleva'}{if isset($discount) && $discount->discount} : {$discount->discount->code}{/if}</strong>
+                        </td>
+                        <td><strong>{if isset($discount) && $discount}{$discount->percent}{else}0{/if} %</strong>
+                        </td>
+                        <td>
+                            {ifset $discount}
+                                {if $isOldDiscount}
+                                    {var $sleva = ($discount->percent / 100) * $total}
+                                    {var $total = $total - $sleva}
+                                {/if}
+                                <a n:href=":Order:editDiscount discountId=>$discount->id, orderId => $order->id">
+                                    <i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                                <a n:href="deleteDiscount! discountId=>$discount->id" class="confirmLink">
+                                    <i class="fa fa-trash"></i></a>
+                            {else}
+                                <a n:href=":Order:editDiscount discountId=>0, orderId => $order->id">
+                                    <i class="fa fa-plus"></i></a> &nbsp;&nbsp;
+                            {/ifset}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"></td>
+                        <td><strong>{_'Celkem:'} </strong></td>
+                        {var $total = round($total, $order->currency->countDecimal)}
+                        <td>
+                            <strong>{$order->currency->markBefore} {$total|number:$order->currency->countDecimal:'.':' '} {$order->currency->markBehind}</strong>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4" n:if="$order->deliveryMethod && $order->deliveryMethod->balikobotDelivery">
+            <div class="well well-lg">
+                <h4>{_'Balíkobot - přehled rozdělení do balíků'} <a n:if="!$packageLabel" n:href=":Order:editPackageBalikobot orderId => $order->id" class="right-button"><i class="fa fa-plus"></i></a></h4>
+                {foreach $order->packages as $package}
+                    <span style='padding-right: 90px'>{$iterator->getCounter()}. {_'balík'}:</span>
+                    <a n:if="!$package->isOrdered && !$packageLabel" style='padding-left: 10px' n:href=":Order:editPackageBalikobot orderId => $order->id, id => $package->id" class="btn btn-xs btn-link">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <span n:if="$package->label_url" class="btn-group">
+                        <button type="button" class="btn btn-xs btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-file-pdf-o"></i>
+                        </button>
+                        <ul class="dropdown-menu slidedown">
+                            <li>
+                                <a style='padding-left: 10px' href="{$package->label_url}?p=1" target="_blank" class="btn btn-xs btn-link">
+                                    <img src="{$basePath}/intra/img/paper-1.jpg">
+                                </a>
+                             </li>
+                             <li>
+                                <a style='padding-left: 10px' href="{$package->label_url}?p=2" target="_blank" class="btn btn-xs btn-link">
+                                    <img src="{$basePath}/intra/img/paper-2.jpg">
+                                </a>
+                            </li>
+                            <li>
+                                <a style='padding-left: 10px' href="{$package->label_url}?p=3" target="_blank" class="btn btn-xs btn-link">
+                                    <img src="{$basePath}/intra/img/paper-3.jpg">
+                                </a>
+                             </li>
+                             <li>
+                                <a style='padding-left: 10px' href="{$package->label_url}?p=4" target="_blank" class="btn btn-xs btn-link">
+                                    <img src="{$basePath}/intra/img/paper-4.jpg">
+                                </a>
+                            </li>
+                        </ul>
+                    </span>
+
+                    <a n:if="$package->isOrdered" style='padding-left: 10px' n:href=":BalikobotPackage:track $package->id" class="btn btn-xs btn-link">
+                        <i class="fa fa-road"></i>
+                    </a>
+
+                    <a n:if="!$package->isOrdered && !$packageLabel" style='padding-left: 10px' n:href="deletePackage! packageId => $package->id" class="btn btn-xs btn-link confirmLink">
+                        <i class="fa fa-trash"></i>
+                    </a>
+
+                    <br/> {$package->weight} {_'kg'},
+                {_'svoz'}: {$package->balikobotShop->name}
+
+                    <br/>
+                    <br/>
+                {/foreach}
+                {if $order->packages && !$packageLabel && !$order->deliveryOrdered}
+                    <a n:href="addPackagesToBalikobot! orderId => $order->id" class="btn btn-primary pull-left">Přidat štítky</a>
+                {/if}
+                {if $order->packages && $packageLabel && !$order->deliveryOrdered}
+                    <a n:href="removePackagesFromBalikobot! orderId => $order->id" class="btn btn-danger pull-right">Smazat štítky</a>
+                {/if}
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="col-lg-4" n:if="$order->deliveryMethod && ($order->deliveryMethod->isDPD || $order->deliveryMethod->isDPDClassic)">
+            <div class="well well-lg">
+                <h4>{_'DPD - přehled rozdělení do balíků'} <a n:if="!$packageLabelDpd" n:href="Order:editPackageDpd orderId => $order->id" class="right-button"><i class="fa fa-plus"></i></a></h4>
+                {var $lastNumber = null}
+                {var $needCloseDiv = false}
+                {var $renderPackageTitle = true}
+                {var $i = 1}
+                {var $packageToSend = false}
+                {var $packageToPrint = false}
+                {foreach $order->dpdPackages as $package}
+                    {if $package->orderNumber == null && !$packageToSend}
+                        {var $packageToSend = true}
+                    {/if}
+                    {if $package->orderNumber != null && !$packageToPrint}
+                        {var $packageToPrint = true}
+                    {/if}
+                    {if $package->orderNumber == null && $renderPackageTitle}
+                        <strong>Balíky, které nebyly odeslány:</strong><br><br>
+                        {var $renderPackageTitle = false}
+                    {/if}
+                    {if $lastNumber != $package->orderNumber}
+                        {var $i = 1}
+                        {if $needCloseDiv}</div>{/if}
+                        <div style="margin: 15px 0;">
+                        {var $needCloseDiv = true}
+                            <div>
+                                <strong>Zásilka č. {$package->shipmentId}</strong>
+                                <a n:if="$package->dpdUrl" style='padding-left: 10px' href="{$package->dpdUrl}" target="_blank" class="btn btn-xs btn-link">
+                                    <i class="fa fa-road"></i>
+                                </a>
+                                <a n:if="$package->shipmentId" style='padding-left: 10px' n:href="getShipmentLabelDpd! shipmentId => $package->shipmentId" class="btn btn-xs btn-link" target="_blank"><i class="fa fa-file-pdf-o"></i></a>
+                                <a n:if="$package->shipmentId" style='padding-left: 10px' n:href="deleteShipmentDpd! shipmentId => $package->shipmentId" class="btn btn-xs btn-link confirmLink">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                    {/if}
+                    <span style='padding-right: 90px'>{$i}. {_'balík'}:</span>
+
+                    <a n:if="!$package->shipmentId && !$package->orderNumber" style='padding-left: 10px' n:href="Order:editPackageDpd orderId => $order->id, id => $package->id" class="btn btn-xs btn-link">
+                        <i class="fa fa-edit"></i>
+                    </a>
+
+                    <a n:if="!$package->shipmentId && !$package->orderNumber" style='padding-left: 10px' n:href="deletePackageDpd! packageId => $package->id" class="btn btn-xs btn-link confirmLink">
+                        <i class="fa fa-trash"></i>
+                    </a>
+
+                    <br/> {$package->weight} {_'kg'}, {_'svoz'}: {$package->dpdAddress->name}
+                            <br>
+                            {var $i = $i + 1}
+                            {if ($iterator->isLast() && $needCloseDiv)}
+                                {var $i = 1}
+                                </div>
+                                {/if}
+
+                    {var $lastNumber = $package->orderNumber}
+                {/foreach}
+                {if $packageToSend}
+                <br>
+                <a n:href="addPackagesToDpd! orderId => $order->id" class="btn btn-primary pull-left" style="margin-right: 10px;">Vytvořit zásilky</a>
+                {/if}
+            {if $packageToPrint}
+                <a n:href="getShipmentLabelOrderDpd! orderId => $order->id" class="btn btn-primary pull-left" target="_blank" style="margin-right: 10px;">Tisk štítků</a>
+            {/if}
+                {*if $order->dpdPackages && !$packageLabelDpd && !$order->deliveryOrdered}
+                    <a n:href="addPackagesToDpd! orderId => $order->id" class="btn btn-primary pull-left">Přidat štítky</a>
+                {/if}
+                {if $order->dpdPackages && $packageLabelDpd && !$order->deliveryOrdered}
+                    <a n:href="removePackagesFromDpd! orderId => $order->id" class="btn btn-danger pull-right">Smazat štítky</a>
+                {/if*}
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="well well-lg">
+                <a n:href=":Order:editCustomerInfo id=>$order->id" class="right-button"><i class="fa fa-edit"></i></a>
+                <h4>{_'Doplňující informace o zákazníkovi'}</h4>
+                <p>
+                    {_'Datum objednání:'} <strong>{$order->foundedDate|date:'j. n. Y'} </strong><br/>
+                    {_'Telefon zákazníka:'} <strong>{$order->phone} </strong><br/>
+                    {_'Email zákazníka:'} <strong>{$order->email} </strong><br/>
+                    {_'Plátce DPH?:'} {if $order->payVat} <i class="fa fa-check"></i> {else} <i
+                        class="fa fa-times"></i> {/if}<br/>
+                    {_'Doplňující komentář od zákazníka:'} <strong>{$order->comment|noescape} </strong><br/>
+                    {_'Poznámka'}: <strong>{$order->commentInternal|noescape} </strong><br/>
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="well well-lg">
+                <a n:href=":Order:editInvoiceInfo id=>$order->id" class="right-button"><i class="fa fa-edit"></i></a>
+                <h4>{_'Informace o fakturaci'}</h4>
+                <p>
+                    {_'Číslo faktury:'} <strong>{$order->codeInvoice}</strong> <br/>
+                    {_'Datum splatnosti:'} <strong>{$order->dueDate|date:'j. n. Y'}</strong> <br/>
+                    {_'Datum úhrady:'} <strong>{$order->paymentDate|date:'j. n. Y'}</strong> <br/>
+                    {_'Variabilní symbol:'} <strong>{$order->variableSymbol}</strong> <br/>
+                    {_'Konstatní symbol:'} <strong>{$order->constantSymbol}</strong> <br/>
+                    {_'Specifický symbol:'} <strong>{$order->specificSymbol}</strong> <br/>
+                    {_'Typ úhrady:'} <strong>{$order->typeOfPayment}</strong> <br/>
+                    {_'Evropský odběratel (nulové DPH):'}
+                    {if $order->euVat} <i class="fa fa-check"></i> {else}
+                    <i class="fa fa-times"></i> {/if}<br/>
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="well well-lg">
+                <a n:href=":Order:editRefund orderId=>$order->id" class="right-button"><i class="fa fa-plus"></i></a>
+                <h4>{_'Úhrady'}</h4>
+                <p>
+                    {if count($refunds)}
+                    {foreach $refunds as $refund}
+                    {if $iterator->getCounter() != 1}
+                <hr>{/if}
+                {if $refund->eetNo}
+                    {_'Číslo: '} <strong>{$refund->eetNo}</strong><br>
+                {/if}
+
+                {_'Datum: '} <strong>{$refund->foundedDate|date:'j. n. Y'}</strong>
+                <a style='padding-left: 100px' n:href=":Order:editRefund orderId=> $order->id, id=> $refund->id">
+                    <i class="fa fa-edit"></i></a>
+                &nbsp;
+                <a n:href="deleteRefund! refundId => $refund->id" class="confirmLink"><i class="fa fa-trash"></i></a>
+                {if $refund->eetNo}
+                    {control print:receipt, $refund->id}
+                {/if}
+                &nbsp;
+                <br/>
+                {_'Částka: '}
+                <strong>{$order->currency->markBefore} {$refund->value|number:2:'.':' '} {$order->currency->markBehind}</strong><br/>
+                {if $refund->text}
+                    {_'Poznámka: '} <strong>{$refund->text}</strong> <br/>
+                {/if}
+
+                {_'EET: '}
+                {if $refund->fikEET === '0' || $refund->fikEET == '' && $refund->online}
+                    <a n:href="sendAgainEET! idRefund=>$refund->id" class="btn btn-xs btn-link"><i
+                                class="fa fa-refresh"></i>
+                    </a>
+                {elseif $refund->fikEET != ""}
+                    <i class="fa fa-check"></i>
+                {else}
+                    <i class="fa fa-times"></i>
+                {/if}
+
+                {/foreach}
+
+                {else}
+                {_'Faktura dosud nebyla uhrazena.'}
+                {/if}
+                </p>
+            </div>
+        </div>
+
+        {if $order->codeInvoice}
+        <div class="col-lg-4">
+            <div class="well well-lg">
+                {if !$order->codeCreditNote}
+                    <a n:href="Order:editCreditNote id=>$order->id" class="btn btn-primary right-button" style="font-size: 16px;">{_'Vystavit dobropis'}</a>
+                {else}
+                    <a n:href="Order:editCreditNote id=>$order->id" class="right-button"><i class="fa fa-edit"></i></a>
+                {/if}
+                <h4>{_'Informace o dobropisu'}</h4>
+                <p>
+                    {_'Číslo dobropisu'}: <strong>{$order->codeCreditNote}</strong> <br/>
+                    {_'Datum vystavení'}: <strong>{$order->creditNoteDate|date:'j. n. Y'}</strong><br>
+                    {if $order->codeCreditNote}
+                    {_'Včetně dopravného'}: {if $order->creditNoteWithDelivery}<i class="fa fa-check"></i>{else}<i class="fa fa-times"></i>{/if}
+                        <br>
+                        <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Název</th>
+                        <th>Počet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {if $order->productsInCreditNote}
+                        {foreach $order->productsInCreditNote as $p}
+                        <tr>
+                            <td>{$p->productInOrder->name}</td>
+                            <td>{$p->count}x</td>
+                        </tr>
+                        {/foreach}
+                    {/if}
+                </tbody>
+            </table>
+                    {/if}
+                </p>
+            </div>
+        </div>
+        {/if}
+
+        <div class="col-lg-4">
+            <div class="well well-lg">
+                {if $customer}
+                <a n:href="Customer:edit#orders id => $customer->id" class="right-button" target="_blank"><i class="fa fa-history"></i></a>
+                {/if}
+                <h4>{_'Historie objednávek - posledních 10'}</h4>
+
+                {if $historyOrders}
+                    {foreach $historyOrders as $o}
+                        <a n:href="Order:view id => $o->id">
+                            {$o->variableSymbol} |
+                            {if $o->orderState}{$o->orderState->name} |{/if}
+                            {$o->foundedDate|date:'d. m. Y'}
+                            - {$o->currency->markBefore}
+                            {$o->totalPrice|number:$o->currency->countDecimal:',':' '}
+                            {$o->currency->markBehind}</a>
+                        <br>
+                    {/foreach}
+                {/if}
+
+                <br>
+                <p>
+                    <strong>
+                {_'Celkem'}:
+                {foreach $sumTotal as $k => $s}
+                    {$sumCurr[$k]->markBefore}
+                    {$s|number:$sumCurr[$k]->countDecimal:',':' '}
+                    {$sumCurr[$k]->markBehind}
+                    {if !$iterator->isLast()}/{/if}
+                {/foreach}
+                    </strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="well well-lg">
+                <h4>{_'Přepnout stav objednávky:'}</h4>
+                <br/>
+                {foreach $orderS as $state}
+                    <a n:href="changeState! orderId=> $order->id, stateId => $state->id"
+                            class="btn btn-primary
+                       {if $state->id === $order->orderState->id} disabled {/if}
+                       ">{$state->name}</a>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+
+    <a n:href=":Order:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+    <br/><br/><br/>
+</div>

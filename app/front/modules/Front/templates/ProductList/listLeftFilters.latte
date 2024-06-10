@@ -1,0 +1,53 @@
+<div id="left_filter">
+
+    {if isset($ourTipProducts) && count($ourTipProducts)}
+        <div class="section mohlo_zajimat_container">
+            <div class="nadpis black bold"><h3>{_'Náš tip'}</h3></div>
+            {foreach $ourTipProducts as $product}
+                <div style="padding-bottom:5px">
+                    {control productTile $product, $sess, '', false, "", true}
+                </div>
+            {/foreach}
+        </div>
+    {/if}
+
+    {if isset($accessoriesProducts) && count($accessoriesProducts)}
+
+        <div class="section mohlo_zajimat_container">
+
+            <div class="nadpis black bold"><h3>{_'Nehledal/a jste toto?'}</h3></div>
+
+            {foreach $accessoriesProducts as $product}
+                <div style="padding-bottom:40px">
+                    {control productTile $product, $sess, '', false, "", true}
+                </div>
+            {/foreach}
+        </div>
+    {/if}
+
+    {if isset($lastBuy) && count($lastBuy)}
+        <div class="section mohlo_zajimat_container">
+            <div class="nadpis black bold"><h3>{_'Mohlo by vás zajímat'}</h3></div>
+            <div class="flexElem flexWrap">
+                {foreach $lastBuy as $item}
+                    {var $slug = \Nette\Utils\Strings::webalize($item->product->name)}
+                    <a class="padding-top-20" n:href=":ProductDetail:detail id => $item->product->id, slug => $slug">
+                        <div class="mohlo_zajimat flexElem">
+                            <div class="flexElem valignCenter">
+                                {if $item->product->mainImage && file_exists($item->product->mainImage)}
+                                    <img src="{$basePath}/{$item->product->mainImage}" alt="{$item->product->name}" title="{$item->product->name}"/>
+                                {else}
+                                    <img src="{$basePath}/front/images/produkty/no-photo.png" alt="{$item->product->name}" title="{$item->product->name}"/>
+                                {/if}
+                            </div>
+                            <div class="content flexElem">
+                                <div>{*<span>Před 15 min</span>*} {_'objednal/a'} {explode(" ", $item->orders->name)[0]}</div>
+                            </div>
+                        </div>
+                    </a>
+                {/foreach}
+            </div>
+        </div>
+    {/if}
+
+</div>

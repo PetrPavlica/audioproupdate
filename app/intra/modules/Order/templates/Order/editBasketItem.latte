@@ -1,0 +1,51 @@
+{block title}{_'Editace položky v objednávce'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace položky v objednávce'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form formEditBasketInfo, class=>"form-horizontal"}
+        {control renderer $form}
+    {/form}
+    <a n:href=":Order:view id=>$orders->id" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>
+
+<script type="text/javascript">
+
+    $(document).on("change", "#frm-formEditBasketInfo-product", function () {
+
+        var field = $(this);
+        var frm = field.closest("form");
+        var order_id = $('input[name="orders"]');
+
+        $.nette.ajax({
+            url: {link getProductData!},
+                    type: "GET",
+                    off: {
+                snippets: true
+            },
+            data: {"product_id":field.val(),"order_id":order_id.attr('value')}
+        }).done(function (payload) {
+
+            if(payload.completed == 1){
+
+                var data = JSON.parse(payload.data);
+
+                frm.find("input[name='selingPrice']").val(data["price"]);
+                frm.find("input[name='count']").val(data["count"]);
+                frm.find("input[name='name']").val(data["name"]);
+                frm.find("input[name='unit']").val(data["unit"]);
+
+            }
+
+        });
+
+    });
+
+</script>

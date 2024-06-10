@@ -1,0 +1,91 @@
+doctrine:
+	metadata:
+		Intra: %appDir%/intra/model/database/entity
+services:
+	- Intra\Model\Facade\ProductCategoryFacade
+	- Intra\Model\Facade\ProductFacade
+	- Intra\Model\Facade\VatFacade
+	- Intra\Model\Facade\CountryFacade
+	- Intra\Model\Facade\CustomerFacade
+	- Intra\Model\Facade\GroupProductFilterFacade
+	- Intra\Model\Facade\ProductFilterFacade
+	- Intra\Model\Facade\OrderFacade
+	- Intra\Model\Facade\DeliveryMethodFacade
+	- Intra\Model\Facade\OrderStateFacade
+	- Intra\Model\Facade\PaymentMethodFacade
+	- Intra\Model\Facade\LanguageFacade
+	- Intra\Model\Facade\OrderRefundFacade
+	- Intra\Model\Facade\ProductProducerFacade
+	- Intra\Model\Facade\ProductMarkFacade
+	- Intra\Model\Facade\RedirectRuleFacade
+	- Intra\Model\Facade\SpecialOfferProductFacade
+	- Intra\Model\Facade\BannerProductFacade
+	- Intra\Model\Facade\ProductRatingFacade
+	- Intra\Model\Facade\ProductDiscussionFacade
+	- Intra\Model\Facade\NewsletterFacade
+	- Intra\Model\Facade\DeliverySectionFacade
+	- Intra\Model\Facade\ProductActionFacade
+	- Intra\Model\Facade\WebMenuFacade
+	- Intra\Model\Facade\WebArticlesFacade
+	- Intra\Model\Facade\SellersFacade
+	- Intra\Model\Facade\WebTemplateFacade
+	- Intra\Model\Facade\DiscountFacade
+	- Intra\Model\Facade\BalikobotShopFacade
+	- Intra\Model\Facade\BalikobotPackageFacade
+	- Intra\Model\Facade\HeurekaCartFacade
+	- Intra\Model\Facade\CronFacade
+	- Intra\Model\Facade\DpdAddressFacade
+	- Intra\Model\Facade\DpdPackageFacade
+	- Intra\Model\Facade\DpdOrderFacade
+	- Intra\Model\Facade\DpdManifestFacade
+	- Intra\Model\Facade\WebPushSubscriptionFacade
+	- Intra\Model\Facade\WebPushNotificationFacade
+	- Intra\Model\Facade\SaleBannerFacade
+
+	- Intra\Components\PDFPrinter\IPDFPrinterFactory
+	- Intra\Components\PDFPrinter\PDFPrinterControl
+
+	- Intra\Model\Utils\ImageManager\ImagesEditor
+	- Intra\Model\Utils\ProductHelper\ProductHelper
+	- Intra\Model\Utils\DPHCounter
+	- Intra\Model\Utils\MyDpd
+	- Intra\Model\Utils\Cezar
+
+	MailSender:
+		class: Intra\Components\MailSender\MailSender
+		setup:
+		- setDir(%wwwDir%)
+		- setProduction(%isProduction%)
+
+	CurrencyFacade:
+		class: Intra\Model\Facade\CurrencyFacade
+		setup:
+		- setUrlNormalCurrency('http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt')
+		- setUrlExoticCurrency('http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_ostatnich_men/kurzy.txt')
+		- setOurCurrency('CZK')
+	MultiUploaderControl:
+		class: Intra\Components\MultiUploader\MultiUploaderControl
+		setup:
+		- setUploadDir(%wwwDir%/temp-img/)
+
+	XMLExporter:
+		class: Intra\Components\Exporter\XMLExporter
+		setup:
+		- setDir(%wwwDir%/export/)
+		- setBasePath(%baseUri%)
+
+	CategoryUpdater:
+		class: Intra\Model\Utils\CategoryUpdater\CategoryUpdater
+		setup:
+		- setUrlGoogleMerchants('http://www.google.com/basepages/producttype/taxonomy-with-ids.cs-CZ.txt')
+		- setUrlZbozi('https://www.zbozi.cz/static/categories.csv')
+		- setUrlHeureka('https://www.heureka.cz/direct/xml-export/shops/heureka-sekce.xml')
+		- setUrlMall('https://knowledgebase.mallgroup.com/wp-content/uploads/2020/11/Strom-kategorii_CZ10MA.xlsx')
+
+	ThePay:
+	    class: Intra\Model\Utils\ThePay
+	    setup:
+	        - setMerchantId(%ThePayMerchantId%)
+	        - setProjectId(%ThePayProjectId%)
+	        - setApiPassword(%ThePayApiPassword%)
+	        - setProduction(%isProduction%)

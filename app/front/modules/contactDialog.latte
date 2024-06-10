@@ -1,0 +1,57 @@
+<div id="contact_dialog" style="display: none;">
+    <div style="max-width: 700px">
+        <div class="nadpis center bold upper">
+            <h2>{_'Chcete, abychom Vám s tím pomohli?'}</h2>
+        </div>
+        {form contactForm}
+            <div class="block flexElem flexWrap alignCenter" style="padding-top: 0px;">
+                <div class="sub_block">
+                    <table class="responzive form_table small_fields full_fields_size">
+                        <tr>
+                            <td colspan="2">
+                                <div class="fields_container center">
+                                    <a>
+                                        {_'Zadejte nám sem kontakt a my se Vás obratem ozveme a se vším Vám pomůžeme.'}
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>{_'Telefon'}</label>
+                            </td>
+                            <td>
+                                {input phone}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>{_'Email'}</label>
+                            </td>
+                            <td>
+                                {input email}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align: center;">
+                                <br>
+                                {input captcha}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="fields_container center">
+                                    <input type="submit" name="send" value="{_'Odeslat'}" class="ajax"
+                                           style="height: 40px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        {/form}
+
+    </div>
+</div>

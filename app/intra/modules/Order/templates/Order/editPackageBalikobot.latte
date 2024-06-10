@@ -1,0 +1,20 @@
+{block title}{_'Editace balíku pro Balíkobot'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace balíku pro Balíkobot'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+
+    {form formPackageBalikobot, class=>"form-horizontal"}
+        {control renderer $form}
+    {/form}
+
+    <a n:href=":Order:view id=>$order->id" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>
+

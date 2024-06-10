@@ -1,0 +1,11 @@
+<div class="form-group">
+    <select name="{$name}" id="{$id}"  class="form-control {$class}">
+        {foreach $data as $in => $val}
+            <option
+                {if $in == $selected}selected="true"{/if}
+                value="{$in}">
+                {$val}
+            </option>
+        {/foreach}
+    </select>
+</div>

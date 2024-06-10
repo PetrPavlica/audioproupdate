@@ -1,0 +1,12 @@
+<div n:if="isset($lastVisitedIdx)" class="nadpis black full bold">
+    <h1 class="indent">{_'Naposledy navštívené'}</h1>
+    <div class="line full through"></div>
+</div>
+
+<div n:if="isset($lastVisitedIdx)" class="products products_navstivene flexElem flexWrap alignLeft">
+    {foreach $lastVisitedIdx as $idx}
+        {continueIf !isset($lastVisitedProduct[$idx])}
+        {var $product = $lastVisitedProduct[$idx]}
+        {control productTile $product, $sess}
+    {/foreach}
+</div>

@@ -1,0 +1,79 @@
+{block title}{_'Správa diskuze produktů'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Nezodpovězené otázky u produktů'}
+</h3>
+
+<link rel="stylesheet" type="text/css" href="{$basePath}/core/css/dataTableBootstrap.css"/>
+
+<div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+    <table id="categoryTbl" class="table table-striped table-bordered" width="100%" cellspacing="0">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Text</th>
+            <th>Produkt</th>
+            <th>Datum</th>
+            <th>Autor</th>
+            <th>Přezdívka</th>
+            <th width="75">Akce</th>
+        </tr>
+        </thead>
+        <tbody>
+        {var $i = 1}
+        {foreach $discussions as $item}
+            {*continueIf count($item->reply)*}
+            <tr>
+                <td>
+                    {$i}
+                    {var $i = $i + 1}
+                </td>
+                <td><span style="
+                             background-color: transparent;
+                             border: none;
+                             border-radius: 0px;
+                             font-family: sans-serif;
+                             ">{$item->text}</span>
+                </td>
+                <td>
+                    <a n:href=":ProductDetail:detail id => $item->product->id" target="_blank">{$item->product->name}</a>
+                </td>
+                <td>{$item->foundedDate|date:'j. n. Y'}</td>
+                <td>
+                        <span n:if="$item->customer">
+                            {$item->customer->name}
+                        </span>
+                </td>
+                <td>{$item->nickname}</td>
+                <td>
+                    {if !$item->reply}
+                        <a n:href=":ProductDiscussion:edit id => 0, idProduct => $item->product->id, idReplayed => $item->id, returnTo => 'all'" class="btn btn-xs btn-default">
+                            <span class="fa fa-reply"></span>
+                        </a>
+                    {else}
+                        <a n:href=":ProductDiscussion:edit id => $item->reply[0]->id, idProduct => $item->product->id, returnTo => 'all'" class="btn btn-xs btn-default">
+                            <span class="fa fa-reply"></span>
+                        </a>
+                    {/if}
+                    <a class="btn btn-xs btn-default" n:href=":ProductDiscussion:edit id => $item->id, idProduct => $item->product->id, returnTo => 'all'"><i class="fa fa-pencil"></i>
+                    </a>
+                    <a n:href="delete! id=>$item->id" class="btn btn-xs btn-danger confirmLink"><span class="fa fa-trash"></span></a>
+                </td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript" src="{$basePath}/core/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="{$basePath}/core/js/dataTable.bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#categoryTbl').DataTable();
+    });
+</script>
+
+

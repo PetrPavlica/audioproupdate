@@ -1,0 +1,247 @@
+{_'Vážený zákazníku,'}<br>
+<br>
+{_'tímto bychom Vás chtěli informovat o tom, že jsme'}<strong> {_'obdrželi platbu'} </strong>{_'za Vaší objednávku. '}
+<br>
+<br>
+<strong> {_'Objednávka je nyní připravena k expedici.'}</strong>
+<br><br>
+{_'Pokud máte jakýkoliv dotaz ohledně Vaší objednávky, tak nás neváhejte kontaktovat na email'} {$settings['company_email']} {_'nebo na telefonu'} {$settings['company_phone1']}.
+<br>
+<br>
+
+<h4>{_'Dodací a fakturační údaje:'}</h4>
+<table class="basketContent responziveTable">
+    <tr>
+        {if $order->deliveryToOther}
+            <td style="width: 360px">
+                <strong>{_'Fakturační údaje'}</strong>
+            </td>
+            <td collspan="2">
+                <strong>{_'Dodací adresa'}</strong>
+            </td>
+        {else}
+            <td>
+                <strong>{_'Fakturační a dodací údaje'}</strong>
+            </td>
+            <td>
+            </td>
+        {/if}
+    </tr>
+    <tr>
+        <td>
+            <strong>
+                {if $order->company}
+                    {$order->company} <br/>
+                {else}
+                {$order->name} <br/>
+                {/if}
+            </strong>
+            {if $order->idNo} {_'IČ:'} {$order->idNo} <br/> {/if}
+            {if $order->vatNo} {_'DIČ:'} {$order->vatNo} <br> {/if}
+            {if $order->vatNo2} {_'IČ DPH:'} {$order->vatNo2} <br> {/if}
+            {*if $order->payVat} {_'Plátce DPH'} <br>{/if*}
+            <br/>
+            {$order->street} <br/>
+            {$order->zip} {$order->city}<br/>
+            {$order->country} <br/>
+        </td>
+        <td>
+            {if $order->deliveryToOther}
+                <strong>
+                    {if $order->contactPerson}
+                        {$order->contactPerson}
+                    {elseif $order->company}
+                        {$order->company}
+                    {else}
+                        {$order->name}
+                    {/if}
+                    <br/>
+                </strong>
+            {$order->streetDelivery} <br/>
+            {$order->zipDelivery} {$order->cityDelivery}<br/>
+            {$order->countryDelivery} <br/>
+            {/if}
+        </td>
+    </tr>
+</table>
+<br><br>
+
+<h4>{_'Obsah objednávky'} </h4>
+<div style="clear: both; margin-bottom: 15px;">
+    <table>
+        <tr style="border-bottom: 1px solid #ddd; background-color: #f2f2f2">
+            <td style="width: 50px;">&nbsp;#</td>
+            <td style="width: 550px;"><strong>{_'Položka'}</strong></td>
+            <td style="text-align: center; width: 100px;"><strong>{_'Počet'}</strong></td>
+            <td style="text-align: center; width: 100px;"><strong>{_'Bez DPH/ks'}</strong></td>
+            <td style="text-align: center; width: 100px;"><strong>{_'S DPH/ks'}</strong></td>
+            <td style="text-align: center; width: 100px;"><strong>{_'Celkem'}</strong></td>
+        </tr>
+        {var $total = $bezDPHTotal = $i = 0}
+        {var $currency = $order->currency}
+        {foreach $order->products as $item}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td>
+                    {var $i = $iterator->getCounter()}
+                    &nbsp;{$i}
+                </td>
+                <td>
+                    {$item->name} ({$item->unit})
+                </td>
+                <td style="text-align: center;">
+                    {$item->count}
+                </td>
+                <td style="text-align: center;">
+                    {var $coeffVat = round($item->product->vat->value / (100 + $item->product->vat->value), 4)}
+                    {var $bezDPH = round($item->selingPrice - ($item->selingPrice * $coeffVat), 2)}
+                    <span>{$currency->markBefore} {$bezDPH|number:2:'.':' '} {$currency->markBehind}</span>
+                    {var $bezDPHTotal = round($bezDPH * $item->count, 2)}
+                </td>
+                <td style="text-align: center;">
+                    {var $sDPH = round($item->selingPrice, 2)}
+                    <span>{$currency->markBefore}
+                        <span class="priceProduct">{$sDPH|number:2:'.':' '}</span> {$currency->markBehind}</span>
+                </td>
+                <td style="text-align: center;">
+                    {var $count = round($item->selingPrice * $item->count, 2)}
+                    <span>{$currency->markBefore}
+                        <span class="totPriceProduct">{$count|number:2:'.':' '}</span> {$currency->markBehind}</span>
+                    {var $total = $total + $count}
+                </td>
+            </tr>
+        {/foreach}
+
+        <tr>
+            <td>
+                {var $i = $i+1}
+                &nbsp;{$i}
+            </td>
+            <td>
+                {_'Způsob platby'} - {$order->paymentMethod->name}
+            </td>
+            <td style="text-align: center;">
+                1
+            </td>
+            <td style="text-align: center;">
+                {var $coeffVat = round($order->paymentMethod->vat->value / (100 + $order->paymentMethod->vat->value), 4)}
+                {var $bezDPH = round($order->payMethodPrice  - ($order->payMethodPrice  * $coeffVat), 2)}
+                {$currency->markBefore} {$bezDPH|number:2:'.':' '} {$currency->markBehind}
+                {var $bezDPHTotal = $bezDPHTotal + round($bezDPH * 1, 2)}
+            </td>
+            <td style="text-align: center;">
+                {var $sDPH = round($order->payMethodPrice, 2)}
+                {$currency->markBefore} {$sDPH|number:2:'.':' '} {$currency->markBehind}
+            </td>
+            <td style="text-align: center;">
+                {var $count = round($order->payMethodPrice  * 1, 2)}
+                {$currency->markBefore} {$count|number:2:'.':' '} {$currency->markBehind}
+                {var $total = $total + $count}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {var $i = $i+1}
+                &nbsp;{$i}
+            </td>
+            <td>
+                {_'Způsob dodání'} - {$order->deliveryMethod->name}
+            </td>
+            <td style="text-align: center;">
+                1
+            </td>
+            <td style="text-align: center;">
+                {var $coeffVat = round($order->deliveryMethod->vat->value / (100 + $order->deliveryMethod->vat->value), 4)}
+                {var $bezDPH = round($order->payDeliveryPrice  - ($order->payDeliveryPrice  * $coeffVat), 2)}
+                {$currency->markBefore} {$bezDPH|number:2:'.':' '} {$currency->markBehind}
+                {var $bezDPHTotal = $bezDPHTotal + round($bezDPH * 1, 2)}
+            </td>
+            <td style="text-align: center;">
+                {var $sDPH = round($order->payDeliveryPrice, 2)}
+                {$currency->markBefore} {$sDPH|number:2:'.':' '} {$currency->markBehind}
+            </td>
+            <td style="text-align: center;">
+                {var $count = round($order->payDeliveryPrice  * 1, 2)}
+                {$currency->markBefore} {$count|number:2:'.':' '} {$currency->markBehind}
+                {var $total = $total + $count}
+            </td>
+        </tr>
+
+        {if count($discount)}
+            <tr>
+                <td>
+                    {var $i = $i+1}
+                    &nbsp;{$i}
+                </td>
+                <td>
+                    {_'Sleva'}: {$discount->discount->name}
+                </td>
+                <td style="text-align: center;">
+                    1
+                </td>
+                <td style="text-align: center;">
+                </td>
+                <td style="text-align: center;">
+                </td>
+                <td style="text-align: center;">
+                    {$discount->percent} %
+                </td>
+            </tr>
+            {var $coefDis = 1 - ($discount->percent / 100)}
+            {var $bezDPHTotal = $bezDPHTotal * $coefDis}
+            {var $dph = $dph * $coefDis}
+            {var $total = $total * $coefDis}
+        {/if}
+
+    </table>
+</div>
+
+<div style="margin-bottom: 15px;">
+    <table>
+        <tr>
+            <td style="width: 700px"></td>
+            <td style="width: 200px">{_'Celkem bez DPH:'}</td>
+            <td style="text-align: center; width: 100px">
+                {$currency->markBefore}
+                {$bezDPHTotal|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                {$currency->markBehind}
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 700px"></td>
+            <td style="width: 200px">{_'DPH:'}</td>
+            <td style="text-align: center; width: 100px">
+                {$currency->markBefore}
+                {var $dph = round($total - $bezDPHTotal, 2)}
+                {$dph|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                {$currency->markBehind}
+            </td>
+        </tr>
+        <tr style="font-size: 20px;">
+            <td style="width: 700px"></td>
+            <td style="width: 200px"><strong>{_'Cena celkem s DPH:'}</strong></td>
+            <td style="text-align: center; width: 100px">
+                <strong>
+                    {$currency->markBefore}
+                    {$total|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                    {$currency->markBehind}
+                </strong>
+            </td>
+        </tr>
+    </table>
+</div>
+<br><br><br>
+
+{_'Doplňující informace k objednávce: '} <br>
+<strong>{$order->comment}</strong>
+
+<br><br>
+{_'V příloze Vám zasíláme fakturu.'}
+<br><br>
+{_'Stav Vaši objednávky můžete sledovat v naší zákaznické sekci, do které se můžete přihlásit'}
+<a href="{link SignCustomer:login}">{_'ZDE'}</a>.
+<br><br>
+{_'Děkujeme za Váš nákup.'}
+<br><br>
+
+{_'S přáním pěkného dne,'}<br>
+<a href="{link Front:default}">www.audiopro.cz</a><br>

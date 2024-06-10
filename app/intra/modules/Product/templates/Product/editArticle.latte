@@ -1,0 +1,67 @@
+{block title}{_'Editace článku produktu'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace článku produktu'}
+</h3>
+
+<div class="col-xs-12 col-sm-12 col-md-12">
+            {form articleForm}
+                        <div class="panel-body">
+                            <fieldset class="form-horizontal">
+                                {input id}
+                                {input product}
+
+                                <div class="row">
+                                    <div style="padding-bottom:20px" class="col-xs-12 col-sm-12 col-md-10">
+                                        {control renderer $form, 'name'}
+                                        {control renderer $form, 'content'}
+                                        {control renderer $form, 'type'}
+                                        {control renderer $form, 'orderArticle'}
+                                        {control renderer $form, 'active'}
+                                        {control renderer $form, 'imageUpload'}
+                                        {snippet article-img}
+                                            {ifset $article}
+                                                <div n:if="$article->image" class="col-md-6 col-md-offset-4" style="padding-bottom: 20px">
+                                                    <img src="{$basePath}/{$article->image}" alt="">
+                                                    <a n:href="deleteArticleImg! articleId => $article->id" class="btn btn-xs btn-danger"
+                                                                                                       data-confirm="modal"
+                                                                                                       data-ajax="on">
+                                                        <span class="fa fa-trash"></span>
+                                                    </a>
+                                                </div>
+                                            {/ifset}
+                                        {/snippet}
+                                        {control renderer $form, 'videoUpload'}
+                                        {snippet article-video}
+                                            {ifset $article}
+                                                <div n:if="$article->video" class="col-md-6 col-md-offset-4" style="padding-bottom: 20px">
+                                                    <video width="320" height="240" controls>
+                                                        <source src="{$basePath}/{$article->video}" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                    <a n:href="deleteArticleVideo! articleId => $article->id" class="btn btn-xs btn-danger"
+                                                                                                      data-confirm="modal"
+                                                                                                      data-ajax="on">
+                                                        <span class="fa fa-trash"></span>
+                                                    </a>
+                                                </div>
+                                            {/ifset}
+                                        {/snippet}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12" style="padding-top: 60px; padding-bottom: 60px;">
+                    <a class="btn btn-link" href="{link Product:edit id => $product->id}">
+                        <i class=" fa fa-arrow-left"></i> {_'Zpět'} </a>
+                    <span style="float: right; padding-right: 40px">
+                        <button name="sendBack" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit a zpět'}</button>
+                        <button name="send" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit'}</button>
+                        <button name="sendNew" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit a nový'}</button>
+                    </span>
+                </div>
+            {/form}
+    </div>

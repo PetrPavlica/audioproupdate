@@ -1,0 +1,9 @@
+{if $type=='invoice'}
+    <a class="btn btn-default" n:href="createInvoice! invoiceId=>$id, isProforma => $isProforma" >
+        <i class="fa fa-file-pdf-o"></i>
+        {$text|translate}
+    </a>
+{else}
+    Undefinded element - PDFPrinter
+{/if}
+

@@ -1,0 +1,92 @@
+
+<a id="{$id}" href="{$url}">
+   Koupit na splátky
+   <img src="{$basePath}/front/design/icons/double_right_arrow.png" alt="">
+</a>
+
+<div id="hc-calc-container">
+   <div id="hc-calc-modal" class="hc-modal" role="dialog" style="display: none">
+      <div class="hc-modal__dialog">
+         <div class="hc-modal__content">
+            <div id="hc-modal-header" class="hc-modal__header">
+               <a id="hc-close-button" href="JavaScript:void(0);" class="hc-modal__close" onclick="document.getElementById('hc-calc-modal').style.display = 'none'"></a>
+               <div class="hc-modal__logo">
+                  <img src="{$basePath}/front/packages/hc/img/logo.svg" alt="logo" />
+               </div>
+               <div class="hc-modal__title">NÁKUP NA SPLÁTKY</div>
+            </div>
+            <div id="hc-calculator-wrapper" class="hc-modal__body"></div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<link rel="stylesheet" href="{$basePath}/front/packages/hc/style/style.css">
+
+<script>
+   $(document).on("click", "#" + {$id}, function (e) {
+      e.preventDefault();
+
+      showCalc();
+   });
+
+   function showCalc() {
+      var productSetCode = {$productSetCode};
+      var price = {$price};
+      var downPayment = 0;
+      var dataCalculatorBaseUrl = {$url};
+      var apiKey = {$apiKey};
+      var fixDownPayment = false;
+      var win = window.open(dataCalculatorBaseUrl + "?productSetCode=" + productSetCode + "&price=" + price + "&downPayment=0&apiKey=" + apiKey + "&fixDownPayment=false", "_blank");
+      win.focus();
+      //showHcCalc(productSetCode, price, downPayment, fixDownPayment, dataCalculatorBaseUrl, apiKey, processCalcResult, {$basePath});
+   }
+
+
+   function processCalcResult(calcResult) {
+      console.log(calcResult);
+   }
+</script>
+<script src="{$basePath}/front/packages/hc/js/resize.js"></script>
+<script src="{$basePath}/front/packages/hc/js/appLoader.js"></script>
+
+{*<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(document).on("click", "#" + {$id}+"", function (e) {
+
+            e.preventDefault();
+            var btn = $(this);
+
+            var progress = new Progress();
+
+            var iframe = document.createElement("iframe");
+            iframe.src = btn.attr("href");
+            iframe.onload = function () {
+                progress.remove();
+            };
+            iframe.frameBorder = 0;
+            iframe.width = "100%";
+            iframe.height = "100%";
+
+            new BasicDialog({
+                content: "",
+                width: "full",
+                height: "full"
+            }, function (dialog) {
+
+                var instance = dialog.data("instance");
+                var body = instance.moveToBodyy(dialog);
+
+                progress.insertInto(body);
+                body.append($(iframe));
+
+            });
+
+        });
+
+    });
+
+</script>
+*}

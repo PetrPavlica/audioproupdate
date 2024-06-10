@@ -1,0 +1,33 @@
+{block title}{_'Editace banneru'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Editace banneru'}
+</h3>
+
+<div class="col-xs-12 col-sm-12 col-md-8">
+    {form form, class => "form-horizontal"}
+        {control renderer $form, 'name'}
+        {control renderer $form, 'product', 'getProducts'}
+        {control renderer $form, 'text'}
+        {control renderer $form, 'link'}
+        {control renderer $form, 'orderBanner'}
+        {control renderer $form, 'active'}
+        {control renderer $form, 'onFront'}
+        {control renderer $form, 'type'}
+        {control renderer $form, 'languages'}
+
+        {control renderer $form, 'img'}
+        {ifset $banner}
+            <div n:if="$banner->image" style="margin: 20px 0;">
+                <img src="{$basePath}/{$banner->image}" style="max-width: 100%;" alt="">
+            </div>
+        {/ifset}
+
+        {control renderer $form, 'send'}
+    {/form}
+    <a n:href="BannerProduct:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

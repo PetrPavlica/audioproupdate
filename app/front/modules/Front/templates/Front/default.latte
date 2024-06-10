@@ -1,0 +1,107 @@
+{block title}{$settings['homepage_title']}{/block}
+{block keywords}{$settings['homepage_description']}{/block}
+{block description}{$settings['homepage_description']}{/block}
+{block content}
+
+{snippet products}
+
+    <div id="product-filters">
+        <div class="sort-items">
+            <a n:href="sortItems! sort => 'name'" class="sort-action {if $sortItems == 'name'}active{/if}">Podle názvu</a>
+            <a n:href="sortItems! sort => 'cheap'" class="sort-action {if $sortItems == 'cheap'}active{/if}">Od nejlevnějšího</a>
+            <a n:href="sortItems! sort => 'expensive'" class="sort-action {if $sortItems == 'expensive'}active{/if}">Od nejdražšího</a>
+        </div>
+    {if $productsType == 1}
+        {form filterForm class => 'ajax'}
+            <div class="items">
+                <div class="item checkbox_container">
+                    <div>
+                        <input name="multiroom" class="icheck icheckbox_flat-orange" type="checkbox" {ifset $fVal['multiroom']}checked{/ifset}/>
+                    </div>
+                    <div>
+                        <label>
+                            {_'Multiroom'}
+                        </label>
+                    </div>
+                </div>
+                <div class="item checkbox_container">
+                    <div>
+                        <input name="battery" class="icheck icheckbox_flat-orange" type="checkbox" {ifset $fVal['battery']}checked{/ifset}/>
+                    </div>
+                    <div>
+                        <label>
+                            {_'Bateriový'}
+                        </label>
+                    </div>
+                </div>
+                <div class="item checkbox_container">
+                    <div>
+                        <input name="chromecast" class="icheck icheckbox_flat-orange" type="checkbox" {ifset $fVal['chromecast']}checked{/ifset}/>
+                    </div>
+                    <div>
+                        <label>
+                            {_'Chromecast'}
+                        </label>
+                    </div>
+                </div>
+                <div class="item checkbox_container">
+                    <div>
+                        <input name="airPlay" class="icheck icheckbox_flat-orange" type="checkbox" {ifset $fVal['airPlay']}checked{/ifset}/>
+                    </div>
+                    <div>
+                        <label>
+                            {_'AirPlay2'}
+                        </label>
+                    </div>
+                </div>
+                <div class="item checkbox_container">
+                    <div>
+                        <input name="bt4" class="icheck icheckbox_flat-orange" type="checkbox" {ifset $fVal['bt4']}checked{/ifset}/>
+                    </div>
+                    <div>
+                        <label>
+                            {_'Bluetooth 4.0'}
+                        </label>
+                    </div>
+                </div>
+                <div class="item checkbox_container">
+                    <div>
+                        <input name="bt5" class="icheck icheckbox_flat-orange" type="checkbox" {ifset $fVal['bt5']}checked{/ifset}/>
+                    </div>
+                    <div>
+                        <label>
+                            {_'Bluetooth 5.0'}
+                        </label>
+                    </div>
+                </div>
+                <div class="item checkbox_container">
+                    <div>
+                        <input name="heyGoogle" class="icheck icheckbox_flat-orange" type="checkbox" {ifset $fVal['heyGoogle']}checked{/ifset}/>
+                    </div>
+                    <div>
+                        <label>
+                            {_'Google'}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        {/form}
+    {/if}
+    </div>
+
+<div id="products_vypis" class="products products_vypis flexElem flexWrap alignLeft">
+
+    {if count($products) == 0}
+        <div>
+            <div class="article">
+                <div class="content">{_'Nenalezeny žádné položky.'}</div>
+            </div>
+        </div>
+    {else}
+        {foreach $products as $product}
+            {control productTile $product, $sess}
+        {/foreach}
+    {/if}
+
+</div>
+{/snippet}

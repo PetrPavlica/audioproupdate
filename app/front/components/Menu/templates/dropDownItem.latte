@@ -1,0 +1,42 @@
+<li class="drop_down">
+    {var $slug = \Nette\Utils\Strings::webalize($category->name)}
+    <a n:href="ProductList:list id => $category->id, slug => $slug, locale=> $locale" data-id="{$category->id}">
+        {$category->name}
+        <div class="line"></div>
+    </a>
+    <ul class="sub_menu">
+        <li>
+            <div class="exit-btn">
+                <i class="fa fa-times"></i>
+            </div>
+            <div class="sub_content products_content flexElem flexWrap valignTop" style="padding-top: 20px;">
+                {var $content = ""}
+                <div n:foreach="$childs as $child" class="category flexElem">
+                    {capture $content}
+                        <div class="flexElem valignCenter alignLeft">
+                            <div class="picture flexElem valignCenter" style="width: 80px; height: 80px;">
+                                <img src="{$basePath}/{$child->image}" title="{$child->name}" alt="{$child->name}"/>
+                            </div>
+                            <div class="title">
+                                <label>
+                                    {$child->name}
+                                </label>
+                            </div>
+                        </div>
+                    {/capture}
+                    {if $child->webMenu}
+                        <a n:href="Page:default id => $child->id, wslug => $child->webMenu->slug, locale=> $locale">
+                            {$content|noescape}
+                        </a>
+                    {else}
+                    {var $slug = \Nette\Utils\Strings::webalize($child->name)}
+                        <a n:href="ProductList:list id => $child->id, slug => $slug, locale=> $locale">
+                            {$content|noescape}
+                        </a>
+                    {/if}
+                </div>
+                <div style="clear: both"></div>
+            </div>
+        </li>
+    </ul>
+</li>

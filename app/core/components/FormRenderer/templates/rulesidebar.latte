@@ -1,0 +1,118 @@
+{var $cap, $capB}
+
+{foreach $renderForm->components as $item}
+    {if get_class($item) == 'Nette\Forms\Controls\HiddenField'}
+        {input $item}
+    {elseif get_class($item) == 'Nette\Forms\Controls\SubmitButton' }
+        {capture $capB}
+            <div>
+                <div>
+                    {input $item, class=>'btn btn-primary'}
+                </div>
+            </div>
+        {/capture}
+    {else}
+        {capture $cap[$item->getControl()->attrs['acl-type']][$item->getControl()->name]}
+            <div>
+                <label for="textinput">{$item->caption}</label>
+                <div >
+                    {input $item, class=>'form-control input-md'}
+                </div>
+            </div>
+        {/capture}
+        {if $item->getControl()->attrs['acl-type'] == 'form-element'}
+        {/if}
+    {/if}
+{/foreach}
+
+{var $presenter,$method,$forms,$actions,$element,$menu,$global}
+{foreach $cap as $item => $value}
+    {if $item=='presenter'}
+        {capture $presenter}
+            <h3>Sekce </h3>
+            {array_values($value)[0]}
+        {/capture}
+    {elseif $item=='method'}
+        {capture $method}
+            <h3>Metody  </h3>
+            {foreach $value as $a}
+                {$a}
+            {/foreach}
+        {/capture}
+    {elseif $item=='form'}
+        {capture $forms}
+            {foreach $value as $i => $f}
+                <h3>Formulář / tabulka </h3>
+                {$f}
+                <h3>Elementy formu / tabulky  </h3>
+                {foreach $cap as $itemEl => $valueEl}
+                    {if $itemEl=='form-element'}
+                        {foreach $valueEl as $c => $d}
+                            {if strpos($c, $i. '_') === 0}
+                                {$d}
+                            {/if}
+                        {/foreach}
+                    {/if}
+                {/foreach}
+            {/foreach}
+        {/capture}
+    {elseif $item=='action'}
+        {capture $actions}
+            <h3>Akce  </h3>
+            {foreach $value as $i => $a}
+                {$a}
+            {/foreach}
+        {/capture}
+    {elseif $item=='element'}
+        {capture $element}
+            <h3>Elementy a další </h3>
+            {foreach $value as $i => $a}
+                {$a}
+            {/foreach}
+        {/capture}
+    {elseif $item=='menu'}
+        {capture $menu}
+            <h3>Položky menu </h3>
+            {foreach $value as $i => $a}
+                {$a}
+            {/foreach}
+        {/capture}
+    {elseif $item=='global-element'}
+        {capture $global}
+            <h3>Globální položky </h3>
+            {foreach $value as $i => $a}
+                {$a}
+            {/foreach}
+        {/capture}
+    {/if}
+
+
+{/foreach}
+
+
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home22">Sekce</a></li>
+    <li><a data-toggle="tab" href="#menu22">Menu</a></li>
+    <li><a data-toggle="tab" href="#global22">Globální</a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="home22" class="tab-pane fade in active">
+        {$presenter}
+        {$method}
+        {$forms}
+        {$actions}
+        {$element}
+    </div>
+    <div id="menu22" class="tab-pane fade">
+        {$menu}
+    </div>
+    <div id="global22" class="tab-pane fade">
+        {$global}
+    </div>
+</div>
+
+{$capB}
+
+
+

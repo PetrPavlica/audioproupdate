@@ -1,0 +1,58 @@
+{contentType application/xml}
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+    <channel>
+        <title>AudioPro</title>
+        <link>https://www.audiopro.cz</link>
+        <description>Feed zboží</description>
+
+        {var $delivery = ""}
+        {capture $delivery}
+            {foreach $deliveryMethods as $d}
+                <g:shipping>
+                    <g:country>CZ</g:country>
+                    <g:service>{$d->name}</g:service>
+                    <g:price>{$d->selingPrice|number:2:'.':''} CZK</g:price>
+                </g:shipping>
+            {/foreach}
+        {/capture}
+
+        {foreach $products as $product}
+            {php $productHelper->setProduct($product, $currency, true)}
+            <item>
+                <!-- The following attributes are always required -->
+                <g:id>{$product->id}</g:id>
+                <g:title>{$product->name}</g:title>
+                    {var $text = str_replace('\n', '', strip_tags($product->webDescription))}
+                    {var $text = substr($text, 0, 5000)}
+                <g:description>{$text}</g:description>
+                <g:link><![CDATA[{link ProductDetail:detail id => $product->id, slug => $control->getSlug($product->name)}]]></g:link>
+
+                {foreach $product->images as $img}
+                    {continueIf $iterator->getCounter() >= 10}
+                    <g:image_link n:if="$img->isMain"><![CDATA[{$basePath}/{$img->path}]]></g:image_link>
+                    <g:additional_image_link n:if="!$img->isMain"><![CDATA[{$basePath}/{$img->path}]]></g:additional_image_link>
+
+                {/foreach}
+
+                <g:condition>new</g:condition>
+                <g:adult>no</g:adult>
+
+                <g:availability>in stock</g:availability>
+
+                {var $sellPrice = $productHelper->getPrice()}
+
+                <g:price>{$sellPrice|number:2:'.':''} CZK</g:price>
+
+                <g:google_product_category n:ifset="$product->categories[0]->category->categoryGoogleMerchants">{$product->categories[0]->category->categoryGoogleMerchants}</g:google_product_category>
+
+                {$delivery|noescape}
+
+                <g:gtin n:if="$product->ean">{$product->ean}</g:gtin>
+                <g:brand n:if="$product->productMark">{$product->productMark->publicName}</g:brand>
+                <g:identifier_exists n:if="!$product->ean && !$product->productMark">no</g:identifier_exists>
+            </item>
+            {php $em->clear()}
+        {/foreach}
+    </channel>
+</rss>

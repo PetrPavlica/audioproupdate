@@ -1,0 +1,28 @@
+{_'Dobrý den,'}<br>
+<br>
+{_'na eshopu AudioPro, jste se dotazoval/a na podrobnosti k produktu:'} <a href='{link ProductDetail:detail id => $product->id}'>{$product->name}</a><br>
+{_'Váš dotaz:'} <br>
+<br>
+<pre style="
+	 background-color: transparent;
+	 border: none;
+	 border-radius: 0px;
+	 font-family: sans-serif;
+	 ">
+	{$question->text}
+</pre>
+<br>
+{_'Naše odpověď:'}<br>
+<pre style="
+	 background-color: transparent;
+	 border: none;
+	 border-radius: 0px;
+	 font-family: sans-serif;
+	 ">
+	{$answer->text}
+</pre>
+
+<br><br>
+
+{_'S pozdravem,'}<br>
+<a href="{link Front:default}">www.audiopro.cz</a><br>

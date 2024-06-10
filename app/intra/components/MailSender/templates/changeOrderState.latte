@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="WebRex, s.r.o.">
+</head>
+<body style="margin: 0;">
+    <div style="background-color: #f6f6f6; width: 100%; height: 100%; padding: 25px 0;">
+        <div style="font-family: 'Open Sans'; background-color: #f6f6f6; border: 1px solid #e0e0e0; width: 840px; margin: 0 auto;">
+            <div style="background-color: #fff; padding: 15px; color: #646464; font-size: 18px; font-weight: 400;">
+                <img src="{$baseUri}/front/design/icons/logo/logo.png" alt="Logo">
+                <br><br>
+                <div style="padding: 15px;">
+                    {if in_array($order->deliveryMethod->id, [3, 4])}
+                        {$state->textEmailPersonal|noescape}
+                    {else}
+                        {$state->textEmail|noescape}
+                    {/if}
+                </div>
+
+                {include contentOrder.latte}
+
+                <p>{_'Budu rád, pokud se podělíte o zkušenost s produktem a rozšíříte reference'}<br>{_'našich zákazníků.'}</p>
+                <p><a style="text-decoration: none;" href="{if $pageTerms}{link Page:default wslug => $pageTerms->slug}{/if}" target="_blank">{_'Obchodní podmínky'}</a></p>
+                <p style="color: #021f41; text-align: right; font-weight: bold;">{_'Děkujeme za Váš nákup.'}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

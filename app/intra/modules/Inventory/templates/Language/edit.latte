@@ -1,0 +1,17 @@
+{block title}{_'Editace jazyků'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace jazyků'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form form, class=>"form-horizontal"}
+        {control renderer $form}
+    {/form}
+    <a n:href=":Language:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

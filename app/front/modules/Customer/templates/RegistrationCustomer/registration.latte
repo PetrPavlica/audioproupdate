@@ -1,0 +1,120 @@
+{block title}{_'Registrace nového uživatele'}{/block}
+{block content}
+
+<div id="content" class="text-center">
+    <br><br>
+    <div class="nadpis blue bold">
+        <h1>{_'Registrace nového uživatele'}</h1>
+    </div>
+
+    <div id="registrace" class="col-4 col-sm-offset-3">
+        {form registrationForm}
+            <div class="block flexElem flexWrap">
+                <div class="sub_block sub_block_reg">
+                    <table class="responzive form_table small_fields full_fields_size">
+                        <tr>
+                            <td class="required">
+                                <label class="">{_'Jméno'}:</label>
+                            </td>
+                            <td colspan="3">
+                                {input name}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="">{_'Příjmení'}:</label>
+                            </td>
+                            <td colspan="3">
+                                {input surname}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="required">
+                                <label class="">{_'Email'}:</label>
+                            </td>
+                            <td colspan="3">
+                                {input email}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="required">
+                                <label>{_'Uživatelské heslo'}:</label>
+                            </td>
+                            <td>
+                                {input password}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="required">
+                                <label>{_'Potvrzení hesla'}:</label>
+                            </td>
+                            <td>
+                                {input password2}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flexElem alignCenter">
+                <div id="podminky_registrace" class="sub_block">
+                    <div class="checkbox_container flexElem">
+                        <div>
+                            {input newsletter}
+                        </div>
+                        <div>
+                            <label>{_'Souhlasím se zasíláním novinek (toto políčko není nutné zaškrtnout)'}</label>
+                        </div>
+                    </div>
+                    <div class="checkbox_container flexElem">
+                        <div>
+                            {input agree}
+                        </div>
+                        <div>
+                            <label>
+                                {_'S odesláním souhlasíte s '}
+                                <a class="blue"
+                                   href="{if $pageTerms}{link :Page:default wslug => $pageTerms->slug}{/if}"
+                                   target="_blank"><b>{_'obchodními podmínkami'}</b>
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="checkbox_container flexElem">
+                        <div>
+                            {input personalData}
+                        </div>
+                        <div><label>{_'Souhlasím se zpracováním osobních údajů'}</label></div>
+                    </div>
+
+                    <div class="block flexElem flexWrap col-sm-offset-1" style="margin-top: 0;">
+                        <div class="sub_block">
+                            <div class="fields_container center">
+                                {input captcha}
+                            </div>
+
+                            <div class="fields_container center">
+                                {input send, id=>'sendFormRegistration', class=>"dialog-handler", data-dialog-options=>'{"applyAfterClicks":"3","content":"#contact_dialog","isSnippet":"false"}'}
+                            </div>
+
+                            <div class="fields_container center">
+                                <a n:href=":RegistrationCustomer:resetPassword">{_'Máte u nás již účet, ale zapomněli jste heslo?'}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/form}
+
+        <div class="block flexElem flexWrap alignLeft">
+            <div class="sub_block">
+                <div class="flexElem alignCenter">
+                    <div class="fb-login-button" onlogin="checkLoginState()" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" data-login-text="Registrovat přes"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,173 @@
+<div class="wrap">
+<div id="products_uvod" class="products flexElem flexWrap">
+
+    <div n:if="$onFrontSpecialOffer" class="product product_akce flexElem valignJustify flexWrap">
+        {var $product = $onFrontSpecialOffer->product}
+        {php $productHelper->setProduct($product, $actualCurrency);}
+
+        {var $slug = \Nette\Utils\Strings::webalize($product->name)}
+        <a n:href="ProductDetail:detail id => $product->id, slug => $slug">
+            <div class="caption">
+                <div class="nadpis bold black">
+                    <h1>{_'Speciální nabídka'}</h1>
+                </div>
+            </div>
+
+            {*<div class="akce">-40%</div>*}
+
+            <div class="photo flexElem alignCenter" style="margin-top: 30%;">
+
+                <div>
+                    {if $product->mainImage && file_exists($product->mainImage)}
+                        <img n:img="$product->mainImage, '380x280', 'shrink_only', null" alt="{$product->name}" title="{$product->name}"/>
+                    {else}
+                        <img n:img="'front/images/produkty/no-photo.png', '380x280'" alt="{$product->name}" title="{$product->name}"/>
+                    {/if}
+                </div>
+
+                <div class="product_labels left" n:if="$product->activeAction && $productHelper->getDiscountPercent() != 0">
+                    <div class="product_label percentage" style="width: 90px; max-width: 100px;">
+                        <div class="amount">- {$productHelper->getDiscountPercent()} %</div>
+                        <div class="usetrite">
+                            {_'ušetříte'}
+                            <div>
+                                {$productHelper->renderDiscount()}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </a>
+        <div>
+            <div class="bar flexElem alignJustify">
+                <div class="hvezdicky flexElem valignCenter">
+                    {var $j = 5}
+                    {for $i = 0; $i < round($product->totalRating); $i++}
+                        <div class="hvezda hvezda_plna"></div>
+                    {/for}
+                    {for $i = 0; $i < $j - round($product->totalRating); $i++}
+                        <div class="hvezda"></div>
+                    {/for}
+                </div>
+
+                <div class="drop_down_container">
+                    {form addToBasketForm-$product->id}
+                            {input productId value => $product->id}
+                            {input count value => '1'}
+
+                    <div class="flexElem alignJustify valignCenter">
+                        <button n:name="addToBasket" class="buy_btn" data-href="{link 'addToCart!'}" style="border: 0; font-weight: normal;">{_'Koupit'}</button>
+                        {*<a n:href="addToCart! productId => $product->id" class="buy_btn">
+                            {_'Koupit'}
+                        </a>*}
+                        <div class="arrow">
+                            <div>
+                                <img src="{$basePath}/front/design/icons/arrow_down.png" alt="" title=""/>
+                            </div>
+                        </div>
+                    </div>
+                    {/form}
+
+                    <div class="drop_down" style="max-width: 250px; min-width: 200px;">
+                        {*<div class="row">
+                            {if $user->loggedIn && $user->isInRole('visitor')}
+                            <a class="white rapid_buy_btn dialog-handler" data-dialog-options='{"content":"#rapid_dialog","ajax":{"process":"true","method":"GET"},"snippetName":"rapid-buy-snipp"}' href="{plink rapidBuy:buy! customerId => $user->id, productId => $product->id}">
+                                {else}
+                                <a class="white login_link dialog-handler" data-dialog-options='{"content":"#login_dialog","isSnippet":"false","dropPasteData":"true"}' style="color: #fff;">
+                                    {/if}
+                                    <div class="flexElem">
+                                        <div>
+                                            <img src="{$basePath}/front/design/icons/double_right_arrow.png"
+                                                 title="{_'Koupit zrychleně'}" alt="{_'Koupit zrychleně'}"/>
+                                        </div>
+                                        <div class="text">
+                                            {_'Koupit zrychleně'}
+                                        </div>
+                                    </div>
+                                </a>
+                        </div>*}
+                        <div class="row">
+                            {if $user->loggedIn && $user->isInRole('visitor')}
+                            <a n:href="addFavourite! customerId => $user->id, productId => $product->id" class="white ajax">
+                                {else}
+                                <a class="white login_link" style="color: #fff;">
+                                    {/if}
+                                    <div class="flexElem">
+                                        <div>
+                                            <img src="{$basePath}/front/design/icons/heard_blue.png" title="{_'Přidat do seznamu'}" alt="{_'Přidat do seznamu'}"/>
+                                        </div>
+                                        <div class="text">
+                                            {_'Přidat do seznamu'}
+                                        </div>
+                                    </div>
+                                </a>
+                        </div>
+                        <div class="row">
+                            <a class="ajax white" n:href="addCompare! productId => $product->id">
+                                <div class="flexElem">
+                                    <div>
+                                        <img src="{$basePath}/front/design/icons/compare_blue.png" title="{_'Porovnat'}" alt="{_'Porovnat'}"/>
+                                    </div>
+                                    <div class="text">
+                                        {_'Porovnat'}
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <a n:href="ProductDetail:detail id => $product->id, slug => $slug">
+                <div class="details flexElem flexWrap">
+
+                    <div class="title">
+                        <h3>{$product->name}</h3>
+                    </div>
+                    <div class="cena flexElem valignCenter">
+                        <div class="cena_sleva">
+                            {$productHelper->renderPrice()}
+                        </div>
+                        <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                            {$productHelper->renderLastPrice()}
+                        </div>
+                    </div>
+
+                    {control stockExpedition $product, false}
+
+                    <div class="vyprseni_akce flexElem alignJustify">
+                        <div class="text flexElem valignCenter">{_'konec akce za:'}</div>
+
+                        <div id="odpocet_casu" class="odpocet flexElem">
+                            <div class="flexElem flexWrap">
+                                <div class="days">{$diffSpecialOffer->d + ($diffSpecialOffer->m * 30) + ($diffSpecialOffer->y * 365)}</div>
+                                <div>{_'dny'}</div>
+                            </div>
+                            <div class="flexElem flexWrap">
+                                <div class="hours">{$diffSpecialOffer->h}</div>
+                                <div>{_'hodiny'}</div>
+                            </div>
+                            <div class="flexElem flexWrap">
+                                <div class="minutes">{$diffSpecialOffer->i}</div>
+                                <div>{_'minuty'}</div>
+                            </div>
+                            <div class="flexElem flexWrap">
+                                <div class="seconds">{$diffSpecialOffer->s}</div>
+                                <div>{_'vteřiny'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div id="right_side" class="flexElem flexWrap">
+        {foreach $onFrontProducts as $product}
+            {control productTile $product, $sess, 'product_container_uvod'}
+        {/foreach}
+    </div>
+</div>
+
+</div>

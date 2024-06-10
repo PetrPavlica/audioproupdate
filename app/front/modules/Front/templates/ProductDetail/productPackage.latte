@@ -1,0 +1,161 @@
+{foreach $product->packages as $package}
+    {continueIf count($package->products) == 0}
+    {var $countActiveProducts = 0}
+    {foreach $package->products as $p}
+        {if $p->product->active && !$p->product->saleTerminated}
+            {var $countActiveProducts = $countActiveProducts + 1}
+        {/if}
+    {/foreach}
+    {if $countActiveProducts > 1}
+{var $noSetSellPrice = 0}
+{var $noSetSellPricePrevious = 0}
+<div class="productsSet flexElem">
+    <div class="{if $isMobile}top-table{else}dragscroll nice_scroll{/if}">
+        <table width="100%">
+            <tr>
+                {var $countItems = 0}
+                {foreach $package->products as $itm}
+                    {var $productInSet = $itm->product}
+                    {continueIf !$productInSet->active || $productInSet->saleTerminated}
+                    {var $countItems = $countItems + 1}
+                    {php $productHelper->setProduct($productInSet, $actualCurrency, false, $actualCurrency['code'] == 'CZK' ? $itm->discountCZK : $itm->discountEUR)}
+                    {if $countItems > 1}
+                        <td>
+                            <img src="{$basePath}/front/design/icons/operators/plus.png" title="plus" alt="plus"/>
+                        </td>
+                    {/if}
+                    <td>
+                        <div class="product" style="position: relative;">
+                            {var $slug = \Nette\Utils\Strings::webalize($productInSet->name)}
+                            <a href="{link 'ProductDetail:detail' id => $productInSet->id, slug => $slug}">
+
+                                <div class="photo">
+                                    {if $productInSet->mainImage && file_exists($productInSet->mainImage)}
+                                        <img style="max-height: 150px; width: auto;" n:img="$productInSet->mainImage, '200x150', 'shrink_only', null" alt="{$productInSet->name}" title="{$productInSet->name}"/>
+                                    {else}
+                                        <img style="max-height: 150px; width: auto;" n:img="'front/images/produkty/no-photo.png', '200x150'" alt="{$productInSet->name}" title="{$productInSet->name}"/>
+                                    {/if}
+                                </div>
+                            </a>
+
+                            <div class="product_labels left">
+                                <div n:if="$productHelper->actionExists()" class="product_label percentage">
+                                    - {$productHelper->renderDiscountPercent()} %
+                                </div>
+                                <div n:if="$productInSet->batteryPowered" class="product_label batteryPowered">
+                                    {_'batteryPowered'}
+                                </div>
+                            </div>
+                            <div class="product_labels right">
+                                <div n:if="$productInSet->audioProMultiroom" class="product_label audioProMultiroom">
+                                    {_'audioProMultiroom'}
+                                </div>
+                            </div>
+
+                            <div class="hvezdicky flexElem valignCenter">
+                                {var $jj = 5}
+                                {for $ii = 0; $ii < round($productInSet->totalRating); $ii++}
+                                    <div class="hvezda hvezda_plna"></div>
+                                {/for}
+                                {for $ii = 0; $ii < $jj - round($productInSet->totalRating); $ii++}
+                                    <div class="hvezda"></div>
+                                {/for}
+                            </div>
+
+                            <div class="details">
+                                <div class="title">
+                                    {*<a href="{link 'ProductDetail:detail' id => $product->id, slug => $slug}">*}
+                                    <h3>{if $productHelper->getLastPrice() != 0}* {/if}{$productInSet->name}</h3>{*</a>*}
+                                </div>
+
+                                <div class="bar flexElem alignJustify">
+                                    <div>
+                                        <div class="cena flexElem valignCenter">
+
+                                            <div class="cena_sleva">
+                                                {var $noSetSellPrice = $noSetSellPrice + $productHelper->getPrice()}
+                                                {$productHelper->renderPrice()}
+                                            </div>
+                                            <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                                                {$productHelper->renderLastPrice()}
+                                            </div>
+                                            {if $productHelper->getLastPrice() != 0}
+                                                {var $noSetSellPricePrevious = $noSetSellPricePrevious + $productHelper->getLastPrice()}
+                                            {else}
+                                                {var $noSetSellPricePrevious = $noSetSellPricePrevious + $productHelper->getPrice()}
+                                            {/if}
+                                        </div>
+                                        {control stockExpedition $productInSet, false}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                {/foreach}
+            </tr>
+        </table>
+    </div>
+    {if $isMobile && $noSetSellPrice != $noSetSellPricePrevious}
+        <small style="padding: 0 10px;">* Lepší cena pouze v tomto balíčku</small>
+        <p>&nbsp;</p>
+    {/if}
+    <div class="bottom-table" style="padding-left: 10px;">
+        <table width="100%" style="height: 100%;">
+            <tr>
+                <td><img src="{$basePath}/front/design/icons/operators/equals.png" title="equals" alt="equals"/>
+                </td>
+                <td style="vertical-align: middle;">
+                    <div class="product summary">
+                        <div class="details">
+                            <div class="cena">
+                                <div class="cena {if $isMobile}set{else}alone{/if}">{_'Cena celkem'}{if !$isMobile}<br>{/if}
+                                    {$actualCurrency['markBefore']}
+                                    {$noSetSellPrice|number:$actualCurrency['countDecimal']:',':' '}
+                                    {$actualCurrency['markBehind']}
+                                    {_'s DPH'}
+                                </div>
+                                <br>
+                                {if $noSetSellPrice != $noSetSellPricePrevious}
+                                    <div class="cena_default">
+                                        {$actualCurrency['markBefore']}
+                                        {$noSetSellPricePrevious|number:$actualCurrency['countDecimal']:',':' '}
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                {/if}
+                            </div>
+                            {if !$product->saleTerminated}
+                                {form addToBasketPackageForm-$product->id}
+                                    {input packageId value => $package->id}
+                            <div class="fields_container no-indent">
+                                <div class="buy_btn_container flex100 flexElem valignCenter">
+                                    <div class="flex100">
+                                        <button n:name="addToBasket" class="buy_btn" data-href="{link 'addToCartPackage!'}" style="border: 0; width: 100%; font-weight: normal;">
+                                        {*<a href="{link addToCartPackage! productId => $product->id}" class="buy_btn">*}
+                                            <div class="flexElem alignCenter">
+                                                <div class="flexElem valignCenter">
+                                                    <img src="{$basePath}/front/design/icons/baket_white.png" title="{_'Koupit'}" alt="{_'Koupit'}"/>
+                                                </div>
+                                                <div>
+                                                    {_'Koupit'}
+                                                </div>
+                                            </div>
+                                        {*</a>*}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {/form}
+                            {/if}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{if !$isMobile && $noSetSellPrice != $noSetSellPricePrevious}
+<small>* Lepší cena pouze v tomto balíčku</small>
+<p>&nbsp;</p>
+{/if}
+{/if}
+{/foreach}

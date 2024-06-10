@@ -1,0 +1,15 @@
+services:
+	- Front\Model\Facade\FrontFacade
+	- Front\Model\Facade\SearchFacade
+	- Front\Model\Facade\CustomerFrontFacade
+	- Front\Components\Menu\IMenuControlFactory
+	- Front\Components\ProductTile\IProductTileControlFactory
+	- Front\Components\InlineElem\IInlineControlFactory
+	- Front\Components\RapidBuy\IRapidBuyControlFactory
+	- Front\Components\FreeTransportRemains\IFreeTransportRemainsFactory
+	- Front\Components\StockExpedition\IStockExpeditionFactory
+	- Front\Components\Basket\BasketControl
+	DPDAdapter:
+		class: Front\Model\Utils\DPDAdapter
+		setup:
+		- setUrl('http://pickup.dpd.cz/api/get-all')

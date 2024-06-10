@@ -1,0 +1,21 @@
+{var $newId = str_replace(']','',$name)}
+{var $newId = str_replace('[','',$newId)}
+{if $type == 'hidden'}
+    <input type="{$type}" name="{$name}" value="{$value}" class="{$class}"  />
+{elseif $type == 'checkbox' }
+    <div class="form-group">
+        <label class="checkbox-inline">
+            <input name="{$name}" id="{$id}_{$newId}" class="form-control input-md {$class}" value="{$value}" type="{$type}" {$attrs|noescape}>
+        </label>
+    </div>
+{elseif  $type == 'submit' }
+    <div class="form-group">
+        <input name="{$name}" id="{$id}_{$newId}" class="btn btn-primary {$class}" value="{$value}" type="{$type}" {$attrs|noescape}>
+    </div>
+{elseif  $type == 'textarea' }
+    <textarea class="form-control {$class}" name="{$name}" id="{$id}_{$newId}" {$attrs|noescape}>{$value}</textarea>
+{else}
+    <div class="form-group">
+        <input name="{$name}" id="{$id}_{$newId}" class="form-control input-md {$class}" value="{$value}" type="{$type}" {$attrs|noescape}>
+    </div>
+{/if}

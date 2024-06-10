@@ -1,0 +1,24 @@
+{if $type=='invoice'}
+    <a class="btn btn-default" n:href="createInvoice! invoiceId=>$id, isProforma => $isProforma, isCreditNote => $isCreditNote" >
+        <i class="fa fa-file-pdf-o"></i>
+        {$text|translate}
+    </a>
+{elseif $type == 'refund'}
+    <a n:href="printReceipt! refundId => $id" class="btn btn-xs btn-link">
+        <i n:if="$i" class="fa fa-{$i}"></i>
+        {$text}
+    </a>
+{elseif $type == 'stockList'}
+    <a n:href="createStockList! invoiceId => $id" class="btn btn-default">
+        <i class="fa fa-file-pdf-o"></i>
+        {$text}
+    </a>
+{elseif $type == 'offer'}
+    <a n:href="createOffer! invoiceId => $id" class="btn btn-default">
+        <i class="fa fa-file-pdf-o"></i>
+        {$text}
+    </a>
+{else}
+    Undefinded element - PDFPrinter
+{/if}
+

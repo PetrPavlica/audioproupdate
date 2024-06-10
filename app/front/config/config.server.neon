@@ -1,0 +1,5 @@
+services:
+	HomeCredit:
+		class: Front\Components\HomeCredit\HomeCredit
+		setup:
+		    - setProductionMode(true)

@@ -1,0 +1,97 @@
+{block title}
+    {_'Moje oblíbené položky'}
+{/block}
+{block content}
+
+<link rel="stylesheet" href="{$basePath}/front/css/kosik.css?v={$ver}">
+
+<div id="basket_container">
+
+    <div class="nadpis bold upper darkblue">
+        <h1>{_'Moje oblíbené položky'}</h1>
+        <div class="line full"></div>
+    </div>
+
+    {if isset($products) && count($products)}
+
+        <table width="100%" class="product responziveTable">
+
+            <tr data-ignore-rows="tr.details.rest" class="control hidden">
+                <td data-new-row='{"640":{"insert":"before","rowName":"row_2","colName": "col_1","class":"new_row_image","rowspan":2}}'></td>
+                <td colspan="1" data-new-row='{"640":{"insert":"before","rowName":"row_2","colName": "col_2","class":"new_row_title","copyOnly":".title","colspan":"2"}}' data-change='{"640":{"colspan":"3","align":"center"}}'></td>
+                <td data-new-row='{"640":{"insert":"before","rowName":"row_2","colName": "col_3","class":"","destination":"col_1"}}'></td>
+                <td data-new-row='{"640":{"insert":"before","class":"","rowName":"row_3","colName": "col_1"}}'></td>
+                <td data-new-row='{"640":{"insert":"before","class":"","rowName":"row_3","colName": "col_2"}}'></td>
+                <td data-new-row='{"640":{"insert":"after","class":"remove_row","rowName":"row_1","colName": "col_1","colspan":"3"}}'></td>
+            </tr>
+
+            <tr data-ignore-rows="tr.details_product" class="control hidden">
+                <td data-hide="640"></td>
+                <td colspan="4"></td>
+                <td data-hide="640"></td>
+            </tr>
+
+            {foreach $products as $item}
+                {var $product = $item->product}
+                <tr class="details details_product">
+                    <td>
+                        {if $product->mainImage}
+                            <img n:img="$product->mainImage, '120x80', 'shrink_only', null" alt="{$product->name}" title="{$product->name}"/>
+                        {else}
+                            <img n:img="'front/images/produkty/no-photo.png', '120x80'" alt="{$product->name}" title="{$product->name}"/>
+                        {/if}
+                    </td>
+                    <td colspan="1">
+                        <div class="title">
+                            <h3>{$product->name}</h3>
+                        </div>
+                    </td>
+                    <td data-name="join1" data-destination=".pojisteniContainer">
+                        {control stockExpedition $product, false}
+                    </td>
+                    <td>
+                        <div>
+                            <div class="cena flexElem valignCenter">
+                                <div class="cena_sleva">
+                                    {php $productHelper->setProduct($product, $actualCurrency);}
+                                    {$productHelper->renderPrice()}
+                                </div>
+                                <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                                    {$productHelper->renderLastPrice()}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="buy">
+                        {form addToBasketForm-$product->id}
+                            {input productId value => $product->id}
+                            {input count value => '1'}
+                        {*<a n:href="addToCart! productId => $product->id" class="ajax">*}
+                            <button n:name="addToBasket" class="buy_btn" data-href="{plink 'addToCart!'}" style="border: 0; background-color: transparent;">
+                            <img src="{$basePath}/front/design/icons/basket.png" title="{_'Přidat do košíku'}" alt="{_'Přidat do košíku'}">
+                        {*</a>*}
+                        </button>
+                        {/form}
+                    </td>
+                    <td class="remove">
+                        <a n:href="removeFavourite! productId => $product->id, customerId => $user->id">
+                            <img src="{$basePath}/front/design/icons/close2.png" title="{_'Odebrat'}" alt="{_'Odebrat'}" style="width: 20px;"/>
+                        </a>
+                    </td>
+
+                </tr>
+            {/foreach}
+        </table>
+    {else}
+        <div id="content">
+            <div class="nadpis blue">
+                <h1>{_'Váš seznam oblíbených položek je prázdný!'}</h1>
+            </div>
+
+            <a class="button-link" n:href=":Front:default">{_'Zpět k nakupování'}</a>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+        </div>
+
+    {/if}
+</div>
+

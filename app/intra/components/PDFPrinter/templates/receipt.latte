@@ -1,0 +1,265 @@
+{var $invoice = $refund->orders}
+{var $currency = $invoice->currency}
+
+<html>
+    <head>
+        <meta http-equiv="Content-Language" content="cs">
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="{$basePath}/intra/css/pdf_print.css">
+    </head>
+
+    <body style="font-family: Arial;">
+        <div style="float:left; width: 80%;">
+            <table style="font-size: 70%; color: #5A7AAD;">
+                <tr>
+                    <td width="130px;">{$settings['company_name']}</td>
+                    <td width="130px;">{$settings['company_city']}</td>
+                    <td width="130px;">Tel.: {$settings['company_phone1']}</td>
+                    <td width="130px;">WWW: <a href="http://{$settings['company_www']}" target="_blank">{$settings['company_www']}</a></td>
+                </tr>
+                <tr>
+                    <td>{$settings['company_street']}</td>
+                    <td>{$settings['company_country']}</td>
+                    <td>Tel.: {$settings['company_phone2']}</td>
+                    <td>E-mail: <a href="mailto:{$settings['company_email']}" target="_blank">{$settings['company_email']}</a></td>
+                </tr>
+            </table>
+
+        </div>
+        <div style="float:right">
+            <img src='{$basePath}/assets/img/logob.png' border='0' />
+        </div>
+        <div class="clear"><br /></div>
+        <div>
+            <div style="text-align: right; border-bottom: 2px solid #000000; color: #1A5DAC; font-weight: bold; font-size: 20px;">
+                Příjmový doklad č. {$refund->eetNo}
+            </div>
+            <table>
+                <tr>
+                    <td width="40%">
+                        <span style="color: #1A5DAC; font-weight: bold; font-size: 12px;">Dodavatel:</span>
+                        <table style="font-weight: bold; margin-bottom: 15px; margin-top: 10px;  font-size: 12px;">
+                            <tr>
+                                <td>{$settings['company_name']}</td>
+                            </tr>
+                            <tr>
+                                <td>{$settings['company_street']}</td>
+                            </tr>
+                            <tr>
+                                <td>{$settings['company_city']}</td>
+                            </tr>
+                        </table>
+
+                        <table style="margin-bottom: 15px; font-size: 12px;">
+                            <tr>
+                                <td>IČ:</td>
+                                <td>{$settings['company_IC']}</td>
+                            </tr>
+                            <tr>
+                                <td>DIČ:</td>
+                                <td>{$settings['company_DIC']}</td>
+                            </tr>
+                        </table>
+
+                        <table style="width: 100%; font-size: 12px;">
+                            <tr>
+                                <td>Forma úhrady:</td>
+                                <td style="text-align: center;">{$refund->typePayment}</td>
+                            </tr>
+                            <tr>
+                                <td>Variabilní symbol:</td>
+                                <td style="text-align: center;">{$refund->orders->variableSymbol}</td>
+                            </tr>
+                            <tr>
+                                <td>Datum vystavení:</td>
+                                <td style="text-align: center;">{$refund->foundedDate|date:'j. n. Y'}</td>
+                            </tr>
+                            <tr>
+                                <td>Datum uskutečnění zdanitelného plnění:</td>
+                                <td style="text-align: center;">{$refund->foundedDate|date:'j. n. Y'}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="60%" align="right" style="vertical-align:top">
+                        <span style="font-weight: bold; font-size: 16px;">
+                            {if $refund->orders->codeInvoice}
+                                Úhrada faktury č. {$refund->orders->codeInvoice}
+                            {else}
+                                Úhrada objednávky č. {$refund->orders->variableSymbol}
+                            {/if}
+                            <br><br><br>
+                        </span>
+                        <table style="margin-bottom: 15px; font-size: 12px;">
+
+                        </table>
+
+                        <table style="border: 3px solid #000000; font-size: 12px;">
+                            <tr>
+                                <td width="350" style="text-align: left;">
+                                    <span style="color: #1A5DAC; font-weight: bold; font-size: 12px;">&nbsp; Odběratel:</span>
+                                    <table style="font-weight: bold; font-size: 12px; margin-left: 10px;  margin-top: 10px; ">
+                                        {if $invoice->company}
+                                            <tr>
+                                                <td>{$invoice->company}</td>
+                                            </tr>
+                                        {else}
+                                            <tr>
+                                                <td>{$invoice->name}</td>
+                                            </tr>
+                                        {/if}
+                                        <tr n:if="$invoice->street">
+                                            <td>{$invoice->street}</td>
+                                        </tr>
+                                        <tr n:if="$invoice->zip || $invoice->city ">
+                                            <td>{$invoice->zip}   {$invoice->city}</td>
+                                        </tr>
+                                        <tr n:if="$invoice->country && $invoice->country->name">
+                                            <td>{$invoice->country->name}</td>
+                                        </tr>
+                                    </table>
+
+                                    <table style="margin-bottom: 10px; margin-left: 10px;">
+                                        <tr n:if="$invoice->idNo">
+                                            <td>{_'IČ:'}</td>
+                                            <td>{$invoice->idNo}</td>
+                                        </tr>
+                                        <tr n:if="$invoice->vatNo">
+                                            <td>{_'DIČ:'}</td>
+                                            <td>{$invoice->vatNo}</td>
+                                        </tr>
+                                        <tr n:if="$invoice->vatNo2">
+                                            <td>{_'IČ DPH:'}</td>
+                                            <td>{$invoice->vatNo2}</td>
+                                        </tr>
+                                        <tr n:if="$invoice->accountNumber">
+                                            <td>{_'Číslo účtu:'}</td>
+                                            <td>{$invoice->accountNumber}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            {*
+            <div style="border: 1px solid #BEC8CE; clear: both; margin-bottom: 15px;">
+            <table style="width: 100%; font-size: 12px;">
+            <tr>
+            <td><strong>Položka</strong></td>
+            <td style="text-align: center;"><strong>Počet</strong></td>
+            <td style="text-align: center;"><strong>Cena/kus</strong></td>
+            <td style="text-align: center;"><strong>DPH</strong></td>
+            <td style="text-align: center;"><strong>Cena/kus (vč.DPH)</strong></td>
+            <td style="text-align: center;"><strong>Cena celkem({$invoice->currency->textCode})</strong></td>
+            </tr>
+            {var $sumTotal = $sumBezDPH = $sumVat = 0}
+            {foreach $invoice->products as $item}
+            {var $vatVal = (($item->unitVat / 100) + 1)}
+
+            {if $typeInvoice->code == 'tax_transfer_invoice'  || $typeInvoice->code == 'receipt_tax_transfer'}}
+            {var $vatVal = 1}
+            {/if}
+        <tr>
+            <td>
+                {$item->textproduct}
+            </td>
+            <td style="text-align: center;">
+                {$item->count|number:0:',':' '}
+            </td>
+            <td style="text-align: center;">
+                {var $unitPrice = round($item->countPrice / $item->count, 2)}
+
+                {var $sumBezDPH = $sumBezDPH + ($item->countPrice)}
+                {var $sumVat = $sumVat + (($item->countPrice) * ($vatVal - 1))}
+
+                {$currency->markBefore}
+                {$unitPrice|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                {$currency->markBehind}
+            </td>
+            <td style="text-align: center;">
+                {$item->unitVat} %
+            </td>
+            <td style="text-align: center;">
+                {var $sDPH = round(((($item->unitVat / 100) + 1) * $unitPrice), $currency->countDecimal)}
+                {$currency->markBefore}
+                {$sDPH|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                {$currency->markBehind}
+
+            </td>
+            <td style="text-align: center;">
+                {var $celkem = round(($item->countPrice * $vatVal), $currency->countDecimal)}
+                {var $sumTotal = $sumTotal + $celkem}
+
+                {$currency->markBefore}
+                {$celkem|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                {$currency->markBehind}
+            </td>
+        </tr>
+        {/foreach}
+        </table>
+            </div>*}
+
+            <div style="border: 2px solid #000000; margin-bottom: 15px;">
+                <table style="width: 100%; font-size: 12px;">
+                    {*<tr>
+                        <td>Celkem bez DPH:</td>
+                        <td style="text-align: right;">
+                            {$currency->markBefore}
+                            {$sumBezDPH|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                            {$currency->markBehind}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DPH:</td>
+                        <td style="text-align: right;">
+                            {$currency->markBefore}
+                            {$sumVat|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                            {$currency->markBehind}
+                        </td>
+                    </tr>*}
+                    <tr style="font-size: 20px;">
+                        <td><strong>Cena celkem:</strong></td>
+                        <td style="text-align: right;"><strong>
+                                {$currency->markBefore}
+                                {$refund->value|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                                {$currency->markBehind}
+                            </strong></td>
+                    </tr>
+                </table>
+
+            </div>
+
+            {if $refund->fikEET && $refund->fikEET !== "0"}
+                <div>
+                    <p style="font-size: 10px;">
+                        Tržba je evidována v běžném režimu. <br />
+                        Čas vystavení: {$refund->foundedDate|date:'j. n. Y H:i:s'} <br />
+                        Pořadové číslo tržby: {$refund->eetNo} <br />
+                        Označení provozovny: {$refund->eetProvoz} <br />
+                        Označení pokladního zařízení: {$refund->eetPokl} <br />
+                        FIK: {$refund->fikEET} <br />
+                        BKP: {$refund->bkpEET} <br />
+                    </p>
+                </div>
+            {/if}
+
+            {*<table style="width: 100%; {if $refund->fikEET && $refund->fikEET !== "0"} padding-top:-75px; {else} padding-top:25px; {/if}">
+                <tr>
+                    <td style="width: 80%"></td>
+                    <td align="left"><strong>..................................................</strong></td>
+                </tr>
+
+                <tr>
+                    <td style="width: 80%"></td>
+                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp; Vystavil: <strong>{$user['name']}</strong> <br />
+                        <span n:if="$user['phone']">&nbsp;&nbsp;&nbsp;&nbsp; Tel: {$user['phone']}</span> <br />
+                        <span n:if="$user['email']">&nbsp;&nbsp;&nbsp;&nbsp; Email: {$user['email']}</span>
+                    </td>
+                </tr>
+            </table>*}
+        </div>
+
+    </body>
+</html>

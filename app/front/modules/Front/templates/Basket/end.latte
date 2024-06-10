@@ -1,0 +1,47 @@
+{block title}{_'Dokončená objednávka'}{/block}
+{block content}
+
+    <div id="basketEnd">
+        <div class="left">
+
+            <h1>{_'Objednávka č.'} {$order->variableSymbol} {_'byla odeslána'}</h1>
+
+            <p>
+                {$text}
+            </p>
+
+            <p>
+                {_'Děkujeme za Vaši objednávku č.'} {$order->variableSymbol}.
+                {_'Potvrzení Vám přijde na Vaši emailovou schránku.'}<br>
+                {_'Pokud Vám email nedorazí, prosím kontaktujte nás.'}
+            </p>
+
+            <p>
+                {_'Vaši objednávku naleznete v sekci'}
+                {if !$user->loggedIn}
+                    {_'Moje objednávky - přístupy naleznete právě ve Vaší emailové schránce.'}
+                    (<a href="#" class="dialog-handler" data-dialog-options='{"content":"#login_dialog","isSnippet":"false","dropPasteData":"true"}'>{_'přihlásit se'}</a>)
+                {else}
+                    <a n:href=":RegistrationCustomer:profil id=> $user->id">{_'Moje objednávky'}</a>
+                {/if}
+            </p>
+            <p>&nbsp;</p>
+            <p>
+                <a n:href=":Front:default" class="btn btn-default">
+                    <img src="{$basePath}/assets/img/basket/arrow-left.png?t={$ver}" alt="">
+                    {_'Zpět do eshopu'}
+                </a>
+            </p>
+        </div>
+        <div class="right">
+            <div class="contactBox">
+                <h4>“{_'Něco není v pořádku?'}”</h4>
+                <p>
+                    E-mail: <a href="mailto:info@hifi-guide.cz">info@hifi-guide.cz</a><br>
+                </p>
+                <p>&nbsp;</p>
+            </div>
+        </div>
+    </div>
+
+{/block}

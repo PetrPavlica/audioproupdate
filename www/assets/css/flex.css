@@ -1,0 +1,316 @@
+/*---------------------------------------------------------------------------------------
+--------------- Nastaveni responzivity metodikou flexibilnich elementu------------------- 
+---------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------
+-------	flex styles for containers ------------
+---------------------------------------------*/
+
+.flexElem{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.flexWrap{
+    -webkit-box-flex-wrap: wrap;
+    -moz-box-flex-wrap:  wrap;
+    -webkit-flex-wrap:  wrap;
+    -ms-flex-wrap:  wrap;
+    flex-wrap: wrap;
+}
+
+
+
+/* justify content */
+
+.alignCenter{
+    -webkit-box-justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.alignLeft{
+    -webkit-box-justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -moz-justify-content: flex-start;
+    -ms-justify-content: flex-start;
+    justify-content: flex-start;
+
+    text-align: left;
+}
+
+.alignRight{
+    -webkit-box-justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+    -moz-justify-content: flex-end;
+    -ms-justify-content: flex-end;
+    justify-content: flex-end;
+
+    text-align: right;
+}
+
+.alignJustify{
+    -webkit-box-justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
+    justify-content: space-between;
+
+    text-align: justify;
+}
+
+/* align content, vertikalni manipulace s elementy */
+
+/* Natahne elementum vysku, aby ji mely vsechny stejnou */
+
+.EqualHeight{
+    align-items: stretch;
+    -webkit-box-align-content: stretch;
+    -webkit-align-content: stretch;
+    -moz-align-content: stretch;
+    -ms-align-content: stretch;
+    align-content: stretch;
+}
+
+.valignCenter{
+    align-items: center;
+    -webkit-box-align-content: center;
+    -webkit-align-content: center;
+    -moz-align-content: center;
+    -ms-align-content: center;
+    align-content: center;
+}
+
+.valignTop{
+    align-items: flex-start;
+    -webkit-box-align-content: flex-start;
+    -webkit-align-content: flex-start;
+    -moz-align-content: flex-start;
+    -ms-align-content: flex-start;
+    align-content: flex-start;
+}
+
+.valignBottom{
+    align-items: flex-end;
+    -webkit-box-align-content: flex-end;
+    -webkit-align-content: flex-end;
+    -moz-align-content: flex-end;
+    -ms-align-content: flex-end;
+    align-content: flex-end;
+}
+
+.valignJustify{
+    align-items: space-between;
+    -webkit-box-align-content: space-between;
+    -webkit-align-content: space-between;
+    -moz-align-content: space-between;
+    -ms-align-content: space-between;
+    align-content: space-between;
+}
+
+.valignStretch{
+    align-items: stretch;
+    -webkit-box-align-content: stretch;
+    -webkit-align-content: stretch;
+    -moz-align-content: stretch;
+    -ms-align-content: stretch;
+    align-content: stretch;
+}
+
+
+.ValignSelfTop {
+    align-self: flex-start;
+}
+
+.ValignSelfBottom {
+    align-self: flex-end;
+}
+
+.selfValignCenter {
+    align-self: center;
+}
+
+.selfValignStretch {
+    align-self: stretch;
+}
+
+.selfAlignLeft {
+    margin-right: auto;
+}
+
+.selfAlignRight {
+    margin-left: auto;
+}
+
+.selfAlignCenter {
+    margin: auto;
+}
+
+
+/*---------------------------------------------
+-------	flex styles for elements inside -------
+---------------------------------------------*/
+
+.flex{
+    -webkit-box-flex: 1 1 auto;
+    -moz-box-flex:  1 1 auto;
+    -webkit-flex:  1 1 auto;
+    -ms-flex:  1 1 auto;
+    flex:  1 1 auto;
+}
+
+.flex100{
+    -webkit-box-flex: 0 1 100%;
+    -moz-box-flex:  0 1 100%;
+    -webkit-flex:  0 1 100%;
+    -ms-flex:  0 1 100%;
+    flex:  0 1 100%;
+}
+
+.flex90{
+    -webkit-box-flex: 0 1 90%;
+    -moz-box-flex:  0 1 90%;
+    -webkit-flex:  0 1 90%;
+    -ms-flex:  0 1 90%;
+    flex:  0 1 90%;
+}
+
+.flex75{
+    -webkit-box-flex: 0 1 75%;
+    -moz-box-flex:  0 1 75%;
+    -webkit-flex:  0 1 75%;
+    -ms-flex:  0 1 75%;
+    flex:  0 1 75%;
+}
+
+.flex50{
+    -webkit-box-flex: 0 1 50%;
+    -moz-box-flex:  0 1 50%;
+    -webkit-flex:  0 1 50%;
+    -ms-flex:  0 1 50%;
+    flex:  0 1 50%;
+}
+
+.flex33{
+    -webkit-box-flex: 0 1 33%;
+    -moz-box-flex:  0 1 33%;
+    -webkit-flex:  0 1 33%;
+    -ms-flex:  0 1 33%;
+    flex:  0 1 33%;
+}
+
+.flex25{
+    -webkit-box-flex: 0 1 25%;
+    -moz-box-flex:  0 1 25%;
+    -webkit-flex:  0 1 25%;
+    -ms-flex:  0 1 25%;
+    flex:  0 1 25%;
+}
+
+.flex10{
+    -webkit-box-flex: 0 1 10%;
+    -moz-box-flex:  0 1 10%;
+    -webkit-flex:  0 1 10%;
+    -ms-flex:  0 1 10%;
+    flex:  0 1 10%;
+}
+
+
+
+
+
+/*
+        responzivita
+*/
+
+@media (max-width: 1366px) {
+
+}
+
+@media (max-width: 1280px) {
+
+}
+
+@media (max-width: 1024px) {
+
+}
+
+@media (max-width: 800px) {
+
+}
+
+@media (max-width: 768px) {
+
+    .flexWrap768{
+        -webkit-box-flex-wrap: wrap;
+        -moz-box-flex-wrap:  wrap;
+        -webkit-flex-wrap:  wrap;
+        -ms-flex-wrap:  wrap;
+        flex-wrap: wrap;
+    }
+
+}
+
+@media (max-width: 640px) {
+
+    .flexWrap640{
+        -webkit-box-flex-wrap: wrap;
+        -moz-box-flex-wrap:  wrap;
+        -webkit-flex-wrap:  wrap;
+        -ms-flex-wrap:  wrap;
+        flex-wrap: wrap;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .flex90, .flex75, .flex50, .flex33, .flex25, .flex10{
+        -webkit-box-flex: 0 1 100%;
+        -moz-box-flex:  0 1 100%;
+        -webkit-flex:  0 1 100%;
+        -ms-flex:  0 1 100%;
+        flex:  0 1 100%;
+    }
+
+    .flexWrap480{
+        -webkit-box-flex-wrap: wrap;
+        -moz-box-flex-wrap:  wrap;
+        -webkit-flex-wrap:  wrap;
+        -ms-flex-wrap:  wrap;
+        flex-wrap: wrap;
+    }
+
+}
+
+@media (max-width: 375px) {
+
+    .flexWrap375{
+        -webkit-box-flex-wrap: wrap;
+        -moz-box-flex-wrap:  wrap;
+        -webkit-flex-wrap:  wrap;
+        -ms-flex-wrap:  wrap;
+        flex-wrap: wrap;
+    }
+
+}
+
+@media (max-width: 320px) {
+
+    .flexWrap320{
+        -webkit-box-flex-wrap: wrap;
+        -moz-box-flex-wrap:  wrap;
+        -webkit-flex-wrap:  wrap;
+        -ms-flex-wrap:  wrap;
+        flex-wrap: wrap;
+    }
+
+}
+

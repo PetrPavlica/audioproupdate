@@ -1,0 +1,79 @@
+<div id="slider1" class="wrap">
+
+    <div class="nadpis full bold black">
+        <h1 class="indent">{_'Doporučujeme'}</h1>
+
+        <div class="line full through"></div>
+    </div>
+
+    <div id="swiper1" class="swiper-container">
+
+        <div class="swiper-wrapper">
+
+            {var $i = $needEnd = 0}
+            <!-- Slides -->
+            {foreach $onFrontRecomandedProducts as $product}
+                {if $i == 0}
+                    {var $needEnd = 1}
+                    <div id="large_device" class="swiper-slide">
+                        <div class="products products_slider flexElem">
+                        {/if}
+
+                        {control productTile $product, $sess, 'product_container_uvod', TRUE}
+
+                        {if $i == 2}
+                        </div>
+                    </div>
+                    {var $needEnd = 0}
+                {/if}
+
+                {var $i = $i + 1}
+                {if $i == 3}
+                    {var $i = 0}
+                {/if}
+
+            {/foreach}
+            {if $needEnd == 1}
+            </div>
+        </div>
+    {/if}
+
+    <!-- mobiles-->
+
+    {var $i = 0}
+    <!-- Slides -->
+    {foreach $onFrontRecomandedProducts as $product}
+        <div id="small_device" class="swiper-slide">
+            <div class="products products_slider flexElem alignCenter">
+                {control productTile $product, $sess, 'product_container_mob', TRUE}
+            </div>
+        </div>
+        {var $i = $i + 1}
+    {/foreach}
+</div>
+
+<div id="swiper1_left" class="swiper-button-next"></div>
+<div id="swiper1_right" class="swiper-button-prev"></div>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        //initialize swiper when document ready
+        var swiper1 = new Swiper('#swiper1', {
+            nextButton: '#swiper1_left',
+            prevButton: '#swiper1_right',
+            loop: false,
+            effect: "slide",
+            autoplay: false,
+            speed: 600,
+            scrollbarHide: true
+
+        });
+
+    });
+
+</script>
+
+</div>

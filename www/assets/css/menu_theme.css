@@ -1,0 +1,354 @@
+/* ------menu------- */
+
+#menu_container{
+    /*background-color: #575757;*/
+    background-color: #a7905a;
+    z-index: 1;
+}
+
+#hamburger{
+    background-color: #fff;
+    padding: 10px 10px;
+    cursor: pointer;
+}
+
+#hamburger #hamburger_img{
+    background: url(../img/icons/menu/hamburger.png) no-repeat;
+    background-size: contain;
+}
+
+/* odkazy menu 0. úroveň */
+
+#menu_container #menu li.drop_down > a:after{
+    /*background: url(../img/icons/menu/arrow.png) no-repeat;
+    background-size: cover;*/
+    background: none;
+}
+
+
+#menu_container #menu > li a .line{
+
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    height: 70%;
+    width: 1px;
+
+    /*background-color: #10325a;*/
+}
+
+#menu_container #menu > li:hover a .line, #menu_container #menu > li.hover a .line{
+    background-color: #d4d4d4;
+}
+
+#menu_container #menu > li:nth-last-child(3) a .line{
+    display: none;
+}
+
+#menu_container #menu li.drop_down > a{
+    /*padding-right: 15px;*/
+}
+
+#menu_container #menu li, ul#menu li a:link, ul#menu li a:visited, ul#menu li a:active{
+    color: #fff;
+    font-weight: normal;
+    font-size: 0.98em;
+    text-decoration: none;
+    /*background-color: #575757;*/
+    background-color: #a7905a;
+}
+
+#menu_container #menu > li.hover > a,
+#menu .clone-to-mob-menu.hover h2  {
+    color: #000;
+    background-color: #d4d4d4;
+}
+
+#menu_container #menu li.drop_down:hover > a:after{
+    /*
+    background: url(../img/icons/menu/arrow2.png) no-repeat;
+    background-size: cover;
+    */
+    background: none;
+}
+
+#menu_container #menu li:hover, ul#menu li:hover a, ul#menu li:hover a:hover,
+#menu_container #menu li.active, ul#menu li.active a, ul#menu li.active a:hover,
+#menu_container #menu li.hover, #menu_container #menu a.hover
+{
+    background-color: #d4d4d4;
+    color: #000;
+}
+
+/* ------sub menu------ */
+
+#menu_container #menu li .sub_menu .sub_content,
+#menu_container #menu li .sub_menu_full,
+#menu_container #menu li .sub_menu_small .sub_content .category ul
+{
+    position: relative;
+    transform: translateY(-20px);
+    opacity:0;
+    transition-duration: 0.6s;
+    transition-property:opacity, transform;
+    transition-timing-function: ease-out;
+    background-color: transparent;
+    min-height: 350px;
+    background-color: transparent;
+    z-index: 3;
+}
+
+#menu_container #menu li .visible.sub_menu .sub_content,
+#menu_container #menu li .visible.sub_menu .sub_menu_full,
+#menu_container #menu li .visible.sub_menu .sub_menu_small .sub_content .category ul {
+    transform: translateY(0);
+    opacity:1;
+}
+
+.sub_menu.visible::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(../img/menu/sub_back.png) repeat-x;
+    background-color: #e7e7e7;
+    border-bottom: 1px #d7d7d7 solid;
+    z-index: 2;
+
+
+}
+
+
+
+
+
+#menu_container #menu li .sub_menu .sub_content{
+    border: 1px #d7d7d7 solid;
+    border-top: none;
+    border-bottom: none;
+}
+
+#menu_container #menu li .sub_menu_full{
+    border-bottom: 1px #ccc solid;
+}
+
+#menu_container #menu li .sub_menu .sub_content .category .title label {
+
+    padding: 5px 25px 5px 15px;
+    text-align: center;
+    color: #000;
+    z-index: 9;
+    text-decoration: underline;
+}
+
+/* odkazy menu 1.úroveň (velké podmenu)*/
+
+#menu_container #menu li .sub_menu .sub_content .category ul li.drop_down > a:after{
+    background: url(../img/icons/menu/arrow3.png) no-repeat;
+    background-size: cover;
+}
+
+#menu_container #menu li .sub_menu .sub_content .category ul li,
+#menu_container #menu li .sub_menu .sub_content .category ul li a:link,
+#menu_container #menu li .sub_menu .sub_content .category ul li a:visited,
+#menu_container #menu li .sub_menu .sub_content .category ul li a:active
+{
+    font-size: 1em;
+    background-color: transparent;
+    font-weight: bold;
+}
+
+#menu_container #menu li .sub_menu .sub_content .category ul li:hover,
+#menu_container #menu li .sub_menu .sub_content .category ul li:hover a,
+#menu_container #menu li .sub_menu .sub_content .category ul li:hover a:hover,
+#menu_container #menu li.active .sub_menu .sub_content .category ul li.active,
+#menu_container #menu li.active .sub_menu .sub_content .category ul li.active a,
+#menu_container #menu li.active .sub_menu .sub_content .category ul li.active a:hover
+{
+    color: #b7995b;
+    text-decoration: underline;
+}
+
+/* odkazy menu 1.úroveň (malé podmenu)*/
+
+#menu_container #menu li .sub_menu .sub_content .category ul li.drop_down:hover > a:after{
+    background: url(../img/icons/menu/arrow.png) no-repeat;
+    background-size: cover;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li a:link,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li a:visited,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li a:active{
+    color: #b7995b;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li:hover,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li:hover a,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li:hover a:hover,
+#menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active,
+#menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active a,
+#menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active a:hover
+{
+    /*background-color: #575757;*/
+    background-color: #a7905a;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* odkazy menu 2.úroveň (malé podmenu) */
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li a:link,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li a:visited,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li a:active
+{
+    color: #b7995b;
+    background-color: transparent;
+}
+
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li:hover,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li a:hover,
+#menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li:hover a:hover,
+#menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active .sub_menu li.active,
+#menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active .sub_menu li.active a,
+#menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active .sub_menu li.active a:hover
+{
+    /*background-color: #575757 !important;*/
+    background-color: #a7905a !important;
+    color: #fff;
+}
+
+/* responzivita */
+
+@media (max-width: 768px) {
+
+    #menu_container #menu li .sub_menu_small .sub_content .category ul li:hover,
+    #menu_container #menu li .sub_menu_small .sub_content .category ul li:hover a,
+    #menu_container #menu li .sub_menu_small .sub_content .category ul li:hover a:hover,
+    #menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active,
+    #menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active a,
+    #menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active a:hover
+    {
+        background-color: transparent !important;
+    }
+
+    #menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li:hover,
+    #menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li a:hover,
+    #menu_container #menu li .sub_menu_small .sub_content .category ul li .sub_menu li:hover a:hover,
+    #menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active .sub_menu li.active,
+    #menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active .sub_menu li.active a,
+    #menu_container #menu li.active .sub_menu_small .sub_content .category ul li.active .sub_menu li.active a:hover
+    {
+        color: #b7995b !important;
+        background-color: transparent !important;
+    }
+
+}
+
+
+/*--------------------------------------------------------------------
+                    Styly pro submenu s produkty
+--------------------------------------------------------------------*/
+
+#menu_container #menu li .sub_menu .products_content{
+    padding: 0px;
+}
+
+#menu_container #menu li .sub_menu .products_content .category{
+    width: 25%;
+    min-height: 60px;
+}
+
+#menu_container #menu li .sub_menu .products_content .category a{
+    padding: 0px;
+    background-color: transparent !important;
+}
+
+#menu_container #menu li .sub_menu .products_content .category .title{
+    max-width: 80%;
+    padding-left: 10px;
+}
+
+#menu_container #menu li .sub_menu .products_content .category .title label{
+
+    display: block;
+    padding: 0px;
+    cursor: pointer;
+    width: 100%;
+    color: #000;
+    font-size: 0.9em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#menu_container #menu li .sub_menu .products_content .category .title label:hover{
+    color: #b7995b;
+    text-decoration: underline;
+}
+
+#menu_container #menu li .sub_menu .products_content .category .title a:hover{
+    text-decoration: underline;
+}
+
+#menu_container #menu li .sub_menu .products_content .category .picture{
+    max-width: 70px;
+}
+
+#menu_container #menu li .sub_menu .products_content .category .picture img{
+    width: 100%;
+}
+
+/* responzivita */
+
+@media (max-width: 768px) {
+
+    #menu_container #menu li .sub_menu .sub_content,
+    #menu_container #menu li .sub_menu_full,
+    #menu_container #menu li .sub_menu_small .sub_content .category ul {
+        transition: none;
+        transform: none;
+        opacity: 1;
+    }
+
+    .sub_menu.visible::after {
+        content: none;
+    }
+
+    #menu_container #menu li .sub_menu .products_content{
+        padding-bottom: 20px;
+    }
+
+
+
+    #menu_container #menu > li a .line{
+        display: none;
+    }
+
+}
+
+@media (max-width: 640px) {
+
+
+
+}
+
+@media (max-width: 480px) {
+
+
+
+    #menu_container #menu li .sub_menu .products_content .category .picture img{
+        width: 70%;
+    }
+
+    #menu_container #menu li .sub_menu .products_content .category .title{
+        max-width: 95%;
+    }
+
+}
+
+@media (max-width: 320px) {
+}

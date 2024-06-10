@@ -1,0 +1,23 @@
+{snippet share-by-email}
+
+    <div id="ShareEmailDialog" style="min-width: 400px;">
+
+        {form sendProductForm}
+
+            <table class="responzive form_table small_fields full_fields_size">
+
+                <tr><td class="required">Komu</td><td>{input to}</td></tr>
+                <tr><td class="required">Od koho</td><td>{input from}</td></tr>
+                <tr><td>Vzkaz</td><td>{input text}</td></tr>
+
+            </table>
+
+            <div class="fields_container center">
+                {input send}
+            </div>
+
+        {/form}
+
+    </div>
+
+{/snippet}

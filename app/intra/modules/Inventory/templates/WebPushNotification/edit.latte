@@ -1,0 +1,82 @@
+{block title}{_'Editace webové notifikace'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Editace webové notifikace'}
+</h3>
+
+<div class="alert alert-info">
+    Do odkazu jsou přidány parametry pro sledování: utm_source -> web-push, utm_medium -> notification, utm_campaign -> název notifikace bez diakritiky
+    {ifset $notification}({Nette\Utils\Strings::webalize($notification->name)}){/ifset}
+</div>
+
+    {form form, class => "form-horizontal"}
+        <div class="row">
+        {control renderer $form, 'id'}
+
+        <div class="col-sm-12 col-md-6">
+            {control renderer $form, 'name'}
+        </div>
+
+    <div class="col-sm-12 col-md-6">
+        {control renderer $form, 'product', 'getProducts'}
+    </div>
+
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                    {label link class => 'col-sm-4 control-label'}{/label}
+                    <div class="col-sm-8">
+                        {input link}
+                        <span class="help-block">Vložte celý odkaz s (http|https) | U zadaného produktu se doplní odkaz na detail produktu automaticky</span>
+                    </div>
+                </div>
+            </div>
+
+        <div class="col-sm-12 col-md-6">
+            <div class="form-group">
+                {label img class => 'col-sm-4 control-label'}{/label}
+                <div class="col-sm-8">
+                    {input img}
+                    <span class="help-block">1600x1100</span>
+                </div>
+            </div>
+
+            {ifset $notification}
+                <div n:if="$notification->image" style="margin: 20px 0; float: right;">
+                    <a href="{$basePath}/{$notification->image}" target="_blank">
+                        <img src="{$basePath}/{$notification->image}" style="max-width: 100%; width: 100px;" alt="">
+                    </a>
+                </div>
+            {/ifset}
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+            {control renderer $form, 'body'}
+        </div>
+
+    {*<div class="col-sm-12">
+        <div class="form-group">
+            <label class="col-sm-12">{$form['body']->caption}</label>
+            <div class="col-sm-12">
+                {input body}
+            </div>
+        </div>
+    </div>*}
+</div>
+
+    <a n:href="WebPushNotification:default" class="btn btn-default pull-left">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+
+        <div class="pull-right">
+            {input send class => 'btn btn-primary'}
+            {input sendDevice class => 'btn btn-success'}
+        </div>
+
+        <div class="clearfix"></div>
+
+    {/form}
+
+
+<p>&nbsp;</p>

@@ -1,0 +1,61 @@
+{block title}{_'Přihlášení'}{/block}
+{block content}
+
+<div id="content">
+    <br><br>
+    <div id="registrace">
+
+        <div class="nadpis blue bold text-center">
+            <h1>{_'Přihlášení zákazníka'}</h1>
+        </div>
+        {form signInForm}
+            <div class="block flexElem flexWrap alignCenter">
+                <div class="sub_block sub_block_log">
+                    <table class="responzive form_table small_fields full_fields_size">
+
+                        <tr>
+                            <td>
+                                <label>{_'Přihlašovací jméno (email):'} *</label>
+                                {input username}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>{_'Heslo:'} *</label>
+                                {input password}
+                            </td>
+                        </tr>
+                        <tr><td></td></tr>
+                        <tr>
+                            <td>
+                                <div class="fields_container center">
+                                    <input type="submit" name="send" value="{_'Přihlásit se'}" class="dialog-handler" data-dialog-options='{"applyAfterClicks":"3","content":"#contact_dialog"}' style="width: auto; padding: 7px 40px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td>
+                                <div class="fields_container center">
+                                    <a n:href=":RegistrationCustomer:registration">{_'Nemáte u nás ještě účet?'}</a>
+                                </div>
+                                <div class="fields_container center">
+                                    <a n:href=":RegistrationCustomer:resetPassword">{_'Zapomněli jste Vaše heslo?'}</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+        {/form}
+
+        <div class="flexElem alignCenter">
+            <div class="fb-login-button" onlogin="checkLoginState()" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+        </div>
+
+    </div>
+
+</div>

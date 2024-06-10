@@ -1,0 +1,41 @@
+{block title}{_'Editace platební metody'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Editace platební metody'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form form, class=>"form-horizontal"}
+        {control renderer $form, 'id'}
+        {control renderer $form, 'name'}
+        {control renderer $form, 'selingPrice'}
+        {control renderer $form, 'vat'}
+        {control renderer $form, 'info'}
+        {control renderer $form, 'orderState'}
+        {control renderer $form, 'heurekaPayment'}
+        {control renderer $form, 'active'}
+        {control renderer $form, 'deliveryCash'}
+        {control renderer $form, 'thePay'}
+        {control renderer $form, 'homeCredit'}
+
+        {control renderer $form, 'methodImg'}
+        {snippet method-img}
+            {ifset $method}
+                <div n:if="$method->image" class="col-md-6 col-md-offset-4" style="padding-bottom: 20px">
+                    <img src="{$basePath}/{$method->image}"/>
+                    <a n:href="deleteImg! methodId => $method->id" class="btn btn-xs btn-danger"
+                                                                   data-confirm="modal"
+                                                                   data-ajax="on">
+                        <span class="fa fa-trash"></span>
+                    </a>
+                </div>
+            {/ifset}
+        {/snippet}
+        {control renderer $form, 'send'}
+    {/form}
+    <a n:href=":PaymentMethod:default" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>

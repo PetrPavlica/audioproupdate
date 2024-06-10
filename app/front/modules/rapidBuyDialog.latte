@@ -1,0 +1,67 @@
+<div id="rapid_dialog" style="display: none;">
+    <div style="max-width: 700px">
+        <div class="nadpis center bold upper">
+            <h2>{_'Koupit zrychleně'}</h2>
+        </div>
+        {snippet rapid-buy-snipp}
+            {if isset($productToBuy)}
+                asdds
+            {/if}
+
+            {form rapidBuyForm}
+                <div class="block flexElem flexWrap alignCenter">
+                    <div class="sub_block">
+                        <table class="responzive form_table small_fields full_fields_size">
+                            {if isset($productToBuy)}
+                                <tr>
+                                    <td class="required">
+                                        <label>{_'Produkt'}</label>
+                                    </td>
+                                    <td>
+                                        {$productToBuy->name}
+                                    </td>
+                                </tr>
+                            {/if}
+                            <tr>
+
+                                <td>
+                                    <label>{_'Způsob placení'}</label>
+                                </td>
+                                <td>
+                                    {input payMethod}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>{_'Metoda dodání'}</label>
+                                </td>
+                                <td>
+                                    {input deliveryMethod}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="required">
+                                    <label>{_'Ceková cena'}</label>
+                                </td>
+                                <td>
+                                    123456
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="fields_container center">
+                                        <input type="submit" name="send" value="{_'Odeslat objednávku'}" style="height: 40px;"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            {input id}
+                            {input currency}
+                            {input product}
+                        </table>
+                    </div>
+                </div>
+            {/form}
+        {/snippet}
+    </div>
+</div>
+

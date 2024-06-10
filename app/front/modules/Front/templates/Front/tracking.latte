@@ -1,0 +1,41 @@
+{block title}
+    <h3>{_'Sledování zásilky'}</h3>
+{/block}
+{block content}
+
+<div id="content">
+    <div id="registrace">
+        <div class="nadpis blue">
+            <h1>{_'Sledování zásilky'}</h1>
+        </div>
+        {if isset($packages) && $packages}
+        <div class="flexElem flexWrap alignLeft">
+            <div class="sub_block">
+                {foreach $packages as $package}
+                    <div class="nadpis blue bold">
+                        <h3>{_'Zásilka č.:'} {$package->id} | {_'Typ přepravy'}: {$package->balikobotTypeDelivery->name} | {_'Číslo balíku'}: {$package->carrier_id}</h3>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Datum</th>
+                                    <th>Popis</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        {foreach $tracks[$package->id] as $item}
+                            <tr>
+                                <td>{$item['date']}</td>
+                                <td>{$item['text']}</td>
+                            </tr>
+                        {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                {/foreach}
+            </div>
+        </div>
+        {/if}
+    </div>
+</div>

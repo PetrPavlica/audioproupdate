@@ -1,0 +1,142 @@
+{block title}{_'Editace článku'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace článku'}
+</h3>
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#main">Základní informace</a></li>
+    <li><a data-toggle="tab" href="#photogallery">Fotogalerie</a></li>
+
+</ul>
+<div class="tab-content">
+    <div id="main" class="tab-pane fade in active">
+<div style="" class="col-xs-12 col-sm-12 col-md-12">
+    {form form}
+                <div class="panel-body">
+                    <fieldset class="form-horizontal">
+                        <div class="row">
+                            <div style="padding-bottom:20px" class="col-xs-12 col-sm-12 col-md-12">
+                                {control renderer $form, 'name'}
+                                {control renderer $form, 'menu'}
+                                {control renderer $form, 'type'}
+                                {control renderer $form, 'article'}
+
+                                {control renderer $form, 'orderArticle'}
+                                {control renderer $form, 'link'}
+                                {control renderer $form, 'articleImg'}
+                                {snippet article-img}
+                                    {ifset $article}
+                                        <div n:if="$article->image" class="col-md-6 col-md-offset-4" style="padding-bottom: 20px">
+                                            <img src="{$basePath}/{$article->image}" style="max-width: 100%;" />
+                                            <a n:href="deleteImg! articleId => $article->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on">
+                                                <span class="fa fa-trash"></span>
+                                            </a>
+                                        </div>
+                                    {/ifset}
+                                {/snippet}
+                                {control renderer $form, 'active'}
+                                {control renderer $form, 'showTitle'}
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+        <div class="col-xs-12 col-sm-12 col-md-12" style="padding-top: 60px; padding-bottom: 60px;">
+            <a n:href=":WebArticles:default" class="btn btn-default">
+                <span class="fa fa-arrow-left"></span>
+                {_'Zpět'}
+            </a>
+            <span style="float: right; padding-right: 40px">
+                <button name="sendBack" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"></i> {_'Uložit a zpět'}</button>
+                <button name="send" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"></i> {_'Uložit a pokračovat'}</button>
+                <button name="sendNew" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"></i> {_'Uložit a nový'}</button>
+            </span>
+        </div>
+    {/form}
+</div>
+    </div>
+    <div id="photogallery" class="tab-pane fade">
+        <br>
+        {ifset $article}
+            {form photogalleryForm id => 'photogallery-dropzone', class => 'ajax dropzone'}
+                {input id value => $article->id}
+            {/form}
+            <br>
+            {snippet images}
+                {if $article->images}
+                    {form galleryForm}
+                        {input id value => $article->id}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-stripped">
+                                <thead>
+                                <tr>
+                                    <th class="text-left">
+                                        #
+                                    </th>
+                                    <th class="text-left" width="40%">
+                                        {_'Fotografie'}
+                                    </th>
+                                    <th class="text-center" width="25%">
+                                        {_'Text fotografie (alt)'}
+                                    </th>
+                                    <th class="text-center" width="10%">
+                                        {_'Pořadí'}
+                                    </th>
+                                    <th class="text-left">
+                                    </th>
+                                </thead>
+                                <tbody>
+                                {foreach $article->images as $img}
+                                    {var $i = $iterator->getCounter()}
+                                    <tr>
+                                        <td>
+                                            {$i}
+                                            <input type="hidden" name="imgId[{$i}]" value="{$img->id}">
+                                        </td>
+                                        <td>
+                                            <a href="{$basePath}/{$img->path}" class="fancybox">
+                                                <img style="max-height: 150px; max-width: 400px;" src="{$basePath}/{$img->path}" alt="{$img->alt}">
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="imgAlt[{$i}]" value="{$img->alt}">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" name="imgOrder[{$i}]" value="{$img->orderImg}">
+                                        </td>
+                                        <td>
+                                            <a n:href="deleteImgGalerie! imgId=>$img->id" class="fa fa-trash btn btn-danger danger-alert" data-ajax="on"></a>
+                                        </td>
+                                    </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-right">
+                            {input send class => 'btn btn-primary ajax'}
+                        </div>
+                    {/form}
+                {/if}
+            {/snippet}
+        {else}
+            <div class="alert alert-info">Fotogalerii lze doplnit až bude článek poprvé uložen.</div>
+        {/ifset}
+    </div>
+</div>
+    <script type="text/javascript">
+        var photogalleryDropZone = new Dropzone('#photogallery-dropzone', {
+            acceptedFiles: 'image/*',
+            dictDefaultMessage: 'Pro nahrání obrázků je přetáhněte sem nebo klikněte zde a vyberte.'
+        });
+        photogalleryDropZone.on("queuecomplete", function(file) {
+            $.nette.ajax({
+                'url': {link updatePhotogallery!}
+            });
+            //photogalleryDropZone.removeAllFiles();
+        });
+
+    </script>

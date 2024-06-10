@@ -1,0 +1,71 @@
+<div id="products_vypis" style="position: relative;" class="products products_vypis flexElem flexWrap alignLeft">
+
+    {if count($products) == 0}
+        <div>
+            <div class="article">
+                <div class="content">{_'Nenalezeny žádné položky.'}</div>
+            </div>
+        </div>
+    {else}
+        {foreach $products as $product}
+            {control productTile $product, $sess}
+        {/foreach}
+    {/if}
+
+</div>
+
+<div class="flex flexElem flexWrap alignRight">
+    <div class="dataPager" data-build="false">
+        <div class="dataPagerHeader flexElem flexWrap alignElemsCenter">
+            <div class="flex flexElem alignRight">
+                <div class="dataPagerLeft flexElem valignCenter">
+                    {if ($paginator->getPage() - 1) > 0}
+                        <a class="dataPagerArrow" n:href=":ProductList:list id=>$idCat, slug=>$slugCat, page=> $paginator->getPage()-1">
+                            <img src="{$basePath}/front/packages/paginator/images/arrow_left.png" title="Vlevo" alt="Vlevo" style="cursor: pointer;" width="12px">
+                        </a>
+                    {/if}
+                </div>
+                <div class="dataPagerBody flexElem valignCenter">
+                    {for $i = $paginator->getFirstPage(); $i < $paginator->getLastPage()+1; $i++}
+                        {if $i == $paginator->getPage()}
+                            <div class="dataPagerItem active">
+                                <a>{$i}</a>
+                            </div>
+
+                        {elseif abs($i - $paginator->getPage()) <= 2}
+                            <div class="dataPagerItem">
+                                <a n:href=":ProductList:list id=>$idCat, slug=>$slugCat, page=>$i">{$i}</a>
+                            </div>
+                        {/if}
+                    {/for}
+                </div>
+                <div class="dataPagerRight flexElem valignCenter">
+                    {if ($paginator->getLastPage() - $paginator->getPage()) > 0}
+                        <a class="dataPagerArrow" n:href=":ProductList:list id=>$idCat, slug=>$slugCat, page=> $paginator->getPage()+1">
+                            <img src="{$basePath}/front/packages/paginator/images/arrow_right.png" title="Vpravo" alt="Vpravo" style="cursor: pointer;" width="12px">
+                        </a>
+                    {else}
+                        <span>&nbsp;</span>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {*<div class="paginationAdmount flexElem valignCenter">
+        <select class="nice_select border">
+            <option value="">15</option>
+            <option value="">30</option>
+            <option value="">50</option>
+            <option value="">70</option>
+            <option value="">90</option>
+            <option value="">vše</option>
+        </select>
+    </div>*}
+
+</div>
+{if $itemCount - $more - $paginator->getOffset() > 0}
+<div class="moreProducts">
+    <a n:href=":ProductList:list id=>$idCat, slug=>$slugCat, more => $more + 15">{_'15 dalších'}...</a>
+</div>
+{/if}

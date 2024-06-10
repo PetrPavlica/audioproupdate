@@ -1,0 +1,362 @@
+{block title}{ifset $category}{$category->seoTitle}{else}{$settings['homepage_title']}{/ifset}{/block}
+{block keywords}{ifset $category}{$category->seoDescription}{else}{$settings['homepage_description']}{/ifset}{/block}
+{block description}{ifset $category}{$category->seoDescription}{else}{$settings['homepage_description']}{/ifset}{/block}
+{block content}
+
+{var $checkedFilters = []}
+        {include listHeader.latte}
+        <div id="vypis_produktu" class="flexElem flexWrap768">
+
+            {include listLeftFilters.latte}
+            <div id="right_side">
+                {snippet products-snipp}
+                <div class="nadpis bold blue">
+                    <h1>{if isset($category)}{$category->name}{elseif isset($searchTerm)}{_'Vyhledávání: '} {$searchTerm}{else}{_'Produkty:'}{/if}</h1>
+                </div>
+
+                <div n:if="isset($category) && $category->description" class="article padding">
+                    <div class="content">{$category->description}<br/><br/></div>
+                </div>
+
+                {capture $categoryTiles}
+                    {if isset($childsCategory) && count($childsCategory)}
+                        <div class="types flexElem flexWrap alignLeft">
+                            {foreach $childsCategory as $child}
+                                <div class="item">
+                                    {capture $content}
+                                        <div class="picture" style="height: 90px;">
+                                            <img src="{$basePath}/{$child->image}" title="{$child->name}"
+                                                 alt="{$child->name}"/>
+                                        </div>
+                                        <div class="title">{$child->name}
+                                        </div>
+                                    {/capture}
+                                    {if $child->webMenu}
+                                        <a n:href="Page:default id => $child->id, wslug => $child->webMenu->slug">
+                                            {$content|noescape}
+                                        </a>
+                                    {else}
+                                    {var $slug = \Nette\Utils\Strings::webalize($child->name)}
+                                        <a n:href="ProductList:list id => $child->id, slug => $slug" class="grey">
+                                            {$content|noescape}
+                                        </a>
+                                    {/if}
+
+                                </div>
+                            {/foreach}
+                        </div>
+                    {/if}
+                {/capture}
+                {$categoryTiles|noescape}
+
+                {var $sort = isset($fVal['sort']) ? $fVal['sort'] : null}
+
+                {form sortLimitForm class => 'ajax'}
+                    {var $catId = isset($category) ? $category->id : 0}
+                    <input type="hidden" name="category" value="{$catId}">
+                <div id="filter_lista_1" class="flexElem flexWrap">
+
+                    <div class="item {if $sort === 'top'}active{/if} flex flexElem alignCenter valignCenter">
+                        <a n:href="sort! type=>'top', categoryId => $catId" class="sort-filter">{_'TOP'}</a>
+                    </div>
+                    <div class="item {if $sort === 'mostSell'}active{/if} flex flexElem alignCenter valignCenter">
+                        <a n:href="sort! type=>'mostSell', categoryId => $catId"
+                                class="sort-filter">{_'Nejprodávanější'}</a>
+                    </div>
+                    <div class="item {if $sort === 'chiep'}active{/if} flex flexElem alignCenter valignCenter">
+                        <a n:href="sort! type=>'chiep', categoryId => $catId"
+                                class="sort-filter">{_'Od nejlevnějšího'}</a>
+                    </div>
+                    <div class="item {if $sort === 'ritch'}active{/if} flex flexElem alignCenter valignCenter">
+                        <a n:href="sort! type=>'ritch', categoryId => $catId"
+                                class="sort-filter">{_'Od nejdražšího'}</a>
+                    </div>
+                    <div class="item {if $sort === 'bestRank'}active{/if} flex flexElem alignCenter valignCenter">
+                        <a n:href="sort! type=>'bestRank', categoryId => $catId"
+                                class="sort-filter">{_'Nejlépe hodnocené'}</a>
+                    </div>
+
+                    <div class="item zobrazeni_po flex">
+                        {input limit class=>'nice_select filterRange'}
+                    </div>
+                </div>
+                <div id="filter_lista_2" class="flexElem flexWrap">
+                    <div id="cena_range_container" class="item rangeSlider flexElem valignCenter filterRange"
+                         data-range="[{$topPrices['low']/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''},{$topPrices['high']/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''}]"
+                         data-values="[{$fVal['priceFrom']/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''},{$fVal['priceTo']/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''}]"
+                         data-mena="{$actualCurrency['markBehind']}{$actualCurrency['markBefore']}" data-step="10">
+                        <input name="priceFrom" type="hidden"
+                               value="{ifset $fVal['priceFrom']}{$fVal['priceFrom']/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''}{/ifset}"/>
+                        <input name="priceTo" type="hidden"
+                               value="{ifset $fVal['priceTo']}{$fVal['priceTo']/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''}{/ifset}"/>
+                    </div>
+                    <div class="item checkbox_container flex flexElem">
+                        <div>
+                            <input name="new" class="icheck" type="checkbox" {ifset $fVal['new']}checked{/ifset}/>
+                        </div>
+                        <div>
+                            <label>
+                                {_'Novinka'}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="item checkbox_container flex flexElem">
+                        <div>
+                            <input name="action" class="icheck" type="checkbox" {ifset $fVal['action']}checked{/ifset}/>
+                        </div>
+                        <div>
+                            <label>
+                                {_'Akce'}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="item checkbox_container flex flexElem">
+                        <div>
+                            <input class="icheck" name="onStock" type="checkbox"
+                                   {ifset $fVal['onStock']}checked{/ifset}/>
+                        </div>
+                        <div>
+                            <label>
+                                {_'Skladem'}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="item checkbox_container flex flexElem">
+                        <div>
+                            <input name="unPack" class="icheck" type="checkbox" {ifset $fVal['unPack']}checked{/ifset}/>
+                        </div>
+                        <div>
+                            <label>
+                                {_'Rozbaleno'}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                {/form}
+
+                    <a id="show-filters" class="no-link button blue full_size"
+                       data-show='{"target":"#vypis_produktu #right_side #filters-container","secondClick":"hide"}'>
+                        {_'Podrobnější filtr'}
+                    </a>
+                    <div id="filters-container">
+                {form filterForm class => 'ajax'}
+                    {input category}
+                    {if isset($filters) && count($filters)}
+                        {var $renderedFilters = []}
+                        <div id="filter-3" class="navbar">
+                            <div id="accordion">
+                                <div id="filters">
+                                    <div class="filter">
+                                        <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#vyrobce">
+                                            {_'Výrobce'}
+                                        </a>
+                                    </div>
+                                    {foreach $filters as $f}
+                                        <div class="filter">
+                                            <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#{Nette\Utils\Strings::webalize($f['name'])}">
+                                                {$f['name']}
+                                            </a>
+                                        </div>
+                                    {/foreach}
+                                </div>
+                                <div class="content">
+                                    <div id="vyrobce" class="collapse">
+                                        <div class="items">
+                                    {foreach $producers as $k => $item}
+                                        <div class="checkbox-bt checkbox-gold">
+                                            <input id="producerCheck[{$k}]" name="producerCheck[{$k}]" value="{$item}" type="checkbox" {if isset($fVal['producerCheck'][$k])}checked{/if}>
+                                            <label for="producerCheck[{$k}]">
+                                                {$item|noescape}
+                                            </label>
+                                        </div>
+                                        {ifset $fVal['producerCheck'][$k]}
+                                            {var $checkedFilters['producer'][$k][$item] = $item}
+                                        {/ifset}
+                                    {/foreach}
+                                        </div>
+                                    </div>
+                                    {foreach $filters as $f}
+                                        <div id="{Nette\Utils\Strings::webalize($f['name'])}" class="collapse">
+                                            <div class="items">
+                                                {foreach $f['filters'] as $filter}
+                                                    {if $filter['slider']}
+                                                        <div class="title" n:if="$filter['name']">{$filter['name']|noescape}:</div>
+                                                        {foreach $filter['values'] as $k => $v}
+                                                            {continueIf isset($renderedFilters[$filter['id']][$v])}
+                                                            <div class="checkbox-bt checkbox-gold">
+                                                                <input id="filterSlider[{$filter['id']}][{$k}]" name="filterSlider[{$filter['id']}][]" value="{$v}" type="checkbox" {if isset($fVal['filterSlider'][$filter['id']]) && is_array($fVal['filterSlider'][$filter['id']]) && in_array($v, $fVal['filterSlider'][$filter['id']])}checked{/if}>
+                                                                <label for="filterSlider[{$filter['id']}][{$k}]">
+                                                                    {$v}
+                                                                </label>
+                                                            </div>
+                                                            {var $renderedFilters[$filter['id']][$v] = $v}
+                                                            {if isset($fVal['filterSlider'][$filter['id']]) && is_array($fVal['filterSlider'][$filter['id']]) && in_array($v, $fVal['filterSlider'][$filter['id']])}
+                                                                {var $checkedFilters['slider'][$filter['id']][$v] = $v}
+                                                            {/if}
+                                                        {/foreach}
+                                                    {else}
+                                                        {var $value = $filter['name']}
+                                                        {continueIf isset($renderedFilters[$filter['id']][$value])}
+                                                        <div class="checkbox-bt checkbox-gold">
+                                                                <input id="filterCheck[{$filter['id']}]" name="filterCheck[{$filter['id']}]" value="{$value}" type="checkbox" {if isset($fVal['filterCheck'][$filter['id']])}checked{/if}>
+                                                                <label for="filterCheck[{$filter['id']}]">
+                                                                    {$value}
+                                                                </label>
+                                                        </div>
+                                                        {var $renderedFilters[$filter['id']][$value] = $value}
+                                                        {ifset $fVal['filterCheck'][$filter['id']]}
+                                                            {var $checkedFilters['check'][$filter['id']][$value] = $value}
+                                                        {/ifset}
+                                                    {/if}
+                                                {/foreach}
+                                            </div>
+                                        </div>
+                                    {/foreach}
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                    {if isset($checkedFilters)}
+                        <div id="filter-values">
+                            {foreach $checkedFilters as $kc => $c}
+                                {foreach $c as $kv => $v}
+                                    {if is_array($v)}
+                                        {foreach $v as $kvv => $vv}
+                                            <a class="ajax" n:href="removeFilter! type => $kc, value => $kvv, filterId => $kv">{$vv} <i class="fa fa-times"></i></a>
+                                        {/foreach}
+                                    {else}
+                                        <a class="ajax" n:href="removeFilter! type => $kc, value => $v, filterId => $kv">{$v} <i class="fa fa-times"></i></a>
+                                    {/if}
+                                {/foreach}
+                            {/foreach}
+                            <a n:href="resetFilters!" class="resetFilters ajax">{_'Vymazat filtry'} <i class="fa fa-times"></i></a>
+                        </div>
+                    {/if}
+
+                    {input sendFilter, id => "sendFilter"}
+                {/form}
+                    </div>
+
+                {include listProducts.latte}
+                {include listLastVisited.latte}
+                <br/>
+                {if isset($childsCategory) && count($childsCategory)}
+                    <div class="nadpis nadpis_reproduktory_bottom bold blue">
+                        <h1>{$category->name}</h1>
+                    </div>
+                    {$categoryTiles|noescape}
+                {/if}
+
+                {if isset($category) && $category->webDescription}
+                    <div class="article full_width no_full padding">
+
+                        <div class="content">
+                            {$category->webDescription|noescape}
+                            <div class="gradient"></div>
+                        </div>
+
+                        <a class="more">{_'Více informací'}</a>
+
+                    </div>
+                {/if}
+                {/snippet}
+            </div>
+
+        </div>
+
+
+<script>
+    var extendetFilters, moreProducers = false;
+    $(document).ready(function () {
+        $(document).on('click', 'a[data-toggle="collapse"]', function() {
+            $('#filter-3 #accordion .content > .collapse.in')
+                .collapse('hide');
+        });
+
+        var progress = new Progress();
+
+        $(document).on("ifChecked ifUnchecked change ", "input.icheck, .filterRange, #filter-3 #accordion .content > .collapse input", function () {
+            checkExtendetFilters();
+            checkMoreProducers();
+            var form = $(this).closest('form');
+            delay(function () {
+                progress.insertInto($(document).find("#products_vypis"), true, true);
+                form.submit();
+                $(document).ajaxComplete(function () {
+                    progress.remove();
+                    toggleExtendedFilters();
+                    toggleMoreProducers();
+                });
+            }, 500);
+        });
+
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        $(document).on("click", ".sort-filter", function (event) {
+            checkExtendetFilters();
+            checkMoreProducers();
+            event.preventDefault();
+            progress.insertInto($(document).find("#products_vypis"), true, true);
+            $.nette.ajax({
+                url: $(this).attr("href")
+            });
+            $(document).ajaxComplete(function () {
+                progress.remove();
+                toggleExtendedFilters();
+                toggleMoreProducers();
+            });
+        });
+        $(document).on("click", ".moreProducts a", function (event) {
+            checkExtendetFilters();
+            checkMoreProducers();
+            event.preventDefault();
+            progress.insertInto($(document).find("#products_vypis"), true, true);
+            $.nette.ajax({
+                url: $(this).attr("href")
+            });
+            $(document).ajaxComplete(function () {
+                progress.remove();
+                toggleExtendedFilters();
+                toggleMoreProducers();
+            });
+        });
+    });
+
+    function checkExtendetFilters() {
+        var extendetDiv = $(document).find("#extendet_filters");
+        if (extendetDiv.css('display') != 'none') {
+            extendetFilters = true;
+        } else {
+            extendetFilters = false;
+        }
+    }
+
+    function toggleExtendedFilters() {
+        if (extendetFilters == true) {
+            $(document).find("#extendet_filters").css('display', 'block');
+        }
+    }
+
+    function checkMoreProducers() {
+        var div = $(document).find("#moreProducers");
+        if (div.css('display') != 'none') {
+            moreProducers = true;
+        } else {
+            moreProducers = false;
+        }
+    }
+
+    function toggleMoreProducers() {
+        if (moreProducers == true) {
+            $(document).find("#moreProducers").css('display', 'block');
+        }
+    }
+
+</script>

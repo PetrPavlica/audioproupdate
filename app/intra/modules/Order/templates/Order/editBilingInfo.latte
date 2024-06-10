@@ -1,0 +1,37 @@
+{block title}{_'Editace fakturačních údajů objednávky'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace fakturačních údajů objednávky'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form formEditBilingInfo, class=>"form-horizontal"}
+        {control renderer $form, 'bootstrap', 'getCustomers', '', 'handleUpdateCustomer'}
+    {/form}
+    <a n:href=":Order:view id=>$order->id" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>
+
+<script type="text/javascript">
+    function handleUpdateCustomer(data) {
+        if (data[1].length) {
+            var customer = data[1];
+            $('#frm-formEditBilingInfo-company').val(customer[0]);
+            $('#frm-formEditBilingInfo-name').val(customer[1]);
+            $('#frm-formEditBilingInfo-idNo').val(customer[2]);
+            $('#frm-formEditBilingInfo-vatNo').val(customer[3]);
+            $('#frm-formEditBilingInfo-payVat').prop('checked', customer[4]);
+            $('#frm-formEditBilingInfo-street').val(customer[5]);
+            $('#frm-formEditBilingInfo-zip').val(customer[6]);
+            $('#frm-formEditBilingInfo-city').val(customer[7]);
+            $('#frm-formEditBilingInfo-country option:eq(' + customer[8] + ')').prop('selected', true);
+            $('#frm-formEditBilingInfo-deliveryToOther').prop('checked', customer[9]);
+            $('#frm-formEditBilingInfo-phone').val(customer[10]);
+            $('#frm-formEditBilingInfo-email').val(customer[11]);
+        }
+    }
+</script>

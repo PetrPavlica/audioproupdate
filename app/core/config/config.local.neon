@@ -1,0 +1,18 @@
+parameters:
+    isProduction: false # set mode of production: true | false
+    version: 1
+    ThePayMerchantId: ''
+    ThePayProjectId: ''
+    ThePayApiPassword: ''
+
+application:
+	catchExceptions: false
+
+database:
+	dsn: 'mysql:host=localhost;dbname=audiopro'
+	user: root
+	password: ''
+doctrine:
+	user: root
+	password: ''
+	dbname: audiopro

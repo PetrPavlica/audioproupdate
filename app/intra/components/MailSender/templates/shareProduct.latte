@@ -1,0 +1,128 @@
+{var $basePath = "https://audiopro.cz"}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta charset="UTF-8">
+    <meta name="author" content="WebRex, s. r. o.">
+
+</head>
+<body>
+
+<div style="width: 650px;margin: 0px auto;background-color: #fff;border: 5px solid #eaeaea;color: #000;font-family: arial,sans-serif !important;">
+
+    {var $slug = \Nette\Utils\Strings::webalize($product->name)}
+
+    <table style="border-collapse: collapse;">
+        <tr>
+            <td style="padding: 4px 8px; background-color: #E7E7E7;">
+                <a href="{$basePath}">
+                    <img style="width: 200px;" src="{$basePath}/front/design/icons/logo/logo.png" title="{$settings["company_name"]}" alt="{$settings["company_name"]}" width="200px"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px 8px;">
+                <table>
+                    <tr>
+                        <td>
+                            <a href="{link 'ProductDetail:detail' id => $product->id, slug => $slug}">
+                                {if $product->mainImage && file_exists($product->mainImage)}
+                                    <img style="width: 250px;" width="250px" src="{$basePath}/{$product->mainImage}" alt="{$product->name}"
+                                         title="{$product->name}"/>
+                                {else}
+                                    <img style="width: 250px;" width="250px" src="{$basePath}/front/images/produkty/no-photo.png"
+                                         alt="{$product->name}" title="{$product->name}"/>
+                                {/if}
+                            </a>
+                        </td>
+                        <td>
+                            <p style="line-height: 1.5em;margin: 7px 0px;font-size: 0.9em;">
+                                Dobrý den, <br/><br/>
+
+                                <a style="color: #146797;text-decoration: none;" href="mailto: {$values->from}">{$values->from}</a> vám doporučuje tento produkt z&nbsp;{str_replace(" ","&nbsp;",$settings["company_name"])|noescape}:
+                            </p>
+
+                            <p style="line-height: 1.5em;margin: 7px 0px;font-size: 0.9em;">
+                                {$values->text}
+                            </p>
+
+                            <a style="display: block; color: #021f40;margin: 12px 0px;text-decoration: none" href="{link 'ProductDetail:detail' id => $product->id, slug => $slug}">
+                                <h3 style="color: #021f40; font-size: 1.5em; font-family: arial,sans-serif;">
+                                    {$product->name}
+                                </h3>
+                            </a>
+
+                            {var $sellPrice = $lastPrice = 0}
+                            {if $product->activeAction}
+                                {var $sellPrice = $product->activeAction->selingPrice}
+                                {var $lastPrice = $product->activeAction->lastPrice}
+                            {else}
+                                {var $sellPrice = $product->selingPrice}
+                                {var $lastPrice = $product->lastPrice}
+                            {/if}
+
+                            <span style="display: block;margin-top: 15px;font-size: 1.3em;color: #021f40;font-weight: bold;">
+                                {$actualCurrency['markBefore']}
+                                {$sellPrice/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </span>
+
+                            <br /><br />
+
+                            <a style="max-width: 200px;display:block;font-weight: bold;white-space: nowrap; text-align: center;padding: 8px 14px;background-color: #021f40;color: #fff;text-decoration: none;" href="{link 'ProductDetail:detail' id => $product->id, slug => $slug}" target="_blank">
+                                Zobrazit produkt
+                            </a>
+
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 4px 8px; background-color: #E7E7E7;">
+
+                <p align="center" style="font-size: 0.9em;margin: 7px 0px;font-weight: bold;">{$settings["company_name"]} {$settings["company_street"]}, {$settings["company_city"]}</p>
+
+                <p align="center" style="font-size: 0.9em;margin: 7px 0px;">
+                    tel.: <a style="color: #146797;text-decoration: none;" href="tel:{$settings["company_phone1"]}">{$settings["company_phone1"]}</a>
+                    |
+                    e-mail: <a style="color: #146797;text-decoration: none;" href="mailto: {$settings["company_email"]}">{$settings["company_email"]}</a>
+                </p>
+                <p align="center" style="font-size: 0.9em;margin: 7px 0px;">
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["googleplus_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/google_plus.png" title="{_'Google Plus'}" alt="{_'Google Plus'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["facebook_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/facebook.png" title="{_'Facebook'}" alt="{_'Facebook'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["pinterest_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/pinterest.png" title="{_'Pinterest'}" alt="{_'Pinterest'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["twitter_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/twitter.png" title="{_'Twitter'}" alt="{_'Twitter'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["instagram_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/instagram.jpg" title="{_'Instagram'}" alt="{_'Instagram'}" width="30px"/>
+                    </a>
+                </p>
+
+                <p style="margin: 7px 0px;font-size: 0.9em;text-align: center;line-height: 1.5em;">
+                    Tento e-mail je obchodním sdělením, které Vám bylo na základě Vaší registrace nebo požadavku odesláno na adresu <a style="color: #146797;text-decoration: none;" href="mailto: {$values->to}">{$values->to}</a>.
+                </p>
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+
+</body>
+</html>

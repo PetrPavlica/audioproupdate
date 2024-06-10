@@ -1,0 +1,109 @@
+#registrace .nadpis h1{
+    font-size: 1.7em;
+}
+
+#registrace .nadpis h3{
+    font-size: 1.2em;
+}
+
+#registrace .block{
+    padding: 0px;
+}
+
+#registrace .block .sub_block{
+    margin-top: 20px;
+    flex: 0 1 50%;
+}
+
+#registrace .block .sub_block_log{
+    flex: 0 1 30%;
+}
+
+#registrace .block .sub_block_reg{
+    flex: 0 1 70%;
+}
+
+#registrace .block .sub_block table{
+    width: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+#registrace .block .sub_block table tr td{
+    text-align: left;
+}
+
+#registrace .block .sub_block table label{
+    font-weight: bold;
+}
+
+#podminky_registrace{
+    flex: 0 1 100%;
+    font-size: 0.8em;
+    text-align: left;
+    margin-top: 15px;
+    padding-left: 7px;
+}
+
+.clanekA a{
+    color: #ed9535;
+}
+
+#login_dialog_data .block{
+    min-width: 600px;
+    max-width: 600px;
+}
+
+
+/*
+        responzivita
+*/
+
+@media (max-width: 1366px) {
+}
+
+@media (max-width: 1280px) {
+}
+
+@media (max-width: 1024px) {
+}
+
+@media (max-width: 800px) {
+}
+
+@media (max-width: 768px) {
+}
+
+@media (max-width: 640px) {
+
+    #registrace .block .sub_block{
+        margin-top: 20px;
+        flex: 0 1 100%;
+    }
+
+    #login_dialog_data .block{
+        min-width: 200px;
+        max-width: none;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    #login_dialog_data .block{
+        padding: 3px 4px;
+    }
+
+    #login_dialog_data .block .sub_block{
+        padding: 0px;
+    }
+
+}
+
+@media (max-width: 320px) {
+
+
+
+}

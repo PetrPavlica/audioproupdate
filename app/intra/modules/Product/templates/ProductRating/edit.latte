@@ -1,0 +1,23 @@
+{block title}{_'Editace hodnocení produktu'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Editace hodnocení produtku'} - <a n:href=":ProductDetail:detail id=>$product->id" target="_blank">{$product->name}</a>
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form form, class=>"form-horizontal"}
+        {control renderer $form}
+    {/form}
+    {if isset($returnTo) && $returnTo == 'all'}
+        <a n:href=":ProductRating:all" class="btn btn-default">
+            <span class="fa fa-arrow-left"></span>
+            {_'Zpět'}
+        </a>
+    {else}
+        <a n:href=":ProductRating:default id => $product->id" class="btn btn-default">
+            <span class="fa fa-arrow-left"></span>
+            {_'Zpět'}
+        </a>
+    {/if}
+</div>

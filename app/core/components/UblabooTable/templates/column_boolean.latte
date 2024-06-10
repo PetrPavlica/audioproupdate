@@ -1,0 +1,19 @@
+{**
+ * @param $row    Ublaboo\DataGrid\Row
+ * @param $status Ublaboo\DataGrid\Column\ColumnStatus
+ * remake for boolean
+*}
+
+{var $active_option = $status->getCurrentOption($row)}
+
+<div>
+    {if $active_option}
+        <span class=" {$active_option->getClass()} ">
+            {if $active_option->getIcon()}<span class="{$icon_prefix}{$active_option->getIcon()}"></span> {/if}
+            {_$active_option->getText()} <i n:if="$status->hasCaret()" class="caret"></i>
+        </span>
+    {else}
+        {$row->getValue($status->getColumn())}
+    {/if}
+
+</div>

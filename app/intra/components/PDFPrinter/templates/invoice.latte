@@ -1,0 +1,554 @@
+{var $currency = $invoice->currency}
+
+<html>
+<head>
+    <meta http-equiv="Content-Language" content="cs">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{$basePath}/intra/css/pdf_print.css">
+</head>
+
+<body style="font-family: Arial;">
+<div style="float:left; width: 80%; padding-top: 15px;">
+    <table style="font-size: 70%; color: #5A7AAD;">
+        <tr>
+            <td width="160px;">{$settings['company_name']}</td>
+            <td width="160px;">{_'Tel.:'} {$settings['company_phone1']}</td>
+            <td width="160px;">{_'WWW:'} <a href="http://{$settings['company_www']}"
+                                            target="_blank">{$settings['company_www']}</a></td>
+        </tr>
+        <tr>
+            <td width="160px;">Táborská 31</td>
+            <td width="160px;">{*Tel.: {$settings['company_phone2']*}</td>
+            <td width="160px;">{_'E-mail:'} <a href="mailto:{$settings['company_email']}"
+                                               target="_blank">{$settings['company_email']}</a></td>
+        </tr>
+        <tr>
+            <td width="160px;">140 00 Praha</td>
+            <td width="160px;"></td>
+            <td width="160px;"></td>
+        </tr>
+        <tr>
+            <td width="160px;">{$settings['company_country']}</td>
+            <td width="160px;"></td>
+            <td width="160px;"></td>
+        </tr>
+    </table>
+
+</div>
+<div style="float:right">
+    <img src='{$basePath}/assets/img/logob.png' border='0'/>
+</div>
+<div class="clear"><br/></div>
+<div>
+    <div style="text-align: right; border-bottom: 2px solid #000000; color: #1A5DAC; font-weight: bold; font-size: 20px;">
+        {if $isProforma}
+            {_'Proforma faktura - neslouží jako daňový doklad'}
+        {elseif $isCreditNote}
+            {_'Dobropis č.'} {$invoice->codeCreditNote}
+        {else}
+            {_'Faktura č.'} {$invoice->codeInvoice}
+        {/if}
+    </div>
+    <table>
+        <tr>
+            <td width="60%">
+                <span style="color: #1A5DAC; font-weight: bold; font-size: 12px;">{_'Dodavatel'}:</span>
+                <table style="font-weight: bold; margin-bottom: 15px; margin-top: 10px;  font-size: 12px;">
+                    <tr>
+                        <td>{$settings['company_name']}</td>
+                    </tr>
+                    <tr>
+                        <td>{$settings['company_street']}</td>
+                    </tr>
+                    <tr>
+                        <td>{$settings['company_city']}</td>
+                    </tr>
+
+                </table>
+
+                <table style="margin-bottom: 15px; font-size: 12px;">
+                    <tr>
+                        <td>{_'IČ:'}</td>
+                        <td>{$settings['company_IC']}</td>
+                    </tr>
+                    <tr>
+                        <td>{_'DIČ:'}</td>
+                        <td>{$settings['company_DIC']}</td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; font-size: 12px; margin-bottom: 15px">
+                    <tr n:if="$settings['company_account_NO'] && $invoice->currency->code == 'CZK'">
+                        <td>{_'Číslo účtu (CZK)'}:</td>
+                        <td>{$settings['company_account_NO']}</td>
+                    </tr>
+                    <tr n:if="$settings['company_account_NO_2'] && $invoice->currency->code == 'CZK'">
+                        <td>{_'Číslo účtu (CZK)'}:</td>
+                        <td>{$settings['company_account_NO_2']}</td>
+                    </tr>
+                    <tr n:if="$settings['company_account_NO_EUR'] && $invoice->currency->code == 'EUR'">
+                        <td>{_'Číslo účtu (EUR)'}:</td>
+                        <td>{$settings['company_account_NO_EUR']}</td>
+                    </tr>
+                    <tr n:if="$settings['company_account_NO_EUR'] && $invoice->currency->code == 'EUR'">
+                        <td>{_'IBAN'}:</td>
+                        <td>CZ3920100000002301395973</td>
+                    </tr>
+                    <tr n:if="$settings['company_account_NO_EUR'] && $invoice->currency->code == 'EUR'">
+                        <td>{_'BIC/SWIFT'}:</td>
+                        <td>FIOBCZPPXXX</td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; font-size: 12px; padding-bottom: 30px">
+                    <tr>
+                        <td style="width: 50%">{_'Forma úhrady:'}</td>
+                        <td style="text-align: left;">{$invoice->paymentMethod->name}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">{_'Datum vystavení:'}</td>
+                        <td style="text-align: left;">
+                            {if $isCreditNote}
+                                {$invoice->creditNoteDate|date:'j. n. Y'}
+                            {else}
+                                {$invoice->foundedDate|date:'j. n. Y'}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">{_'Datum zdanitelného plnění:'}</td>
+                        <td style="text-align: left;">
+                            {if $isCreditNote}
+                                {$invoice->creditNoteDate|date:'j. n. Y'}
+                            {else}
+                                {$invoice->foundedDate|date:'j. n. Y'}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">{_'Datum splatnosti:'}</td>
+                        <td style="text-align: left;">
+                            {if $isCreditNote}
+                                {$invoice->creditNoteDate|date:'j. n. Y'}
+                            {else}
+                                {$invoice->dueDate|date:'j. n. Y'}
+                            {/if}
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+            <td width="60%" align="right">
+                <table style="margin-bottom: 15px; font-size: 12px;">
+                    <tr>
+                        <td style="text-align: right;">{_'Variabilní symbol:'}</td>
+                        <td style="text-align: right;"><strong>{$invoice->variableSymbol}</strong></td>
+                    </tr>
+                    <tr n:if="$invoice->specificSymbol">
+                        <td style="text-align: right;">{_'Specifický symbol:'}</td>
+                        <td style="text-align: right;"><strong>{$invoice->specificSymbol}</strong></td>
+                    </tr>
+                    <tr n:if="$invoice->constantSymbol">
+                        <td style="text-align: right;">{_'Konstantní symbol:'}</td>
+                        <td style="text-align: right;"><strong>{$invoice->constantSymbol}</strong></td>
+                    </tr>
+
+                </table>
+
+                <table style="margin-bottom: 15px; border: 3px solid #000000; font-size: 12px;">
+                    <tr>
+                        <td width="350" style="text-align: left;">
+                            <span style="color: #1A5DAC; font-weight: bold; font-size: 12px;">&nbsp; {_'Odběratel'}:</span>
+                            <table style="font-weight: bold; font-size: 12px; margin-left: 10px;  margin-top: 10px; ">
+                                {if $invoice->company}
+                                    <tr>
+                                        <td>{$invoice->company}</td>
+                                    </tr>
+                                {else}
+                                    <tr>
+                                        <td>{$invoice->name}</td>
+                                    </tr>
+                                {/if}
+                                <tr n:if="$invoice->street">
+                                    <td>{$invoice->street}</td>
+                                </tr>
+                                <tr n:if="$invoice->zip || $invoice->city ">
+                                    <td>{$invoice->zip}   {$invoice->city}</td>
+                                </tr>
+                                <tr n:if="$invoice->country && $invoice->country->name">
+                                    <td>{$invoice->country->name}</td>
+                                </tr>
+                            </table>
+
+                            <table style="margin-bottom: 10px; margin-left: 10px;">
+                                <tr n:if="$invoice->idNo">
+                                    <td>{_'IČ:'}</td>
+                                    <td>{$invoice->idNo}</td>
+                                </tr>
+                                <tr n:if="$invoice->vatNo">
+                                    <td>{_'DIČ:'}</td>
+                                    <td>{$invoice->vatNo}</td>
+                                </tr>
+                                <tr n:if="$invoice->vatNo2">
+                                    <td>{_'IČ DPH:'}</td>
+                                    <td>{$invoice->vatNo2}</td>
+                                </tr>
+                                <tr n:if="$invoice->accountNumber">
+                                    <td>{_'Číslo účtu:'}</td>
+                                    <td>{$invoice->accountNumber}</td>
+                                </tr>
+                                <tr n:if="$invoice->phone">
+                                    <td>{_'Telefon:'}</td>
+                                    <td>{$invoice->phone}</td>
+                                </tr>
+                                <tr n:if="$invoice->email">
+                                    <td>{_'Email:'}</td>
+                                    <td>{$invoice->email}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style="margin-bottom: 15px;" n:if="!$isCreditNote && $isProforma">
+                    <tr>
+                        <td style="text-align: right;">
+                            {if $invoice->currency->code == 'CZK'}
+                                {var $bankAcc = explode('/', $settings['company_account_NO'])}
+                                <img n:if="count($bankAcc)"
+                                        alt="QR platba" width="100px"
+                                        src="https://api.paylibo.com/paylibo/generator/czech/image?accountNumber={$bankAcc[0]}&bankCode={$bankAcc[1]}&amount={ceil($invoice->totalPrice)|number:0:'.':''}&currency={$invoice->currency->code}&vs={$invoice->variableSymbol}&size=100"/>
+                            {else}
+                                {var $bankAcc = explode('/', $settings['company_account_NO_EUR'])}
+                                <img n:if="count($bankAcc)"
+                                        alt="QR platba" width="100px"
+                                        src="https://api.paylibo.com/paylibo/generator/czech/image?accountNumber={$bankAcc[0]}&bankCode={$bankAcc[1]}&amount={$invoice->totalPrice|number:2:'.':''}&currency={$invoice->currency->code}&vs={$invoice->variableSymbol}&size=100"/>
+                            {/if}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div style="border: 1px solid #BEC8CE; clear: both; margin-bottom: 15px;">
+        <table style="width: 100%; font-size: 12px;">
+            <tr>
+                <td>&nbsp;#</td>
+                <td><strong>{_'Položka'}</strong></td>
+                <td style="text-align: center;"><strong>{_'Počet'}</strong></td>
+                <td style="text-align: right; padding-right: 15px;"><strong>{_'Bez DPH/ks'}</strong></td>
+                <td style="text-align: right; padding-right: 15px;"><strong>{_'S DPH/ks'}</strong></td>
+                <td style="text-align: right; padding-right: 20px;"><strong>{_'Celkem'}</strong></td>
+            </tr>
+
+            {var $total = $bezDPHTotal = $i = 0}
+            {var $currency = $invoice->currency}
+            {var $isOldDiscount = true}
+
+            {if $isCreditNote}
+                {foreach $productsInCreditNote as $item}
+                    <tr>
+                        <td>
+                            {var $i = $iterator->getCounter()}
+                            &nbsp;{$i}
+                        </td>
+                        <td>
+                            {$item->productInOrder->name} {if $item->productInOrder->unit}({$item->productInOrder->unit}){/if}
+                        </td>
+                        <td style="text-align: center;">
+                            {$item->count}
+                        </td>
+                        <td style="text-align: right; padding-right: 10px;">
+                            {var $coeffVat = round($item->productInOrder->product->vat->value / (100 + $item->productInOrder->product->vat->value), 4)}
+                            {var $bezDPH = round($item->productInOrder->selingPrice - ($item->productInOrder->selingPrice * $coeffVat), 2)}
+                            <span>{$currency->markBefore} {$bezDPH|number:2:'.':' '} {$currency->markBehind}</span>
+                            {var $bezDPHTotal = $bezDPHTotal + round($bezDPH * $item->count, 2)}
+                        </td>
+                        <td style="text-align: right; padding-right: 10px;">
+                            {if $invoice->euVat}
+                                {var $sDPH = round($bezDPH, 2)}
+                            {else}
+                                {var $sDPH = round($item->productInOrder->selingPrice, 2)}
+                            {/if}
+                            <span>{$currency->markBefore} <span
+                                        class="priceProduct">{$sDPH|number:2:'.':' '}</span> {$currency->markBehind}</span>
+                        </td>
+                        <td style="text-align: right; padding-right: 10px;">
+                            {var $count = round($sDPH * $item->count, 2)}
+                            <span>{$currency->markBefore} <span
+                                        class="totPriceProduct">{$count|number:2:'.':' '}</span> {$currency->markBehind}</span>
+                            {var $total = $total + $count}
+                        </td>
+                    </tr>
+                {/foreach}
+            {else}
+                {foreach $products as $item}
+                    <tr>
+                        <td>
+                            {var $i = $iterator->getCounter()}
+                            &nbsp;{$i}
+                        </td>
+                        <td>
+                            {$item->name} {if $item->unit}({$item->unit}){/if}
+                            {if $discount && $item->basePrice && $item->basePrice != $item->selingPrice}
+                                <br>
+                                {_'sleva'} {$discount->percent}% {$discount->discount->name}
+                            {/if}
+                        </td>
+                        <td style="text-align: center; vertical-align: top;" valign="top">
+                            {$item->count}
+                        </td>
+                        <td style="text-align: right; padding-right: 10px;">
+                            {var $coeffVat = $item->product->vat->value / (100 + $item->product->vat->value)}
+                            {var $bezDPHBase = round($item->basePrice - ($item->basePrice * $coeffVat), 2)}
+                            {var $bezDPH = round($item->selingPrice - ($item->selingPrice * $coeffVat), 2)}
+                            {if $discount && $item->basePrice && $item->basePrice != $item->selingPrice}
+                                {var $isOldDiscount = false}
+                                <span>{$currency->markBefore} {$bezDPHBase|number:2:'.':' '} {$currency->markBehind}</span>
+                                <br>
+                                <span>{$currency->markBefore} {$bezDPH - $bezDPHBase|number:2:'.':' '} {$currency->markBehind}</span>
+                            {else}
+                                <span>{$currency->markBefore} {$bezDPH|number:2:'.':' '} {$currency->markBehind}</span>
+                            {/if}
+                            {var $bezDPHTotal = $bezDPHTotal + round($bezDPH * $item->count, 2)}
+                        </td>
+                        <td style="text-align: right; padding-right: 10px;">
+                            {if $invoice->euVat}
+                                {var $sDPHBase = round($bezDPH, 2)}
+                                {var $sDPH = round($bezDPH, 2)}
+                            {else}
+                                {var $sDPHBase = round($item->basePrice, 2)}
+                                {var $sDPH = round($item->selingPrice, 2)}
+                            {/if}
+                            {if $discount && $item->basePrice && $item->basePrice != $item->selingPrice}
+                                <span>
+                                    {$currency->markBefore}
+                                    <span class="priceProduct">{$sDPHBase|number:2:'.':' '}</span>
+                                    {$currency->markBehind}
+                                </span>
+                                <br>
+                                <span>
+                                    {$currency->markBefore}
+                                    <span class="priceProduct">{$sDPH - $sDPHBase|number:2:'.':' '}</span>
+                                    {$currency->markBehind}
+                                </span>
+                            {else}
+                                <span>
+                                    {$currency->markBefore}
+                                    <span class="priceProduct">{$sDPH|number:2:'.':' '}</span>
+                                    {$currency->markBehind}
+                                </span>
+                            {/if}
+                        </td>
+                        <td style="text-align: right; padding-right: 10px;">
+                            {var $countBase = round($sDPHBase * $item->count, 2)}
+                            {var $count = round($sDPH * $item->count, 2)}
+                            {if $discount && $item->basePrice && $item->basePrice != $item->selingPrice}
+                                <span>
+                                    {$currency->markBefore}
+                                    <span class="totPriceProduct">{$countBase|number:2:'.':' '}</span>
+                                    {$currency->markBehind}
+                                </span>
+                                <br>
+                                <span>
+                                    {$currency->markBefore}
+                                    <span class="totPriceProduct">{$count - $countBase|number:2:'.':' '}</span>
+                                    {$currency->markBehind}
+                                </span>
+                            {else}
+                                <span>
+                                    {$currency->markBefore}
+                                    <span class="totPriceProduct">{$count|number:2:'.':' '}</span>
+                                    {$currency->markBehind}
+                                </span>
+                            {/if}
+                            {var $total = $total + $count}
+                        </td>
+                    </tr>
+                {/foreach}
+            {/if}
+            {* Pay method - only if price is not 0 *}
+            {if $invoice->payMethodPrice != 0}
+                {if !$isCreditNote || ($isCreditNote && $invoice->creditNoteWithDelivery)}
+                <tr>
+                    <td>
+                        {var $i = $i+1}
+                        &nbsp;{$i}
+                    </td>
+                    <td>
+                        {$invoice->paymentMethod->name}
+                    </td>
+                    <td style="text-align: center;">
+                        1
+                    </td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        {var $coeffVat = round($invoice->paymentMethod->vat->value / (100 + $invoice->paymentMethod->vat->value), 4)}
+                        {var $bezDPH = round($invoice->payMethodPrice  - ($invoice->payMethodPrice  * $coeffVat), 2)}
+                        {$currency->markBefore} {$bezDPH|number:2:'.':' '} {$currency->markBehind}
+                        {var $bezDPHTotal = $bezDPHTotal + round($bezDPH * 1, 2)}
+                    </td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        {if $invoice->euVat}
+                            {var $sDPH = round($bezDPH, 2)}
+                        {else}
+                            {var $sDPH = round($invoice->payMethodPrice, 2)}
+                        {/if}
+                        {$currency->markBefore} {$sDPH|number:2:'.':' '} {$currency->markBehind}
+                    </td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        {var $count = round($sDPH  * 1, 2)}
+                        {$currency->markBefore} {$count|number:2:'.':' '} {$currency->markBehind}
+                        {var $total = $total + $count}
+                    </td>
+                </tr>
+                {/if}
+            {/if}
+            {* Delivery method - only if price is not 0 *}
+            {if $invoice->payDeliveryPrice != 0}
+                {if !$isCreditNote || ($isCreditNote && $invoice->creditNoteWithDelivery)}
+                <tr>
+                    <td>
+                        {var $i = $i+1}
+                        &nbsp;{$i}
+                    </td>
+                    <td>
+                        {$invoice->deliveryMethod->name}
+                    </td>
+                    <td style="text-align: center;">
+                        1
+                    </td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        {var $coeffVat = round($invoice->deliveryMethod->vat->value / (100 + $invoice->deliveryMethod->vat->value), 4)}
+                        {var $bezDPH = round($invoice->payDeliveryPrice  - ($invoice->payDeliveryPrice  * $coeffVat), 2)}
+                        {$currency->markBefore} {$bezDPH|number:2:'.':' '} {$currency->markBehind}
+                        {var $bezDPHTotal = $bezDPHTotal + round($bezDPH * 1, 2)}
+                    </td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        {if $invoice->euVat}
+                            {var $sDPH = round($bezDPH, 2)}
+                        {else}
+                            {var $sDPH = round($invoice->payDeliveryPrice, 2)}
+                        {/if}
+                        {$currency->markBefore} {$sDPH|number:2:'.':' '} {$currency->markBehind}
+                    </td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        {var $count = round($sDPH  * 1, 2)}
+                        {$currency->markBefore} {$count|number:2:'.':' '} {$currency->markBehind}
+                        {var $total = $total + $count}
+                    </td>
+                </tr>
+                {/if}
+            {/if}
+            {* Sleva *}
+            {if $discount && $isOldDiscount}
+                <tr>
+                    <td>
+                        {var $i = $i+1}
+                        &nbsp;{$i}
+                    </td>
+                    <td>{_'Sleva'}: {$discount->discount->name}</td>
+                    <td style="text-align: center;"></td>
+                    <td style="text-align: center;"></td>
+                    <td style="text-align: center;"></td>
+                    <td style="text-align: right; padding-right: 10px;">{$discount->percent} %</td>
+                </tr>
+                {var $coefDis = 1 - ($discount->percent / 100)}
+                {var $bezDPHTotal = $bezDPHTotal * $coefDis}
+                {var $dph = $dph * $coefDis}
+                {var $total = $total * $coefDis}
+            {/if}
+        </table>
+    </div>
+
+    <div style="border: 2px solid #000000; margin-bottom: 15px;">
+        <table style="width: 100%; font-size: 13px;">
+            <tr>
+                <td>&nbsp;&nbsp;{_'Celkem bez DPH:'}</td>
+                <td style="text-align: right; padding-right: 10px;">
+                    {$currency->markBefore}
+                    {$bezDPHTotal|number:2:',':' '}{if $currency->countDecimal == 0},-{/if}
+                    {$currency->markBehind}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;{_'DPH:'}</td>
+                <td style="text-align: right; padding-right: 10px;">
+                    {$currency->markBefore}
+                    {var $dph = round($total - $bezDPHTotal, 2)}
+                    {$dph|number:2:',':' '}{if $currency->countDecimal == 0},-{/if}
+                    {$currency->markBehind}
+                </td>
+            </tr>
+            <tr style="font-size: 20px;">
+                <td>&nbsp;&nbsp;{if $isProforma}<strong>{/}{_'Cena celkem s DPH:'}{if $isProforma}</strong>{/}</td>
+                <td style="text-align: right; padding-right: 10px;">
+                    {if $isProforma}<strong>{/if}
+                        {$currency->markBefore}
+                        {$total|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                        {$currency->markBehind}
+                        {if $isProforma}</strong>{/if}
+                </td>
+            </tr>
+            {if !$isProforma && !$isCreditNote}
+                <tr style="font-size: 20px;">
+                    <td>&nbsp;&nbsp;{_'Uhrazená záloha:'}</td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        {$currency->markBefore}
+                        {-$total|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                        {$currency->markBehind}
+                    </td>
+                </tr>
+
+                <tr style="font-size: 20px;">
+                    <td>&nbsp;&nbsp;<strong>{_'Cena celkem k úhradě:'}</strong></td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        <strong>
+                            {$currency->markBefore}
+                            {0|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                            {$currency->markBehind}
+                        </strong>
+                    </td>
+                </tr>
+            {/if}
+            {if $isCreditNote}
+                <tr style="font-size: 20px;">
+                    <td>&nbsp;&nbsp;<strong>{_'Cena celkem k úhradě:'}</strong></td>
+                    <td style="text-align: right; padding-right: 10px;">
+                        <strong>
+                            {$currency->markBefore}
+                            {-$total|number:$currency->countDecimal:',':' '}{if $currency->countDecimal == 0},-{/if}
+                            {$currency->markBehind}
+                        </strong>
+                    </td>
+                </tr>
+            {/if}
+
+        </table>
+    </div>
+    {if !$isCreditNote}
+    <div style=" font-size: 10px;">
+        <p>
+            <strong>{_'Děkujeme za Váš nákup a budeme rádi pokud přispějete svou recenzí produktů na našem webu.'} </strong>
+        </p>
+        <p>
+            {_'V případě poškození zboží v zásilce využijte náš reklamační formulář na webu a neprodleně nás informujte.'}
+            <br/>
+        </p>
+    </div>
+    {/if}
+    {if !$isProforma && !$isCreditNote && $refund && $refund->fikEET && $refund->fikEET !== "0"}
+        <div>
+            <p style="font-size: 10px;">
+                {_'Tržba je evidována v běžném režimu.'} <br/>
+                {_'Čas vystavení:'}{$refund->foundedDate|date:'j. n. Y H:i:s'} <br/>
+                {_'Pořadové číslo tržby:'} {$refund->eetNo} <br/>
+                {_'Označení provozovny:'} {$refund->eetProvoz} <br/>
+                {_'Označení pokladního zařízení:'} {$refund->eetPokl} <br/>
+                FIK: {$refund->fikEET} <br/>
+                BKP: {$refund->bkpEET} <br/>
+            </p>
+        </div>
+    {/if}
+</div>
+</body>
+</html>

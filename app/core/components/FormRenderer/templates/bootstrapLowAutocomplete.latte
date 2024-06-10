@@ -1,0 +1,16 @@
+
+<input
+    {foreach $attrs as $n => $v}
+        {if $valueCmp}
+            value={$valueCmp}
+            readonly="true"
+        {/if}
+        {if $n != 'type' && $n != 'disabled' && $n != 'value' && $n != 'name'}
+            {$n}={$v}
+        {/if}
+    {/foreach}
+    data-source="{link dataSource $dataSource}" data-to-send="{$dataSend}" data-output=".{$id}{str_replace('[]', '', $name)}-autocomplete" type="text" name="text{$name}" id="{$id}_tatcmplt"/>
+<input name="{$name}" id="{$id}{$name}_atcmplt" data-success="{$dataSucc}" class="{$id}{str_replace('[]', '', $name)}-autocomplete" value="{$value}" type="hidden"/>
+<div class="input-group-addon">
+    <div class="remove-autocomplete-value">X</div>
+</div>

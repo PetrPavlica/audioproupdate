@@ -1,0 +1,95 @@
+.cc_banner-wrapper {
+    height:30px !important;
+    position:fixed !important;
+    bottom:0;
+    left:0;
+}
+.cc_container {
+    padding:15px 15px 15px;
+    overflow:hidden;
+
+    background-color: #CFCFCF !important;
+    color:#999;
+    font-size:17px;
+    font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+    box-sizing:border-box;
+
+    border-top:1px solid #b8b8b8 !important;
+}
+
+.cc_banner-wrapper {
+    z-index:9001;
+    position:relative
+}
+
+.cc_container .cc_logo {
+    display:none;
+    text-indent:-1000px;
+    overflow:hidden;
+    width:100px;
+    height:22px;
+    background-size:cover;
+    background-image:url(//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/logo.png);
+    opacity:0.9;
+    transition:opacity 200ms
+}
+.cc_container .cc_logo:hover,.cc_container .cc_logo:active {
+    opacity:1
+}
+
+.cc_container .cc_message {
+    font-size:0.6em;
+    transition:font-size 200ms;
+    margin:0;
+    padding:0;
+    line-height:1.5em;
+    display:block;
+
+    color: #000 !important;
+}
+
+.cc_container ::-moz-selection {
+    background:#fff;
+    color:#fff;
+    text-shadow:none
+}
+
+.cc_container a,.cc_container a:visited {
+    text-decoration:none;
+    color:#575757 !important;
+    transition:200ms color;
+    font-weight: bold;
+}
+.cc_container a:hover,.cc_container a:active {
+    color:#575757 !important;
+}
+
+.cc_container .cc_btn {
+    cursor:pointer;
+    display:block;
+    margin-left:10px;
+    float:right;
+    transition:font-size 200ms;
+
+    padding:8px 10px;
+    width:33%;
+    text-align:center;
+    max-width:120px;
+    line-height:1em;
+    font-size:0.6em;
+    color:#fff !important;
+    background-color:#575757 !important;
+}
+
+.cc_container .cc_btn:visited {
+    color:#fff !important;
+    background-color:#575757 !important;
+    transition:background 200ms ease-in-out,color 200ms ease-in-out,box-shadow 200ms ease-in-out;
+    -webkit-transition:background 200ms ease-in-out,color 200ms ease-in-out,box-shadow 200ms ease-in-out;
+    border-radius:5px;
+    -webkit-border-radius:5px
+}
+.cc_container .cc_btn:hover,.cc_container .cc_btn:active {
+    background-color:#575757;
+    color:#fff !important
+}

@@ -1,0 +1,1006 @@
+{block title}{_'Přehled produktů v košíku'}{/block}
+{block content}
+    {if isset($products) && count($products)}
+        {form orderForm}
+            {input currency value => $actualCurrency['id']}
+            {input id}
+            <div id="basket" {if $isMobile}class="step1"{/if}>
+                {if !$isMobile}
+                {include 'navigation.latte', 'step' => 1}
+                {else}
+                <div id="navigation">
+                    <div class="breadcrumb">
+                        <a href="#" data-step="1"><img src="{$basePath}/assets/img/icons/basket.png" alt=""></a>
+                        <a href="#" data-step="2">Doprava a platba</a>
+                        <a href="#" data-step="3">Osobní údaje</a>
+                        <a href="#">Souhrn</a>
+                    </div>
+                </div>
+                {/if}
+
+                <div id="top-summary" n:if="$isMobile">
+                    <div id="summary">
+                        <div n:snippet="basket-prices-m-top">
+                            <div class="line summary">
+                                <div class="left">{_'Cena k úhradě'}</div>
+                                <div class="right">
+                                    {$actualCurrency['markBefore']}
+                                    {$prices['totalWithSale']|number:$actualCurrency['countDecimal']:',':' '}
+                                    {$actualCurrency['markBehind']}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="products">
+                    <h4>{_'V košíku máte'}:</h4>
+
+                    <div id="summary" n:if="$isMobile">
+                        <div n:snippet="basket-prices-m-1">
+                            <div class="line">
+                                <div class="left">{_'Celkem bez DPH'}</div>
+                                <div class="right">
+                                    {$actualCurrency['markBefore']}
+                                    {$prices['totalWithoutDPH']|number:$actualCurrency['countDecimal']:',':' '}
+                                    {$actualCurrency['markBehind']}
+                                </div>
+                            </div>
+                            <div class="line">
+                                <div class="left">{_'Celkem s DPH'}</div>
+                                <div class="right">
+                                    {$actualCurrency['markBefore']}
+                                    {$prices['totalPrice']|number:$actualCurrency['countDecimal']:',':' '}
+                                    {$actualCurrency['markBehind']}
+                                </div>
+                            </div>
+                            <div class="line" n:ifset="$prices['sale']">
+                                <div class="left">{_'Sleva: '}
+                                    {$prices['sale']->discount->name}
+                                    - {$prices['sale']->percent}%
+                                </div>
+                                <div class="right">
+                                    {$actualCurrency['markBefore']}
+                                    {$prices['totalSale']|number:$actualCurrency['countDecimal']:',':' '}
+                                    {$actualCurrency['markBehind']}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="line summary">
+                                <div class="left">{_'Cena k úhradě s DPH'}</div>
+                                <div class="right">
+                                    {$actualCurrency['markBefore']}
+                                    {$prices['totalWithSale']|number:$actualCurrency['countDecimal']:',':' '}
+                                    {$actualCurrency['markBehind']}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <h4 n:if="$isMobile">{_'Přehled zboží'}:</h4>
+
+                    {snippet basket-products}
+                    {var $packageDiscountOnce = false}
+                    <table width="100%" class="product responziveTable">
+                        <thead>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{_'cena 1 ks bez DPH'}</td>
+                            <td>{_'za 1 ks s DPH'}</td>
+                            <td>{_'celkem s DPH'}</td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {foreach $products as $productInOrder}
+                            {var $product = $productInOrder['product']}
+                            {var $packageItem = $productInOrder['packageItem']}
+                            {var $salePercent = $productInOrder['salePercent']}
+                            {if $packageItem}
+                                {$helper->setProduct($product, $actualCurrency, false, $actualCurrency['code'] == 'CZK' ? $packageItem->discountCZK : $packageItem->discountEUR)}
+                            {else}
+                                {$helper->setProduct($product, $actualCurrency)}
+                            {/if}
+                            {var $packageDiscount = $packageItem && ($actualCurrency['code'] == 'CZK' ? $packageItem->discountCZK : $packageItem->discountEUR) ? true : false}
+
+                            {if $packageDiscount}
+                                {var $packageDiscountOnce = true}
+                            {/if}
+
+                            {if $helper->specialExists() && isset($specialView[$product->id])}
+                                {var $priceWithoutDPH = $helper->getSpecialWithoutDPH()}
+                                {var $priceDPH = $helper->getSpecialPrice()}
+                            {else}
+                                {var $priceWithoutDPH = $helper->getWithoutDPH()}
+                                {var $priceDPH = $helper->getPrice()}
+                            {/if}
+
+                            {var $saleCoef = 1}
+                            {if $salePercent}
+                                {var $saleCoef = 1 - $salePercent / 100}
+                            {/if}
+
+                            <tr class="details details_product" id="product{$productInOrder['id']}">
+                                <td>
+                                    {if !empty($product->mainImage)}
+                                        <img n:img="$product->mainImage, '120x80', 'shrink_only', null" title="" alt="">
+                                    {else}
+                                        <img n:img="'assets/img/produkty/no-photo.png', '120x80', 'shrink_only'" title="{_'Bez obrázku'}" alt="{_'Bez obrázku'}">
+                                    {/if}
+                                </td>
+                                <td colspan="1">
+                                    <div class="title">
+                                        <h3>
+                                            <a href="{link 'ProductDetail:detail' id => $product->id, slug => $helper->getSlug()}">{if $packageDiscount}* {/if}{$product->name} {if $product->unit}({$unitParser::parse($product->unit, $productInOrder['count'])}){/if}</a>
+                                        </h3>
+                                    </div>
+                                </td>
+                                <td data-name="join1" data-destination=".pojisteniContainer">
+                                    <input class="amount number save-handle" min="1" max="99999999" value="{$productInOrder['count']}" name="count[{$productInOrder['id']}]" data-product="{$productInOrder['id']}" type="text">
+                                </td>
+                                <td>
+                                    <div class="cena_bet_dph">
+                                        <input class="cena_bez_dph_input" type="hidden" value="{round($priceWithoutDPH, $actualCurrency['countDecimal'])}" name="bezDPH[{$productInOrder['id']}]"/>
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_bez_dph_value castka">{$priceWithoutDPH|number:$actualCurrency['countDecimal']:',':' '}</span>
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cena_s_dph" style="text-decoration: none; font-weight: normal;">
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_s_dph_value castka" style="font-weight: normal;">
+                                            {$priceDPH|number:$actualCurrency['countDecimal']:',':' '}
+                                        </span>
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cena_s_dph" style="text-decoration: none; font-weight: bold;width: 100%; color: #de0037; margin: 0 0 5px;" n:if="$salePercent">
+                                        <input class="cena_s_dph_input" type="hidden" value="{round($priceDPH, $actualCurrency['countDecimal'])}" name="sDPH[{$productInOrder['id']}]"/>
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_s_dph_sum_value castka">
+                                            {$priceDPH * $productInOrder['count'] * $saleCoef|number:$actualCurrency['countDecimal']:',':' '}
+                                        </span>
+                                        {$actualCurrency['markBehind']}
+                                    </div>
+                                    <div class="cena_s_dph" style="width: 100%; {if $salePercent}text-decoration: line-through;{else}text-decoration: none; font-weight: bold;{/if}">
+                                        <input class="cena_s_dph_input" type="hidden" value="{round($priceDPH, $actualCurrency['countDecimal'])}" name="sDPH[{$productInOrder['id']}]"/>
+                                        {$actualCurrency['markBefore']}
+                                        <span class="cena_s_dph_sum_value castka" {if $salePercent}style="font-weight: 400;"{/if}>
+                                            {$priceDPH * $productInOrder['count']|number:$actualCurrency['countDecimal']:',':' '}
+                                        </span>
+                                        {$actualCurrency['markBehind']}
+                                        {if $isMobile}
+                                        <div class="vat">
+                                        {_'s DPH'}
+                                        </div>
+                                        {/if}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a n:href="deleteBasketProduct! prodId => $productInOrder['id']">
+                                        <img style="width: 15px;" src="{$basePath}/assets/img/icons/close2.png" title="{_'Smazat produkt'}" alt="{_'Smazat produkt'}">
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr class="space"></tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                    {if $packageDiscountOnce}
+                        <div class="packageItemText">* cena platná pouze při zakoupení celého balíčku</div>
+                    {/if}
+
+                    <div class="other flexElem alignJustify flexWrap768">
+
+                        {*<div id="advanced">
+
+                            <div id="slevovy_poukaz" class="flexELem alignLeft">
+
+                                <div>
+                                    <div class="checkbox_container flexElem">
+                                        <div>
+                                            <input class="icheck icheck_blue" data-show='{"target":"#sleva_div","effect":"fadeIn","secondClick":"hide"}' type="checkbox"/>
+                                        </div>
+                                        <div><label> {_'Chci uplatnit slevový/dárkový poukaz'}</label></div>
+                                    </div>
+
+                                    <div class="fields_container left" id="sleva_div" style="display: none;">
+                                        <input class="full_size" id="discount-code" type="text" placeholder="{_'vložte slevový kód'}"/>
+                                        <a id="discount-butt" class="button" style="padding: 8px 10px; background-color: #b59a5e;">
+                                            <img src="{$basePath}/assets/img/icons/fajfka.png?v=2" title="{_'Uplatnit'}" alt="{_'Uplatnit'}"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                /* obsluha formu pro slevy **/
+                                function callDiscountSucc() {
+                                    var codeVal = $(document).find("#discount-code").val();
+                                    window.location.href ={link addDiscountSucc!} +'&code=' + codeVal;
+                                }
+
+                                $('#discount-code').keypress(function (e) {
+                                    var key = e.which;
+                                    if (key == 13)  // the enter key code
+                                    {
+                                        callDiscountSucc();
+                                        return false;
+                                    }
+                                });
+
+                                $(document).on("click", "#discount-butt", function (e) {
+                                    e.preventDefault();
+                                    callDiscountSucc()
+                                });
+                            </script>
+                        </div>*}
+                        <div n:snippet="basket-transport">
+                            {control freeTransport $settings['delivery_free'], $prices['totalWithSale'], $actualCurrency, true, $prices[ 'freeDelivery' ]}
+                        </div>
+                    </div>
+                    {/snippet}
+                </div>
+
+                <div id="summary" n:if="!$isMobile">
+                    <div n:snippet="basket-prices-1">
+                        <div class="line">
+                            <div class="left">{_'Celkem bez DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalWithoutDPH']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+                        <div class="line">
+                            <div class="left">{_'Celkem s DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalPrice']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+                        <div class="line" n:ifset="$prices['sale']">
+                            <div class="left">{_'Sleva: '}
+                                {$prices['sale']->discount->name}
+                                - {$prices['sale']->percent}%
+                            </div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalSale']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="line summary">
+                            <div class="left">{_'Cena k úhradě s DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalWithSale']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="delivery">
+                    <div n:snippet="basket-delivery">
+                    <div class="block">
+                        <div class="border">
+                            <div class="nadpis darkblue">
+                                <h1 class="indent">{_'Vyberte dopravu'}</h1>
+                            </div>
+                            {var $first = false}
+                            {foreach $deliverySections as $section}
+                                {if $first}
+                                    <hr>
+                                    <div class="otherSections">
+                                        <a data-key="delivery">Další možnosti dopravy
+                                            <img src="{$basePath}/assets/img/basket/arrow-down.png" alt=""></a>
+                                    </div>
+                                {/if}
+                                <div {if $first}class="close-target" {if isset($openDelivery) && $openDelivery == true}style="display: block;"{else}style="display: none;"{/if}{/if}>
+                                    {ifset $deliveryMethods[$section->id]}
+                                        <table width="100%" class="responziveTable">
+
+                                            <tr class="hidden control">
+                                                <td></td>
+                                                <td data-join='{"320":{"target":"join1,join2"}}'></td>
+                                                <td data-join='{"425-320":{"target":"join2"},"1000-769":{"target":"join2"}}' data-name="join1"></td>
+                                                <td data-name="join2"></td>
+                                            </tr>
+                                            {var $priceDel = 0}
+                                            {foreach $deliveryMethods[$section->id] as $method}
+                                                {if $prices[ 'freeDelivery' ]}
+                                                    {var $price = 0}
+                                                {else}
+                                                    {var $price = $method->selingPrice}
+                                                {/if}
+                                                <tr>
+                                                    <td width="74">
+                                                        <div>
+                                                            <input name="typ_dopravy[id]" class="typ_dopravy icheck icheck_blue save-handle check-method {if $method->isDPD}inputDpdPickup{/if}" type="radio" value="{$method->id}"
+                                                                   data-id="{$method->id}" data-type="delivery"
+                                                                    {if $order->deliveryMethod->id == $method->id}
+                                                                        checked
+                                                                        {var $priceDel = $price}
+                                                                    {/if}
+                                                            />
+                                                        </div>
+                                                    </td>
+                                                    <td width="300">
+                                                        <div class="drop_down_container full flexELem valignCenter">
+                                                            {if $method->image}
+                                                                <div>
+                                                                    <img style="margin-left: 15px;margin-right: 10px; width: auto;" src="{$basePath}/{$method->image}" title="{$method->name|translate}" alt="{$method->name|translate}">
+                                                                </div>
+                                                            {/if}
+                                                            <span>{$method->name|translate}</span>
+                                                            <div n:if="$method->bubbleInfo" style="vertical-align: top" class="arrow_hover" data-options='{"direction":"up","controlWidth":".block"}'>
+                                                                <img class="info" src="{$basePath}/assets/img/icons/info.png" title="info" alt="info"/>
+                                                            </div>
+                                                            <div n:if="$method->bubbleInfo" class="drop_down info">
+                                                                <div class="close"></div>
+                                                                {$method->bubbleInfo}
+                                                            </div>
+                                                        </div>
+                                                        <div n:if="$method->info">
+                                                            <span n:if="$method->info" class="notice">{$method->info|translate}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td data-name="join1" width="235">
+                                                            {*<span class="dostupnost">
+                                                                {if $productUnavailable}
+                                                                    {_'Datum expedice upřesníme'}
+                                                                {else}
+                                                                    {control stockExpedition:time $expeditionToday, $method->days}
+                                                                {/if}
+                                                            </span>*}
+                                                    </td>
+                                                    <td data-name="join2" width="132" align="right">
+                                                            <span class="cena">
+                                                                {if $price}
+                                                                    {$actualCurrency['markBefore']}
+                                                                    {$price / $actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:',':' '}
+                                                                    {$actualCurrency['markBehind']}
+                                                                {else}
+                                                                    {_'ZDARMA'}
+                                                                {/if}
+                                                            </span>
+                                                    </td>
+                                                </tr>
+
+                                                {if $method->isDPD}
+                                                    <tr class="deliverySelect">
+                                                        <td></td>
+                                                        <td width="300" style="max-width: 300px;">
+                                                            <div id="dpdPickupSelect">
+                                                                <select name="dpdPickup" class="selectpicker pickup" style="width:100%; max-width: 300px;" {if $order->deliveryMethod && $order->deliveryMethod->id == $method->id}required data-nette-rules='[{"op":":filled","msg":"Prosím vyberte místo"}]'{/if}>
+                                                                    {foreach $dpdPickups as $i => $d}
+                                                                        <option value="{$i}" {if $order->deliveryMethod && $order->deliveryMethod->id == $method->id && $i == $order->deliveryPlace}selected{/if}>{$d}</option>
+                                                                    {/foreach}
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="2"></td>
+                                                    </tr>
+                                                {/if}
+
+                                                {if $method->isUlozenka}
+                                                    <tr class="deliverySelect">
+                                                        <td></td>
+                                                        <td width="300" style="max-width: 300px;">
+                                                            <div id="ulozenkaSelect">
+                                                                <select name="ulozenkaPickups" class="selectpicker pickup" style="width:100%; max-width: 300px;" {if $order->deliveryMethod && $order->deliveryMethod->id == $method->id}required data-nette-rules='[{"op":":filled","msg":"Prosím vyberte místo"}]'{/if}>
+                                                                    {foreach $ulozenkaPickups as $i => $d}
+                                                                        <option value="{$i}">{$d}</option>
+                                                                    {/foreach}
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="2"></td>
+                                                    </tr>
+                                                {/if}
+                                                {if $method->isZasilkovna && isset($zasilkovna)}
+                                                    <tr class="deliverySelect">
+                                                        <td></td>
+                                                        <td width="300" style="max-width: 300px;">
+                                                            <div id="zasilkovnaSelect">
+                                                                <select name="zasilkovna" class="selectpicker pickup" style="width:100%; max-width: 300px;" {if $order->deliveryMethod && $order->deliveryMethod->id == $method->id}required data-nette-rules='[{"op":":filled","msg":"Prosím vyberte místo"}]'{/if}>
+                                                                    {foreach $zasilkovna as $i => $d}
+                                                                        <option value="{$i}">{$d}</option>
+                                                                    {/foreach}
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="2"></td>
+                                                    </tr>
+                                                {/if}
+                                                {if !$first}
+                                                    {var $first = true}
+                                                {/if}
+                                            {/foreach}
+                                        </table>
+                                    {/ifset}
+                                </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div id="payment">
+                    <div n:snippet="basket-payment">
+                    <div class="block">
+                        <div class="border">
+
+                            <div class="nadpis darkblue">
+                                <h1 class="indent">{_'Vyberte platbu'}</h1>
+                            </div>
+                            {var $i = 0}
+                                {var $pricePay = 0}
+                                {foreach $payMethods as $method}
+                                    {continueIf $method->id == 1 && $order->deliveryMethod->id == 5 && $actualCurrency['code'] != 'CZK'}
+                                    {if $i == 0}<div>{/if}
+                                {if $i == 1}<div class="close-target" {if isset($openPayment) && $openPayment == true}style="display: block;"{else}style="display: none;"{/if}>{/if}
+                            <table width="100%" class="responziveTable">
+
+                                <tr class="hidden control">
+                                    <td></td>
+                                    <td data-join='{"320":{"target":"join1"}}'></td>
+                                    <td data-name="join1"></td>
+                                </tr>
+                                    {if $prices[ 'freeDelivery' ]}
+                                        {var $price = 0}
+                                    {else}
+                                        {var $price = $method->selingPrice}
+                                    {/if}
+                                    <tr>
+                                        <td width="70">
+                                            <div>
+                                                <input name="typ_platby" class="typ_platby icheck icheck_blue check-method" type="radio" value="{$method->id}"
+                                                       data-id="{$method->id}" data-type="payment"
+                                                        {if $order->paymentMethod->id == $method->id}
+                                                            checked
+                                                            {var $pricePay = $price}
+                                                        {/if}
+                                                />
+                                            </div>
+                                            <input type="hidden" value="{$price / $actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''}"/>
+                                        </td>
+                                        <td class="typ_platby" width="180">
+                                            <div class="flexElem valignCenter">
+                                                {if $method->image}
+                                                    <div>
+                                                        <img style="margin-left: 0; margin-right: 10px; width: auto;" src="{$basePath}/{$method->image}" title="{$method->name|translate}" alt="{$method->name|translate}">
+                                                    </div>
+                                                {/if}
+                                                <span>{$method->name|translate}</span>
+                                                {*<div class="drop_down_container">
+                                                    <div n:if="$method->info" class="arrow_hover" data-options='{"direction":"up","controlWidth":".block"}'>
+                                                        <img class="info" src="{$basePath}/assets/img/icons/info.png" title="info" alt="info"/>
+                                                    </div>
+                                                    <div n:if="$method->info" class="drop_down info">
+                                                        <div class="close"></div>
+                                                        {$method->info}
+                                                    </div>
+                                                </div>*}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div n:if="$method->info" style="text-align: center;">
+                                                <span class="notice">{$method->info}</span>
+                                            </div>
+                                        </td>
+                                        <td data-name="join1" width="125" align="right">
+                                            <span class="cena">
+                                                {if $price}
+                                                    {$actualCurrency['markBefore']}
+                                                    {$price / $actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:',':' '}
+                                                    {$actualCurrency['markBehind']}
+                                                {else}
+                                                    {_'ZDARMA'}
+                                                {/if}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {if $method->homeCredit}
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="4">
+                                            {if $locale == 'sk'}
+                                                <p>Beriete na vedomie, že Vaše osobné údaje v rozsahu meno, priezvisko, adresa, e-mail, telefón, budú poskytnuté spoločnosti Home Credit Slovakia, a.s., Teplická 7434/147, Piešťany 921 22, IČO 36 234 176, e-mail: posta@homecredit.sk, zapísanej v obchodnom registri vedenom Okresným súdom Trnava, oddiel Sa, vložka č. 10130/T za účelom predvyplnenia žiadosti o poskytnutie služby</p>
+                                            {else}
+                                                <p>Berete na vědomí, že Vaše osobní údaje v rozsahu jméno, příjmení, adresa, e-mail, telefon, budou předány společnosti Home Credit a.s., Nové sady 996/25, 602 00 Brno, IČO 26978636, e-mail: info@homecredit.cz, zapsané v obchodním rejstříku vedeném Krajským soudem v Brně, oddíl B, vložka 4401 (dále jen 'HC') za účelem předvyplnění formuláře žádosti o poskytnutí služby.</p>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                {/if}
+                            </table>
+                            {if $i == 0}
+                                <hr>
+                                <div class="otherSections">
+                                    <a data-key="payment">Další možnosti platby
+                                        <img src="{$basePath}/assets/img/basket/arrow-down.png" alt=""></a>
+                                </div>
+                            {/if}
+                            {if $i == 0}</div>{/if}
+                        {if $iterator->last}</div>{/if}
+                    {var $i = $i + 1}
+                                {/foreach}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div id="userDetails">
+                    <div class="tabs_content">
+                        <div class="tab_content visible">
+                            {if !$user->loggedIn}
+                                <div id="still_have_account" class="nadpis darkblue" style="padding-bottom:25px;">
+                                    <h1>{_'Máte již u nás účet? Přihlaste se a my vše vyplníme za Vás.'} </h1>
+                                    &nbsp;&nbsp;
+                                    <a id="buyLogin" style="display: inline-block" class="dialog-handler button white" data-dialog-options='{"content":"#login_dialog","isSnippet":"false","dropPasteData":"true"}'>{_'Přihlásit se'}</a>
+                                </div>
+                            {/if}
+                            <div id="osobni_udaje" class="flexElem flexWrap">
+
+                                <div id="osobni" class="block flex flexElem">
+                                    <div class="border">
+
+                                        <div class="nadpis darkblue">
+                                            <h1 class="indent">{_'Osobní údaje'}</h1>
+                                        </div>
+
+                                        <div>
+                                            <table width="100%">
+                                                <tr>
+                                                    <td class="required">
+                                                        <label>{_'Jméno: *'}</label><br/>
+                                                        {input name class=>"full_size rounded"}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="required">
+                                                        <label>{_'Příjmení: *'}</label><br/>
+                                                        {input surname class=>"full_size rounded"}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="required">
+                                                        <label>{_'Telefon: *'}</label><br/>
+                                                        {input phone class=>"full_size rounded"}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="required">
+                                                        <label>{_'Email: *'}</label><br/>
+                                                        {input email class=>"full_size rounded"}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="fakturacni" class="block flex flexElem" style="margin-top: 0px;">
+                                    <div class="border">
+                                        <div class="nadpis darkblue">
+                                            <h1 class="indent">{_'Fakturační údaje'}</h1>
+                                        </div>
+
+                                        <table width="100%">
+
+                                            <tr>
+                                                <td class="required">
+                                                    <label>{_'Ulice a č. p.: *'}</label><br/>
+                                                    {input street class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="required">
+                                                    <label>{_'Město: *'}</label><br/>
+                                                    {input city class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="required">
+                                                    <label>{_'PSČ: *'}</label><br/>
+                                                    {input zip class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="required">
+                                                    <label>{_'Stát: *'}</label><br/>
+                                                    {input country class=>"nice_select full_size rounded basket"}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="na_firmu" class="block flex flexElem" {if !(isset($order) && $order->isCompany)}style="display: none;"{/if}>
+
+                                    <div class="border">
+
+                                        <div class="nadpis darkblue">
+                                            <h1 class="indent">{_'Údaje o firmě'}</h1>
+                                        </div>
+
+                                        <table width="100%">
+                                            <tr>
+                                                <td>
+                                                    <label>{_'IČ:'}</label><br/>
+                                                    {*input idNo class=>"full_size rounded"*}
+                                                    <input placeholder="{_'IČO'}" class="full_size rounded"
+                                                           data-toggle="complete" data-preload="false"
+                                                           data-suggest="true" data-minlen="8"
+                                                           data-source="{link getCustomersAres!}"
+                                                           data-to-send="idNo_atcmplt2"
+                                                           data-output=".ico-autocomplete-val" type="text" name="idNo"
+                                                           id="1_tatcmplt2"
+                                                           value="{ifset $order}{$order->idNo}{/ifset}"/>
+                                                    <input name="ico-autocomplete-val" id="ico-autocomplete-val"
+                                                           data-success="handleAresComplete"
+                                                           class="ico-autocomplete-val" value="" type="hidden">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>{_'DIČ:'}</label><br/>
+                                                    {input vatNo class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+                                            <tr class="vatNo2" {if isset($data['country']) && $data['country'] == 'CZ'}style="display: none;"{/if}>
+                                                <td>
+                                                    <label>{_'IČ DPH:'}</label><br/>
+                                                    {input vatNo2 class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>{_'Název:'}</label><br/>
+                                                    {input company class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="jina_adresa" class="block flex flexElem" {if !(isset($order) && $order->deliveryToOther)}style="display: none;"{/if}>
+                                    <div class="border">
+                                        <div class="nadpis darkblue">
+                                            <h1 class="indent">{_'Údaje o pro jiné doručení'}</h1>
+                                        </div>
+
+                                        <table width="100%">
+                                            <tr>
+                                                <td>
+                                                    <label>{_'Jméno:'}</label><br/>
+                                                    {input nameDelivery class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>{_'Příjmení:'}</label><br/>
+                                                    {input surnameDelivery class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <label>{_'Ulice a č. p.:'}</label><br/>
+                                                    {input streetDelivery class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <label>{_'Město:'}</label><br/>
+                                                    {input cityDelivery class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>{_'PSČ:'}</label><br/>
+                                                    {input zipDelivery class=>"full_size rounded"}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <label>{_'Stát:'}</label><br/>
+                                                    {input countryDelivery class=>"nice_select full_size rounded basket"}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="other flexElem flexWrap768">
+                        <div id="advanced">
+                            <div id="osobni_udaje_rest">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox_container flexElem">
+                                                <div>
+                                                    <input name="isCompany" id="isCompany" value="1" class="icheck icheck_blue" data-show='{"target":"#na_firmu","effect":"fadeIn","secondClick":"hide","scrollTo":"#na_firmu"}' type="checkbox"{if isset($order) && $order->isCompany} checked{/if}/>
+                                                </div>
+                                                <div><label> {_'Kupuji zboží na firmu'}</label></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox_container flexElem">
+                                                <div>
+                                                    <input name="deliveryToOther" id="deliveryTo" value="1" class="icheck icheck_blue scroll-to" data-show='{"target":"#jina_adresa","effect":"fadeIn","secondClick":"hide","scrollTo":"#jina_adresa"}' type="checkbox"{if isset($order) && $order->deliveryToOther} checked{/if}/>
+                                                </div>
+                                                <div>
+                                                    <label> {_'Chci zboží doručit na jinou než fakturační adresu'}</label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox_container flexElem">
+                                                <div>{input newsletter class=>"icheck icheck_blue"}</div>
+                                                <div>
+                                                    <label> {_'Chci dostávat informace o slevách a akčních nabídkách'}</label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="user-info">
+                                <div class="fields_container flexWrap no-indent">
+
+                                    <label><b>{_'Napište nám jestli je ještě něco, co bychom měli vědět'}</b></label>
+                                    {input comment class=>'full_size'}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="summary" n:if="!$isMobile">
+                    <div n:snippet="basket-prices-2">
+                        <div class="line">
+                            <div class="left">{_'Celkem bez DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalWithoutDPHWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+                        <div class="line">
+                            <div class="left">{_'Celkem s DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+                        <div class="line" n:ifset="$prices['sale']">
+                            <div class="left">{_'Sleva: '}
+                                {$prices['sale']->discount->name}
+                                - {$prices['sale']->percent} %
+                            </div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalSaleWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="line summary">
+                            <div class="left">{_'Cena k úhradě s DPH'}</div>
+                            <div class="right">
+                                {$actualCurrency['markBefore']}
+                                {$prices['totalWithSaleWithDeliPay']|number:$actualCurrency['countDecimal']:',':' '}
+                                {$actualCurrency['markBehind']}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="btn-next">
+                    <div class="next-step">{_'Pokračovat'}</div>
+                </div>
+
+                <div id="btns" class="right">
+                    <input type="submit" name="send" class="btn btn-danger" value="{_'Pokračovat k rekapitulaci'}">
+                </div>
+            </div>
+            {input expeditionToday, value => (int)$expeditionToday}
+            <input type="submit" id="sendAjax" class="ajax" style="display:none">
+            <input type="hidden" id="countDecimal" value="{$actualCurrency['countDecimal']}">
+        {/form}
+
+        <script type="text/javascript">
+            // change count on product - save and refresh snippets
+            $(document).on("change", ".amount", function () {
+                var _this = $(this);
+                $.nette.ajax({
+                    url: {link changeCountProduct!},
+                    type: 'POST',
+                    data: {
+                        product: _this.data('product'),
+                        count: _this.val()
+                    },
+                    off: {
+                        snippets: true
+                    }
+                });
+            });
+
+            $(document).on("ifChanged", ".pojisteni_check", function (e) {
+                e.preventDefault();
+                var _this = $(this);
+                if (_this.data('type')) {
+                    var on = 0;
+                    if (_this.is(':checked')) {
+                        on = 1;
+                    }
+                    $.nette.ajax({
+                        url: {link changePojisteniProduct!},
+                        type: 'POST',
+                        data: {
+                            product: _this.data('product'),
+                            on: on,
+                            type: _this.data('type'),
+                        },
+                        off: {
+                            snippets: true
+                        }
+                    });
+                }
+            });
+
+            $(document).on("ifChanged", ".check-method", function (e) {
+                e.preventDefault();
+                var _this = $(this);
+                if (_this.data('type')) {
+                    var on = 0;
+                    if (_this.is(':checked')) {
+                        on = 1;
+                    }
+                    if (on == 1) {
+                        var openDelivery = $('#delivery .border > .close-target').css('display') === 'block';
+                        var openPayment = $('#payment .border > .close-target').css('display') === 'block';
+                        var dpdPickupVal = $('select[name="dpdPickup"] option:selected').val();
+
+                        $.nette.ajax({
+                            url: {link changeMethod!},
+                            type: 'POST',
+                            data: {
+                                method: _this.data('id'),
+                                on: on,
+                                type: _this.data('type'),
+                                openDelivery: openDelivery,
+                                openPayment: openPayment,
+                                dpdPickup: dpdPickupVal
+                            },
+                            off: {
+                                snippets: true
+                            }
+                        });
+                    }
+                }
+            });
+
+            $(document).on("change", 'select[name="dpdPickup"]', function (e) {
+                e.preventDefault();
+                var _this = $('input.inputDpdPickup');
+                if (_this.data('type')) {
+                    var on = 0;
+                    if (_this.is(':checked')) {
+                        on = 1;
+                    }
+                    if (on == 1) {
+                        var openDelivery = $('#delivery .border > .close-target').css('display') === 'block';
+                        var openPayment = $('#payment .border > .close-target').css('display') === 'block';
+                        var dpdPickupVal = $('select[name="dpdPickup"] option:selected').val();
+
+                        $.nette.ajax({
+                            url: {link changeMethod!},
+                            type: 'POST',
+                            data: {
+                                method: _this.data('id'),
+                                on: on,
+                                type: _this.data('type'),
+                                openDelivery: openDelivery,
+                                openPayment: openPayment,
+                                dpdPickup: dpdPickupVal
+                            },
+                            off: {
+                                snippets: true
+                            }
+                        });
+                    }
+                }
+            });
+        </script>
+    {else}
+        <div id="content">
+            <div class="nadpis blue">
+                <h1>{_'Váš nákupní košík je prázdný!'}</h1>
+            </div>
+
+            <a class="button-link" n:href=":Front:default">{_'Zpět k nakupování'}</a>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+        </div>
+
+    {/if}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on('click', '.otherSections a', function() {
+                var key = $(this).data('key');
+                $('#' + key + ' .close-target').slideToggle();
+            });
+
+            $(document).on('change', 'select[name="country"]', function(e) {
+                let val = $(this).val();
+                let trVatNo = $(document).find('.vatNo2');
+                if (val === 'CZ') {
+                    trVatNo.hide();
+                } else {
+                    trVatNo.show();
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript" n:if="$isMobile">
+        var currentStep = 1;
+        $(function() {
+            let hash = window.location.hash;
+            if (hash) {
+                let step = hash.replace('#step', '');
+                if (step) {
+                    let basket = $('#basket');
+                    basket.removeClass('step' + currentStep);
+                    currentStep = step;
+                    basket.addClass('step' + currentStep);
+                }
+            }
+        });
+        $(document).on('click', '#basket #btn-next .next-step', function() {
+            let basket = $('#basket');
+            basket.removeClass('step' + currentStep);
+            currentStep++;
+            basket.addClass('step' + currentStep);
+            window.scrollTo(0, 0);
+        });
+        $(document).on('click', '#basket #navigation .breadcrumb a', function(e) {
+            e.preventDefault();
+            let step = $(this).data('step');
+            let basket = $('#basket');
+            if (step) {
+                basket.removeClass('step' + currentStep);
+                currentStep = step;
+                basket.addClass('step' + currentStep);
+                window.scrollTo(0, 0);
+            }
+        });
+    </script>
+{/block}

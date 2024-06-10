@@ -1,0 +1,40 @@
+{block title}{_'Spojení účtů'}{/block}
+{block content}
+
+<div id="content">
+
+    <div id="registrace">
+
+        <div class="nadpis blue bold">
+            <h1>{_'Byl nalezen účet s vámi zadaným emailem: '}{$email}</h1>
+        </div>
+        {form mergeAccountsForm}
+            <div class="block flexElem flexWrap alignCenter">
+                <div class="sub_block">
+                    <table class="responzive form_table small_fields full_fields_size">
+
+                        <tr>
+                            <td class="required">
+                                <label>{_'Heslo:'}</label>
+                            </td>
+                            <td>
+                                {input password}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="fields_container center">
+                                    <input type="submit" name="send" value="{_'Spojit účty a přihlásit se'}" class="dialog-handler" data-dialog-options='{"applyAfterClicks":"3","content":"#contact_dialog"}' style="height: 40px;"/>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+        {/form}
+
+    </div>
+
+</div>

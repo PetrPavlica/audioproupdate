@@ -1,0 +1,45 @@
+{block title}{_'Editace akce na produtku'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {ifset $isEdit}
+        {_'Editace akce na produktu'}
+    {else}
+        {_'Přidání akce na produktu'}
+    {/ifset} - {$product->name}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-8">
+    {form editActionForm, class=>"form-horizontal"}
+        {control renderer $form, 'lastPrice'}
+        {control renderer $form, 'percent'}
+        {control renderer $form, 'selingPrice'}
+        {control renderer $form, 'dateForm'}
+        {control renderer $form, 'dateTo'}
+        {control renderer $form, 'currency'}
+        {control renderer $form, 'feedShow'}
+        {input isTypeOfPrice value => '0'}
+        {control renderer $form, 'send'}
+        <input type="hidden" name="active" value="{$active}">
+    {/form}
+    {*<input type="checkbox" id="auto-count"/><label for="auto-count">Vypnout automatické dopočítávání?</label>*}
+    <br/>
+    <a n:href=":Product:edit id => $product->id" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+
+</div>
+<script>
+    $(document).on('change', '#frm-percent', function () {
+        if ($(document).find('#auto-count').is(":checked")) {
+            return;
+        }
+        var percent = parseFloat($(this).val());
+        var lastVal = parseFloat($(document).find('#frm-lastPrice').val());
+        var val = lastVal * (1 - (percent / 100));
+        $(document).find('#frm-selingPrice').val(val);
+    });
+
+</script>

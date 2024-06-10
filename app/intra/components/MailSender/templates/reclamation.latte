@@ -1,0 +1,106 @@
+<h1>{_'Uplatnění reklamace (reklamační list)'}</h1><br/>
+
+<br/>
+
+<table>
+
+    <tr>
+        <td colspan="2"><b>{_'Kupující'}:</b></td>
+    </tr>
+
+    <tr>
+        <td>Jméno a příjmení:</td>
+        <td> {$data["name"]} {$data["surname"]} </td>
+    </tr>
+    <tr>
+        <td>Adresa:</td>
+        <td> {$data["street"]}, {$data["zip"]} {$data["city"]} </td>
+    </tr>
+    <tr>
+        <td>Telefon:</td>
+        <td> {$data["phone"]} </td>
+    </tr>
+    <tr>
+        <td>E-mail:</td>
+        <td> {$data["email"]}</td>
+    </tr>
+
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Prodávající:</b></td>
+    </tr>
+
+    <tr>
+        <td>Jméno a příjmení či název společnosti:</td>
+        <td> {$settings["company_name"]}</td>
+    </tr>
+    <tr>
+        <td>Adresa:</td>
+        <td> {$settings["company_street"]},{$settings["company_city"]}</td>
+    </tr>
+    <tr>
+        <td>IČ:</td>
+        <td> {$settings["company_IC"]}</td>
+    </tr>
+    <tr>
+        <td>Místo pro zaslání reklamace:</td>
+        <td> {$settings["company_name"]}, {$settings["reclamation_adress"]}</td>
+    </tr>
+
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+
+    <tr>
+        <td><b>Reklamované zboží:</td>
+        <td> {$data["product"]}</b></td>
+    </tr>
+    <tr>
+        <td>Označení zboží:</td>
+        <td> {$data["purchase_number"]}</td>
+    </tr>
+    <tr>
+        <td>Datum prodeje:</td>
+        <td> {$data["buy_date"]}</td>
+    </tr>
+    <tr>
+        <td>Číslo kupního dokladu:</td>
+        <td> {$data["purchase_number"]}</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><b>Popis závady:</td>
+        <td> {$data["description"]}</b></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><b>Obsah balení při předání:</td>
+        <td> {$data["package_content"]}</b></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><b>Preferovaný způsob vyřízení reklamace</b>:</td>
+        <td> {$data['reclamation_way']} </td>
+    </tr>
+
+</table>
+
+<br/><br/>
+Vyřízení reklamace očekávám nejpozději v zákonné lhůtě 30 kalendářních dnů.
+Zároveň vás žádám o vystavení písemného potvrzení o uplatnění reklamace s uvedením,
+kdy jsem právo uplatnil, co je obsahem reklamace spolu se zvoleným nárokem, a následně
+o vystavení potvrzení o datu a způsobu vyřízení reklamace, včetně uvedení doby jejího
+trvání.
+<br/><br/>
+Datum uplatnění reklamace: {$data['reclamation_date']}

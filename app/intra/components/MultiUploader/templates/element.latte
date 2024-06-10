@@ -1,0 +1,18 @@
+<!-- Styles -->
+<link href="{$basePath}/intra/packages/multiUploader/jquery.filer.css" rel="stylesheet">
+<link href="{$basePath}/intra/packages/multiUploader/jquery.filer-dragdropbox-theme.css" rel="stylesheet">
+
+<!-- Jvascript -->
+<script src="{$basePath}/intra/packages/multiUploader/jquery.filer.min.js" type="text/javascript"></script>
+<script src="{$basePath}/intra/packages/multiUploader/custom.js" type="text/javascript"></script>
+
+<div>
+    <input type="file" name="files[]" id="filer_input2" class="multiuploader" multiple="multiple"
+           data-remove="{link remove}"
+           data-send="{link send}"
+           data-limit="{$limit}"
+           data-maxSize="{$maxSize}"
+           data-extensions="{implode('|', $extensions)}"
+           >
+    <input type="hidden" name="pathToNewImg" value="{$uploadDir}"/>
+</div>

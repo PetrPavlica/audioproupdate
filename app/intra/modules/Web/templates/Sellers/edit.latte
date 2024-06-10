@@ -1,0 +1,49 @@
+{block title}{_'Editace prodejce'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace prodejce'}
+</h3>
+<div style="" class="col-xs-12 col-sm-12 col-md-12">
+    {form form}
+                <div class="panel-body">
+                    <fieldset class="form-horizontal">
+                        <div class="row">
+                            <div style="padding-bottom:20px" class="col-xs-12 col-sm-12 col-md-12">
+                                {control renderer $form, 'name'}
+                                {control renderer $form, 'text'}
+                                {control renderer $form, 'orderSellers'}
+                                {control renderer $form, 'link'}
+                                {control renderer $form, 'sellersImg'}
+                                {snippet sellers-img}
+                                    {ifset $sellers}
+                                        <div n:if="$sellers->image" class="col-md-6 col-md-offset-4" style="padding-bottom: 20px">
+                                            <img src="{$basePath}/{$sellers->image}" style="max-width: 100%;" />
+                                            <a n:href="deleteImg! sellersId => $sellers->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on">
+                                                <span class="fa fa-trash"></span>
+                                            </a>
+                                        </div>
+                                    {/ifset}
+                                {/snippet}
+                                {control renderer $form, 'active'}
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+        <div class="col-xs-12 col-sm-12 col-md-12" style="padding-top: 60px; padding-bottom: 60px;">
+            <a n:href=":Sellers:default" class="btn btn-default">
+                <span class="fa fa-arrow-left"></span>
+                {_'Zpět'}
+            </a>
+            <span style="float: right; padding-right: 40px">
+                <button name="sendBack" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"></i> {_'Uložit a zpět'}</button>
+                <button name="send" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"></i> {_'Uložit a pokračovat'}</button>
+                <button name="sendNew" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"></i> {_'Uložit a nový'}</button>
+            </span>
+        </div>
+    {/form}
+</div>

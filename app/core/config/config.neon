@@ -1,0 +1,77 @@
+parameters:
+
+application:
+	errorPresenter: ErrorFront
+	catchExceptions: false
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+session:
+	expiration: 14 days
+	savePath: "%tempDir%/sessions"
+	gcProbability: 1
+
+services:
+	router: App\RouterFactory::createRouter
+	- App\Core\Model\DoctrineFormGenerator
+	- App\Core\Model\ACLMapper
+	- App\Core\Model\UserManager
+	- App\Core\Model\ACLForm
+
+	- App\Core\Model\Facade\PermisionGroupFacade
+	- App\Core\Model\Facade\PermisionItemFacade
+	- App\Core\Model\Facade\PermisionRuleFacade
+	- App\Core\Model\Facade\UserFacade
+	- App\Core\Model\Facade\SettingFacade
+
+	- App\Core\Components\ACLHtml\IACLHtmlControlFactory
+	- App\Core\Components\FormRenderer\IFormRendererFactory
+
+	- App\Core\Components\UblabooTable\IUblabooTableControlFactory
+	- App\Core\Components\UblabooTable\Model\DoctrineGridGenerator
+
+extensions:
+	console: Kdyby\Console\DI\ConsoleExtension
+	events: Kdyby\Events\DI\EventsExtension
+	annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	doctrine: Kdyby\Doctrine\DI\OrmExtension
+	reCaptcha: Contributte\ReCaptcha\DI\ReCaptchaExtension
+	translation: Kdyby\Translation\DI\TranslationExtension
+	imageStorage: Ublaboo\ImageStorage\DI\ImageStorageExtension
+
+console:
+	name: CronTab
+	version: '1.0'
+	catchExceptions: true
+	autoExit: true
+	url: http://localhost
+	lazy: true
+
+doctrine:
+	metadata:
+		App: %appDir%/core/model/database/entity
+	dql:
+		string:
+			MATCH_AGAINST: App\Core\Model\Database\Utils\MatchAgainst
+
+translation:
+	default: cs
+	fallback: [cs_CS, cs]
+
+reCaptcha:
+	siteKey: '6LeYxy4pAAAAAEv6uYS2AtaJEaJkn82dC7aasBKs'
+	secretKey: '6LeYxy4pAAAAAOwttn6HiaGJQZypXrRH23sq0-h7'
+
+tracy:
+    email: michal@webrex.eu
+    fromEmail: webmailer@audio-pro.cz
+
+imageStorage:
+	data_path          : %wwwDir% # Filesystem location
+	data_dir           : www                    # Relative path
+	algorithm_file     : sha1_file               # Algorithm to take image prefix directory from
+	algorithm_content  : sha1                    # ...
+	quality            : 85                      # Default wuality when cropping
+	default_transform  : fit                     # Default crop transformation
+	noimage_identifier : assets/img/produkty/no-photo.png # No-image image
+	friendly_url       : FALSE                   # Create friendly URLs?

@@ -1,0 +1,21 @@
+<div class="navigation">
+    {if $step == 2}
+        <a {if $step == 1}class="active"{/} n:href=":Basket:one">
+            <span>1</span>
+            {_'košík'}
+        </a>
+    {else}
+        <a {if $step == 1}class="active"{/}>
+            <span>1</span>
+            {_'košík'}
+        </a>
+    {/if}
+    <a {if $step == 2}class="active"{/}>
+        <span>2</span>
+        {_'rekapitulace'}
+    </a>
+    <a {if $step == 3}class="active"{/}>
+        <span>3</span>
+        {_'potvrzení'}
+    </a>
+</div>

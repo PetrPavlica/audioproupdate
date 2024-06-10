@@ -1,0 +1,23 @@
+{**
+ * @param $row    Ublaboo\DataGrid\Row
+ * @param $status Ublaboo\DataGrid\Column\ColumnSelectCallback
+*}
+{var $option = $status->getCurrentOption($row)}
+{var $prompt = $status->getPromptOption($row)}
+
+<div class="dropdown">
+    {if $option}
+        <a class="{$option->getClass()}" n:href="changeStatus!, id => $row->getId(), key => $status->getKey(), value => $option->getValue()">
+            {_$option->getText()}
+        </a>
+    {elseif $prompt}
+        {_$prompt->getText()}
+    {else}
+        {var $val = $row->getValue($status->getColumn())}
+        {if is_object($val) && get_class($val) == 'DateTime'}
+            {$val|date:$status->dateFormat}
+        {else}
+            {$val}
+        {/if}
+    {/if}
+</div>

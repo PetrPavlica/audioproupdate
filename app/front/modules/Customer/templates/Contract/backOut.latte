@@ -1,0 +1,143 @@
+    <div class="nadpis blue bold">
+        <h1>{_'Formulář odstoupení od smlouvy:'}</h1>
+        <br/><br/>
+    </div>
+
+    <div class="block flexElem flexWrap alignLeft">
+
+        <div class="sub_block">
+
+            {form backOutForm}
+
+                {input id}
+
+                <table class="responzive form_table small_fields full_fields_size">
+
+                    <tr>
+                        <td class="required">
+                            <label>{_'Jméno'}:</label>
+                        </td>
+                        <td>
+                            {input name}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Příjmení'}:</label>
+                        </td>
+                        <td>
+                            {input surname}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Ulice a číslo popisné'}</label>
+                        </td>
+                        <td>
+                            {input street}
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Město'}:</label>
+                        </td>
+                        <td colspan="3">
+                            {input city}
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'PSČ'}:</label>
+                        </td>
+                        <td>
+                            {input zip}
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Telefon'}:</label>
+                        </td>
+                        <td>
+                            {input phone}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Email'}:</label>
+                        </td>
+                        <td>
+                            {input email}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Označení zboží'}:</label>
+                        </td>
+                        <td>
+                            {input product}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Datum vzniku smlouvy'}:</label>
+                        </td>
+                        <td>
+                            {input conclusion_date, data-date-settings=>'{"currentDate":"false"}'}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Datum převzetí převzetí zboží'}:</label>
+                        </td>
+                        <td>
+                            {input taken_date, data-date-settings=>'{"currentDate":"false"}'}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Kupní cena'}:</label>
+                        </td>
+                        <td>
+                            {input product_price}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Cena poštovného'}:</label>
+                        </td>
+                        <td>
+                            {input postage_price}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="required">
+                            <label>{_'Bankovní účet'}:</label>
+                        </td>
+                        <td>
+                            {input bank_account}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="required">
+                            <label>{_'Příloha koupního dokladu'}:</label>
+                        </td>
+                        <td>
+                            {input attachment}
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="fields_container left" style="padding-left: 138px;">
+                    {input send, class=>"dialog-handler", data-dialog-options=>'{"applyAfterClicks":"3","content":"#contact_dialog"}'}
+                </div>
+
+            {/form}
+
+        </div>
+
+        <div class="sub_block">
+
+
+
+        </div>
+
+    </div>

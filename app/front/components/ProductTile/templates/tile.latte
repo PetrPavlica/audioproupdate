@@ -1,0 +1,109 @@
+{snippetArea products}
+<div class="product_container {$class} flexElem" n:snippet="product-{$product->id}">
+    <div class="product product_uvod {if $productHelper->specialExists() && isset($sess->specialView[$product->id])}special{/if} flexElem flexWrap valignJustify">
+        {var $slug = \Nette\Utils\Strings::webalize($product->name)}
+            <div>
+                <div class="details">
+                    <div class="title">
+                        <a href="{plink 'ProductDetail:detail' id => $product->id, slug => $slug}">
+                            <h3>{$product->name}</h3>
+                        </a>
+                    </div>
+                    {*<div class="description">
+                        {$product->description|noescape}
+                    </div>*}
+                </div>
+
+                <div class="productLabels" n:if="!$disableTags">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_AP_Multiroom.svg" alt="AudioPro Multiroom" n:if="$product->audioProMultiroom">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_Battery.svg" alt="Battery Powered" n:if="$product->batteryPowered">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_Chromecast_Built-in.svg" alt="Chromecast" n:if="$product->chromecast">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_IPX4.svg" alt="IPX4" n:if="$product->ipx4">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_BT_40.svg" alt="BT 4.0" n:if="$product->bt4">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_BT_50.svg" alt="BT 5.0" n:if="$product->bt5">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_Hey_Google.svg" alt="Hey Google" n:if="$product->heyGoogle">
+                    <img src="{$basePath}/assets/img/product-labels/ICON_AP2.svg" alt="Air Play" n:if="$product->airPlay">
+                </div>
+        </div>
+        <div>
+                <div class="photo">
+                    <a href="{plink 'ProductDetail:detail' id => $product->id, slug => $slug}">
+                        {if $product->mainImage && file_exists($product->mainImage)}
+                            <img n:img="$product->mainImage, '380x280', 'shrink_only', null" alt="{$product->name}" title="{$product->name}">
+                        {else}
+                            <img n:img="'front/images/produkty/no-photo.png', '380x280'" alt="{$product->name}" title="{$product->name}">
+                        {/if}
+                    {*if $mainImg && file_exists($mainImg->path)}
+                        <img n:img="$mainImg->path, '380x280', null, null, true" alt="{$product->name}" title="{$product->name}">
+                    {else}
+                        <img n:img="'front/images/produkty/no-photo.png', '380x280'" alt="{$product->name}" title="{$product->name}">
+                    {/if*}
+                    </a>
+                </div>
+                {*<div class="hvezdicky flexElem valignCenter">
+                    {var $jj = 5}
+                    {for $ii = 0; $ii < round($product->totalRating); $ii++}
+                        <div class="hvezda hvezda_plna"></div>
+                    {/for}
+                    {for $ii = 0; $ii < $jj - round($product->totalRating); $ii++}
+                        <div class="hvezda"></div>
+                    {/for}
+                </div>*}
+
+        <div class="color-variants">
+            {if count($colorVariants)}
+                {foreach $colorVariants as $v}
+                    {continueIf empty($v['color'])}
+                    <div class="variant">
+                        <a n:href="redrawProduct! id => $v['id'], slug => $v['slug']" class="ajax">
+                            <div class="variant-color" style="background-color: {$v['color']|noescape}"></div>
+                        </a>
+                    </div>
+                {/foreach}
+            {/if}
+        </div>
+        <div class="details">
+            {if !$disableEshop}
+                <div class="stock-container">
+                    {control stockExpedition $product, 0, 'text', 'div'}
+                </div>
+            {/if}
+            <div class="bottom">
+                <div class="price-container {if $productHelper->getLastPrice() != 0}priceSale{/if}">
+                    <div class="cena">
+                        <div class="cena_bez_dph">
+                            {$productHelper->renderPriceWithoutDPH()} <span class="price_desc">{_'cena bez DPH'}</span>
+                        </div>
+                        <div class="cena_sleva">
+                            {$productHelper->renderPrice()} <span class="price_desc">{_'cena s DPH'}</span>
+                        </div>
+                        <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                            {$productHelper->renderLastPrice()} <span class="price_desc">{_'cena s DPH'}</span>
+                        </div>
+                    </div>
+                </div>
+                {if !$disableEshop}
+                    <div class="btn-container">
+                        {if !$product->saleTerminated}
+                            {form addToBasketForm-$time$product->id}
+                                {input productId value => $product->id}
+                                {input count value => '1'}
+                                <button n:name="addToBasket" class="buy_btn" data-href="{plink 'addToCart!'}">{_'Koupit'}</button>
+                            {/form}
+                        {/if}
+                    </div>
+                {else}
+                    <div class="btn-container">
+                        {if $product->type == 2}
+                            <a href="{plink 'Page:' id => '11', wslug => 'kde-koupit'}" class="buy_btn_link">{_'Kde koupit'}</a>
+                        {else}
+                            <a href="{plink 'Page:' id => '8', wslug => 'kde-muzete-koupit'}" class="buy_btn_link">{_'Kde koupit'}</a>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{/snippetArea}

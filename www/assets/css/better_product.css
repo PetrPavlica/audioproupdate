@@ -1,0 +1,42 @@
+#betterProduct .product {
+    text-align: center;
+}
+
+#betterProduct .product .photo {
+    margin-top: 0px;
+}
+
+#betterProduct .advantages {
+    margin-top: 10px;
+}
+
+#betterProduct .advantages .higher_than {
+    color: #575757;
+    font-size: 1.2em;
+    margin: 15px 0px;
+    padding: 10px;
+    text-align: center;
+
+}
+
+@media (max-width: 480px) {
+
+    #betterProduct {
+        -webkit-box-justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        justify-content: center;
+
+        text-align: center;
+    }
+
+    #betterProduct .product, #betterProduct .advantages {
+        -webkit-box-flex: 0 1 100%;
+        -moz-box-flex: 0 1 100%;
+        -webkit-flex: 0 1 100%;
+        -ms-flex: 0 1 100%;
+        flex: 0 1 100%;
+    }
+
+}

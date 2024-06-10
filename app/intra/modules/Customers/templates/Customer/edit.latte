@@ -1,0 +1,251 @@
+{block title}{_'Editace zákazníka'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace zákazníka'}
+</h3>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a data-toggle="tab" href="#home">{_'Obecné údaje'}</a></li>
+        <li><a data-toggle="tab" href="#orders">{_'Objednávky'}</a></li>
+        {*<li><a data-toggle="tab" href="#saleMark">{_'Slevy značek'}</a></li>*}
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            {form form, class=>"form-horizontal"}
+                {input id}
+            <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                <div class="row">
+                    <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                        <legend>{_'Základní informace'}</legend>
+						{control renderer $form, 'degree'}
+						{control renderer $form, 'name'}
+                        {control renderer $form, 'surname'}
+                        {control renderer $form, 'email'}
+						{control renderer $form, 'phone'}
+						{control renderer $form, 'password'}
+                        {control renderer $form, 'currency'}
+                        {control renderer $form, 'foundedDate'}
+                        {control renderer $form, 'ip'}
+                    </div>
+                    <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                        <legend>{_'Fakturační údaje'}</legend>
+						{control renderer $form, 'vatPay'}
+						{control renderer $form, 'isCompany'}
+						{control renderer $form, 'company'}
+                        {control renderer $form, 'idNo'}
+                        {control renderer $form, 'vatNo'}
+                        {control renderer $form, 'street'}
+                        {control renderer $form, 'city'}
+                        {control renderer $form, 'country'}
+                        {control renderer $form, 'zip'}
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 30px;">
+
+                    <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                        <legend>{_'Doručovací údaje'}</legend>
+						{control renderer $form, 'deliveryToOther'}
+						{control renderer $form, 'nameDelivery'}
+						{control renderer $form, 'surnameDelivery'}
+						{control renderer $form, 'companyDelivery'}
+						{control renderer $form, 'streetDelivery'}
+						{control renderer $form, 'zipDelivery'}
+						{control renderer $form, 'cityDelivery'}
+                        {control renderer $form, 'countryDelivery'}
+                        {control renderer $form, 'emailDelivery'}
+                        {control renderer $form, 'phoneDelivery'}
+                    </div>
+                    <div style="" class="col-xs-12 col-sm-12 col-md-6">
+                        <legend>{_'Doplňující údaje'}</legend>
+                        {control renderer $form, 'accountNumber'}
+                        {control renderer $form, 'description'}
+                    </div>
+                </div>
+            </div>
+                <div class='col-md-2 col-md-offset-5'>
+                    <p>&nbsp;</p>
+                    <button name="send" type="submit" class="btn btn-primary btn-block"><i class="fa fa-floppy-o"></i> {_'Uložit'}</button>
+                </div>
+            {/form}
+        </div>
+
+        <div id="orders" class="tab-pane fade">
+            <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                <legend>{_'Objednávky zákazníka'}</legend>
+                {var $sum = []}
+                {var $curr = []}
+                {ifset $customerOrders}
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">
+                                    #
+                                </th>
+                                <th class="text-left">
+                                    {_'Id / variabilní symbol'}
+                                </th>
+                                <th class="text-left">
+                                    {_'Datum objednání'}
+                                </th>
+                                <th class="text-left">
+                                    {_'Stav'}
+                                </th>
+                                <th class="text-left">
+                                    {_'Částka'}
+                                </th>
+                        </thead>
+                        <tbody>
+                            {foreach $customerOrders as $order}
+                                {var $i = $iterator->getCounter()}
+                                <tr>
+                                    <td>{$i}</td>
+                                    <td>
+										<a n:href=":Order:view id => $order->id" target="_blank">
+											{$order->id} / {$order->variableSymbol}
+										</a>
+									</td>
+                                    <td>{$order->foundedDate|date:'d. m. Y'}</td>
+                                    <td>{$order->orderState->name}</td>
+                                    <td>{$order->currency->markBefore}
+										{$order->totalPrice|number:$order->currency->countDecimal:',':' '}
+										{$order->currency->markBehind}
+                                    </td>
+                                </tr>
+                                {if !isset($sum[$order->currency->id])}
+                                    {var $sum[$order->currency->id] = 0}
+                                {/if}
+                                {var $sum[$order->currency->id] += $order->totalPrice}
+                                {var $curr[$order->currency->id] = $order->currency}
+                            {/foreach}
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    {foreach $sum as $k => $s}
+                                        {$curr[$k]->markBefore}
+                                        {$s|number:$curr[$k]->countDecimal:',':' '}
+                                        {$curr[$k]->markBehind}
+                                        {if !$iterator->isLast()}/{/if}
+                                    {/foreach}
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                {else}
+                    {_'Zákazník může mít objednávku, až když je uložen.'}
+                {/ifset}
+            </div>
+        </div>
+
+        {*<div id="saleMark" class="tab-pane fade">
+            <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                <legend>{_'Slevy značek'}</legend>
+                {snippet sales-customer}
+                    {form formSales}
+                        {ifset $customer}
+                            <input type="hidden" name="customer" value="{$customer->id}">
+                        {var $i = 0}
+                            <table class="table table-bordered table-stripped span-remove">
+                                <thead>
+                                <tr>
+                                    <th class="text-left" width="5%">
+                                        #
+                                    </th>
+                                    <th class="text-center" width="40%">
+                                        {_'Název značky'}
+                                    </th>
+                                    <th class="text-center" width="40%">
+                                        {_'Sleva v %'}
+                                    </th>
+                                    <th class="text-left" width="100">
+                                    </th>
+                                </thead>
+                                <tbody>
+                                {if $customer->sales != NULL}
+                                    {foreach $customer->sales as $s}
+                                        {var $i = $iterator->getCounter()}
+                                        <tr>
+                                            <td>
+                                                {$i}
+                                                <input type="hidden" name="saleId[{$i}]" value="{$s->id}"/>
+                                            </td>
+                                            <td>
+                                                <select name="saleMark[{$i}]" class="form-control selectpicker" data-live-search="true" disabled>
+                                                    {foreach $marks as $m}
+                                                        <option value="{$m->id}" {if $m->id == $s->mark->id}selected{/if}>{$m->publicName}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" placeholder='Sleva v %' name="saleValue[{$i}]" value="{$s->value}" min="1" max="100">
+                                            </td>
+                                            <td>
+                                                <button name="updateSale" type="submit" class="btn btn-link ajax" value="{$s->id}">
+                                                    <i class="fa fa-edit"></i></button>
+                                                |
+                                                <a n:href="deleteSale! saleId => $s->id" class="btn btn-link" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                {/if}
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <select name="newSaleMark" class="form-control selectpicker" data-live-search="true">
+                                            {foreach $marks as $m}
+                                                <option value="{$m->id}">{$m->publicName}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" name="newSaleValue" placeholder='Sleva v %' value="" min="1" max="100">
+                                    </td>
+                                    <td>
+                                        <button name="addSale" type="submit" class="btn btn-link ajax">
+                                            <i class="fa fa-plus"></i></button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        {else}
+                            <label>{_'Slevy můžete vkládat, až bude zákazník poprvé uložený.'}</label>
+                        {/ifset}
+                    {/form}
+                {/snippet}
+            </div>
+        </div>*}
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12" style="padding-top: 40px; padding-bottom: 60px">
+        <div class='col-md-12'>
+            <a class="btn btn-default"
+               {ifset $backUrl}
+                   href="{$backUrl}">
+               {else}
+                   href="{link Customer:default}">
+               {/ifset}
+               <span class="fa fa-arrow-left" aria-hidden="true"></span>
+               {_'Zpět'} </a>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function() {
+        var url = document.URL;
+        var hash = url.substring(url.indexOf('#'));
+
+        $("[role='tablist']").find("li a").each(function(key, val) {
+            if (hash == $(val).attr('href')) {
+                $(val).click();
+            }
+
+            $(val).click(function(ky, vl) {
+                location.hash = $(this).attr('href');
+            });
+        });
+    });
+</script>

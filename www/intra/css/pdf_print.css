@@ -1,0 +1,25 @@
+ .table {
+    border-collapse: collapse !important;
+  }
+  .table td,
+  .table th {
+    padding: 5px;
+    text-align: left;   
+    background-color: #fff !important;
+  }
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #ddd !important;
+  }
+  
+  .oramovani {
+      border: 1px solid #ddd !important;
+  }
+  
+  h1 {text-align:center;}
+  .clear { clear: both; }
+  
+  .logo-left {float:left; width: 40%;}
+  .logo-right {float:right; width: 40%; text-align:right;}
+  
+  

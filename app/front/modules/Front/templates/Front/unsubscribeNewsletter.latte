@@ -1,0 +1,26 @@
+{block title}{$settings['homepage_title']}{/block}
+{block keywords}{$settings['homepage_description']}{/block}
+{block description}{$settings['homepage_description']}{/block}
+{block content}
+
+<div id="content">
+    <div id="registrace">
+        <div class="nadpis blue">
+            <h1>{_'Odhlášení z newsletteru'}</h1>
+        </div>
+        <div class="flexElem flexWrap alignLeft">
+            <div class="sub_block">
+                <div class="nadpis blue bold">
+                    {if $res}
+                        <h3>{_'Email:'} {$email} {_'byl odebrán z naší newsletterové databáze.'}</h3>
+                    {else}
+                        <h3>{_'Email:'} {$email} {_'se již nenachází v naší newsletterové databázi.'}</h3>
+                    {/if}
+                </div>
+                <div class="fields_container">
+                    <a class="button-link" n:href=":Front:default">{_'Zpět na úvodní stranu'}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

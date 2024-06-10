@@ -1,0 +1,93 @@
+{block title}{_'Editace menu'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace menu'}
+    &nbsp;&nbsp;&nbsp;
+    <small n:ifset="$menu">
+        <a n:href=":Page:default wslug => $menu->slug" target="_blank">
+            <i class="fa fa-eye"></i>
+            {_'Zobrazit na webu'}
+        </a>
+    </small>
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-12">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">{_'Základní informace'}</a></li>
+        <li><a data-toggle="tab" href="#content">{_'Obsah'}</a></li>
+    </ul>
+    {form form}
+        <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+                <div class="panel-body">
+                    <fieldset class="form-horizontal">
+                        <legend>
+                            <small>{_'Základní informace'}</small>
+                        </legend>
+                        <div class="row">
+                            <div style="padding-bottom:20px" class="col-xs-12 col-sm-12 col-md-8">
+                                {control renderer $form, 'name'}
+                                {control renderer $form, 'title'}
+                                {control renderer $form, 'keywords'}
+                                {control renderer $form, 'description'}
+                                {control renderer $form, 'parentMenu'}
+                                {control renderer $form, 'orderPage'}
+                                {control renderer $form, 'template'}
+                                {control renderer $form, 'menuImg'}
+                                {snippet menu-img}
+                                    {ifset $menu}
+                                        <div n:if="$menu->image" class="col-md-6 col-md-offset-4" style="padding-bottom: 20px">
+                                            <img src="{$basePath}/{$menu->image}" style="max-width: 500px; margin: 0 0 15px;">
+                                            <a n:href="deleteImg! menuId => $menu->id" class="btn btn-xs btn-danger"
+                                                                                       data-confirm="modal"
+                                                                                       data-ajax="on">
+                                                <span class="fa fa-trash"></span>
+                                            </a>
+                                        </div>
+                                    {/ifset}
+                                {/snippet}
+                                {control renderer $form, 'visible'}
+                                {control renderer $form, 'showInMenu'}
+                                {control renderer $form, 'inMenu'}
+                                {control renderer $form, 'forCookies'}
+                                {control renderer $form, 'forPrinciples'}
+                                {control renderer $form, 'forTerms'}
+                                {control renderer $form, 'forDownload'}
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="content" class="tab-pane fade">
+                <div class="panel-body">
+                    {ifset $menu}
+                        <div n:if="$menu->template && $menu->template->path != '' && $menu->template->path !='article'" class="panel panel-default">
+                            <div class="panel-body">
+                                {include APP_DIR . '/front/modules/Front/templates/Page/'. $menu->template->path .'.latte'}
+                            </div>
+                        </div>
+                    {else}
+                        <label>{_'Obsah můžete upravovat až bude menu poprvé uloženo.'}</label>
+                    {/ifset}
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12" style="padding-top: 60px; padding-bottom: 60px;">
+            <a n:href=":WebMenu:default" class="btn btn-default">
+                <span class="fa fa-arrow-left"></span>
+                {_'Zpět'}
+            </a>
+            <span style="float: right; padding-right: 40px">
+                <button name="sendBack" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"/> {_'Uložit a zpět'}</button>
+                <button name="send" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"/> {_'Uložit a pokračovat'}</button>
+                <button name="sendNew" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i
+                            class="fa fa-floppy-o"/> {_'Uložit a nový'}</button>
+            </span>
+        </div>
+    {/form}
+</div>

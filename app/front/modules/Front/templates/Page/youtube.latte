@@ -1,0 +1,26 @@
+{if !isset($isBack)} {* toto se nenačte v administraci *}
+    {block title}
+        {if !empty($menu->title)}
+            {$menu->title}
+        {else}
+            {$menu->name}
+        {/if}
+    {/block}
+    {block keywords}{$menu->keywords}{/block}
+    {block description}{$menu->description}{/block}
+{/if}
+
+{block content}
+    {if !isset($isBack) && $menu->parentMenu == null}
+        {include 'breadcrumb.latte'}
+    {/if}
+    <div id="content" class="wrap clanekA">
+        <div id="text-content" class="youtube">
+            {control inline 'div', 'div', $allowEdit, $resource, $menu->id, 'content'}
+            <br/><br/>
+        </div>
+        {ifset $category}
+            {include category.latte}
+        {/ifset}
+    </div>
+{/block}

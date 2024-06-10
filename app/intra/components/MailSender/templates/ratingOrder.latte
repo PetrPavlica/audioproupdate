@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="WebRex, s.r.o.">
+</head>
+<body style="margin: 0;">
+    <div style="background-color: #f6f6f6; width: 100%; height: 100%; padding: 25px 0;">
+        <div style="font-family: 'Open Sans'; background-color: #f6f6f6; border: 1px solid #e0e0e0; width: 840px; margin: 0 auto;">
+            <div style="background-color: #fff; padding: 15px; color: #646464; font-size: 18px; font-weight: 400;">
+                <img src="{$baseUri}/assets/img/logo.png" alt="Logo">
+                <br><br>
+                <p>{_'Dobrý den'},<br>
+                    {_'děkujeme za Váš nákup na internetovém obchodě'} <a n:href="Front:default" style="color: #00408a; text-decoration: none;" target="_blank">{$settings['company_www']}</a></p>
+                <p>
+                    {_'Váš názor nám není lhostejný! Podělte se o něj a'} <strong>{_'ohodnoťte'}</strong> {_'vámi zakoupené produkty'}. {_'Pomůžete nám zkvalitnit služby zákazníkům, nebo při výběru těm, kteří také chtějí'}.
+                </p>
+                <p>{_'Vaší přízně si vážíme a jsme tu kdykoliv pro vás.'}<br>
+                    <a n:href="Front:default" style="color: #00408a; text-decoration: none;" target="_blank">{$settings['company_www']}</a>
+                </p>
+                <h4 style="color: #00408a;">Číslo objednávky: {$order->variableSymbol}</h4>
+                <div>
+                    <table style="border-collapse: collapse;" width="100%">
+                        <tr style="background-color: #eaeaea; font-weight: 700; color: #000; font-size: 18px;">
+                            <td style="width: 10%; padding: 5px 10px;"></td>
+                            <td style="width: 50%; padding: 5px 10px;"><strong>{_'Položka'}</strong></td>
+                            <td style="text-align: center; width: 10%; padding: 5px 10px;"><strong>{_'Množství'}</strong></td>
+                            <td style="text-align: right; width: 20%; padding: 5px 10px;"><strong>{_'Celkem'}</strong></td>
+                            <td style="text-align: right; width: 10%; padding: 5px 10px;"></td>
+                        </tr>
+                        {var $total = $bezDPHTotal = $dph = $i = 0}
+                        {var $currency = $order->currency}
+
+                        {foreach $products as $item}
+                            {php $dc->setPriceWithDPH($item->selingPrice, $item->product->vat->value, $item->count)}
+                            {php $dc->setDisableDPH($order->euVat)}
+                            {var $dph = $dph * $dc->getTotalDPH()}
+                            {var $bezDPHTotal = $bezDPHTotal + $dc->getTotalWithoutDPH()}
+                            {var $total =  $total + $dc->getTotalPrice()}
+                            {var $slug = Nette\Utils\Strings::webalize($item->name)}
+                            <tr style="border: 1px solid #eaeaea; color: #000;">
+                                <td>
+                                    {if file_exists($item->product->mainImage)}
+                                        <a n:href="ProductDetail:detail#hodnoceni id => $item->product->id, slug => $slug">
+                                            <img src="{$baseUri}/{$item->product->mainImage}" alt="" width="100">
+                                        </a>
+                                    {/if}
+                                </td>
+                                <td style="padding: 5px 10px; font-weight: 700;">
+                                    <a n:href="ProductDetail:detail#hodnoceni id => $item->product->id, slug => $slug" style="color: #00408a; text-decoration: none;">{$item->name} ({$item->unit})</a>
+                                </td>
+                                <td style="text-align: center; padding: 5px 10px;">
+                                    {$item->count}
+                                </td>
+                                <td style="text-align: right; padding: 5px 10px;">
+                                    {$currency->markBefore}
+                                    {$dc->getTotalPrice()|number:2:'.':' '} {$currency->markBehind}
+                                </td>
+                                <td style="text-align: right; padding: 5px 10px;">
+                                    <a n:href="ProductDetail:detail#hodnoceni id => $item->product->id, slug => $slug" target="_blank" style="display: block; background-color: #021f40; color: #fff; text-decoration: none; text-align: center; padding: 6px 12px; text-transform: uppercase;">{_'Ohodnotit'}</a>
+                                </td>
+                            </tr>
+                        {/foreach}
+
+                        {php $dc->setPriceWithDPH($order->payMethodPrice, $order->paymentMethod->vat->value, 1)}
+                        {php $dc->setDisableDPH($order->euVat)}
+                        {var $paymentPrice = $dc->getTotalWithoutDPH()}
+                        {var $dph = $dph * $dc->getTotalDPH()}
+                        {var $total = $total + $dc->getTotalPrice()}
+
+                        {php $dc->setPriceWithDPH($order->payDeliveryPrice, $order->deliveryMethod->vat->value, 1)}
+                        {php $dc->setDisableDPH($order->euVat)}
+                        {var $deliveryPrice = $dc->getTotalWithoutDPH()}
+                        {var $dph = $dph * $dc->getTotalDPH()}
+                        {var $total = $total + $dc->getTotalPrice()}
+                    </table>
+                </div>
+
+                <p align="center">
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["googleplus_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/google_plus.png" title="{_'Google Plus'}" alt="{_'Google Plus'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["facebook_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/facebook.png" title="{_'Facebook'}" alt="{_'Facebook'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["pinterest_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/pinterest.png" title="{_'Pinterest'}" alt="{_'Pinterest'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["twitter_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/twitter.png" title="{_'Twitter'}" alt="{_'Twitter'}" width="30px"/>
+                    </a>
+                    &nbsp;
+                    <a style="text-decoration: none;" target="_blank" href="{$settings["instagram_url"]}">
+                        <img style="width: 30px;" src="{$baseUri}/front/design/icons/social/instagram.jpg" title="{_'Instagram'}" alt="{_'Instagram'}" width="30px"/>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

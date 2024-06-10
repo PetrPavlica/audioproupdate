@@ -1,0 +1,68 @@
+.product_column{
+    padding: 5px;
+    border: 0px !important;
+    border-bottom: 1px #ccc solid !important;
+}
+
+table.product {
+    position: relative;
+    background-color: #fff;
+}
+
+td.photo {
+    text-align: center;
+}
+
+td.details {
+    margin-top: 1em;
+    padding: 0px;
+}
+
+td.cena {
+    white-space: nowrap;
+    padding-right: 5px;
+    height: 18px;
+}
+
+div.cena_sleva {
+    color: #021f40;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+div.cena_default {
+    color: #636363;
+    line-height: 2em;
+    text-decoration: line-through;
+    font-size: 0.8em;
+}
+
+div.cena_bez_dph {
+    color: #636363;
+    line-height: 2em;
+    font-size: 0.8em;
+}
+
+div.cena_s_dph span {
+    font-weight: bold;
+}
+
+h3 {
+
+    margin: 0px;
+    padding: 0px 0px 6px 0px;
+
+    font-size: 0.8em;
+    line-height: 1.7em;
+
+    text-align: left;
+    font-weight: bold;
+
+    color: #5f5f5f;
+}
+
+p.description{
+    margin-top: 1em;
+    text-align: justify !important;
+    font-size: 0.85em;
+}

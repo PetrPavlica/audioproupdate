@@ -1,0 +1,30 @@
+{block title}
+    <h3>{_'Sledování zásilky'}</h3>
+{/block}
+{block content}
+
+<div id="content">
+    <div id="registrace">
+        <div class="nadpis blue">
+            <h1>{_'Sledování zásilky'}</h1>
+        </div>
+        <div class="flexElem flexWrap alignLeft">
+            <div class="sub_block">
+                {if isset($packages)}
+                {foreach $packages as $package}
+                    <div class="nadpis blue bold">
+                        <h3>{_'Zásilka č.:'} {$package->id}</h3>
+                    </div>
+                    <div>
+                        {foreach $tracks[$package->id] as $item}
+                            {$item}<br/>
+                        {/foreach}
+                        <br/><br/>
+                    </div>
+                {/foreach}
+                {/if}
+                <a class="button-link" n:href="RegistrationCustomer:profil id => $user->id">Zpět</a>
+            </div>
+        </div>
+    </div>
+</div>

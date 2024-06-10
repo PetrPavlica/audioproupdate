@@ -1,0 +1,31 @@
+{if empty(trim($stockText))}
+{if $count > 0}
+    <div class="skladem">{_'skladem'} {$count} {$unitParser::parse($unit, $count)}</div>
+
+    {if $expedition}
+    <div>
+        {if $hour <= 12}
+            {_'expedujeme dnes'}
+        {else}
+            {if $day >= 5}
+                {_'expedujeme v pondělí'}
+            {else}
+                {_'expedujeme zítra'}
+            {/if}
+        {/if}
+    </div>
+    {/if}
+{else}
+
+    {*<div class="skladem">{_'skladem do 5 dnů'}</div>*}
+    <div class="skladem no_skladem">{_'není skladem'}</div>
+
+    {if $expedition}
+    <div>
+        {_'datum expedice upřesníme'}
+    </div>
+    {/if}
+{/if}
+{else}
+    <div class="skladem">{$stockText}</div>
+{/if}

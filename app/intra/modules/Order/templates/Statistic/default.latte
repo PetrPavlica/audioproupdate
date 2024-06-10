@@ -1,0 +1,217 @@
+{block title}{_'Statistiky - zisk'}{/block}
+{block content}
+
+
+<h3 class="page-header">
+    {_'Statistiky - zisk'}
+</h3>
+
+{var $sum1 = $sum2 = 0}
+{capture $all}
+    <div clas="row" n:ifset="$items">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <h4>{_'Výnosy - objednávky'}</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                        <tr>
+                            <th class="text-left" width="5%">
+                                #
+                            </th>
+                            <th class="text-left">
+                                {_'Objednávka'}
+                            </th>
+                            <th class="text-left">
+                                {_'Datum'}
+                            </th>
+                            <th class="text-center">
+                                {_'Hodnota'}
+                            </th>
+                        </thead>
+                        <tbody>
+                        {var $sum = 0}
+                        {foreach $items['orders'] as $item}
+                            <tr>
+                                <td>
+                                    {$iterator->getCounter()}
+                                </td>
+
+                                <td>
+                                    <a target="_blank" n:href=":Order:view id => $item->id">
+                                        {$item->variableSymbol}
+                                    </a>
+                                </td>
+                                <td>
+                                    {$item->foundedDate|date:'j. n. Y'}
+                                </td>
+                                <td class="text-right">
+                                    {*php barDump($item->products)*}
+                                    {var $price = 0}
+                                    {foreach $item->products as $pr}
+                                        {var $vat = $pr->product ? $pr->product->vat->value : $defaultVat->value}
+                                        {php $dphCounter->setPriceWithDPH($pr->selingPrice, $vat, 1)}
+                                        {var $price = $price + $dphCounter->getTotalWithoutDPH()}
+                                    {/foreach}
+
+                                    {$price|number:2:',':' '}
+                                    {var $sum = $sum + $price}
+                                </td>
+                            </tr>
+                        {/foreach}
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <strong>
+                                    {_'Součet'}
+                                </strong>
+                            </td>
+                            <td class="text-right">
+                                <strong>
+                                    {$sum|number:2:',':' '}
+                                </strong>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4>{_'Náklady - k produktům v objednávkách'}</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                        <tr>
+                            <th class="text-left" width="5%">
+                                #
+                            </th>
+                            <th class="text-left">
+                                {_'Produkt'}
+                            </th>
+                            <th class="text-left">
+                                {_'Objednávka'}
+                            </th>
+                            <th class="text-left">
+                                {_'Datum'}
+                            </th>
+                            <th class="text-left">
+                                {_'Počet ks'}
+                            </th>
+                            <th class="text-center">
+                                {_'Hodnota'}
+                            </th>
+                        </thead>
+                        <tbody>
+                        {foreach $items['products'] as $item}
+                            <tr>
+                                <td>
+                                    {$iterator->getCounter()}
+                                </td>
+                                <td>
+                                    <a {if count($item->product)} target="_blank" href="{link :Product:edit id => $item->product->id}" {/if}>
+                                        {$item->name},
+                                    </a>
+                                </td>
+                                <td>
+                                    <a n:if="count($item->orders)"
+                                            target="_blank" n:href=":Order:view id => $item->orders->id">
+                                        {$item->orders->variableSymbol}
+                                    </a>
+                                </td>
+                                <td>
+                                    {$item->orders->foundedDate|date:'j. n. Y'}
+                                </td>
+                                <td>
+                                    {$item->count}
+                                </td>
+                                <td class="text-right">
+                                    {if $item->product}
+                                        {$item->count * $item->product->lastPurchasePrice|number:2:',':' '}
+                                        {var $sum2 = $sum2 + ($item->count * $item->product->lastPurchasePrice)}
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/foreach}
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <strong>
+                                    {_'Součet'}
+                                </strong>
+                            </td>
+                            <td class="text-right">
+                                <strong>
+                                    {$sum2|number:2:',':' '}
+                                </strong>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+{/capture}
+
+<div clas="row">
+    <div class="col-md-6">
+        <h4>{_'Filtr'}</h4>
+        {form rangeForm}
+            <fieldset class="form-horizontal">
+                {control renderer $form, 'dateFrom'}
+                {control renderer $form, 'dateTo'}
+                {control renderer $form, 'type'}
+                {control renderer $form, 'send'}
+            </fieldset>
+        {/form}
+    </div>
+    <div class="col-md-6" n:ifset="$items">
+        <h4>{_'Přehled'}</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered table-stripped">
+                <thead>
+                <tbody>
+                <tr>
+                    <td>
+                        {_'Výnosy z objednávek'}
+                    </td>
+                    <td class="text-right">
+                        {$sum|number:2:',':' '}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {_'Náklady k objednávkám'}
+                    </td>
+                    <td class="text-right">
+                        {$sum2|number:2:',':' '}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {_'Rozdíl'}
+                    </td>
+                    <td class="text-right">
+                        {$sum - $sum2|number:2:',':' '}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{$all|noescape}

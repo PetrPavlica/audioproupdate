@@ -1,0 +1,266 @@
+{block title}{if $product->seoTitle}{ucfirst($product->seoTitle)}{else}{$product->name}{/if}{/block}
+{block keywords}{$product->seoDescription}{/block}
+{block metas}
+    <meta property="og:url" content="{$thisUrl}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{$product->seoTitle}"/>
+    <meta property="og:description" content="{$product->seoDescription}"/>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{$product->seoTitle}">
+    <meta name="twitter:description" content="{$product->seoDescription}">
+
+    {if $mainImg != null}
+        <meta property="og:image" content="{$baseUri}/{$mainImg->path}"/>
+        <meta name="twitter:image" content="{$baseUri}/{$mainImg->path}">
+    {else}
+        <meta property="og:image" content="{$baseUri}/assets/img/produkty/no-photo.jpg"/>
+        <meta name="twitter:image" content="{$baseUri}/assets/img/produkty/no-photo.jpg">
+    {/if}
+{/block}
+{*if $product->saleTerminated}
+    {block robots}noindex, follow{/block}
+{/if*}
+{block description}{$product->seoDescription}{/block}
+{block content}
+
+<div id="detail_product" class="product">
+    <div class="wrapper">
+        {snippet productHeader}
+    <div class="header-line">
+        <div class="title">
+            <h1>{$product->name}</h1>
+        </div>
+        <div class="colors">
+            {if count($colorVariants)}
+                <div class="color-variants">
+                    {foreach $colorVariants as $v}
+                        {continueIf empty($v->color)}
+                        <div class="variant {if $v->id == $product->id}active{/if}">
+                            {var $slugv = \Nette\Utils\Strings::webalize($v->name)}
+                            <a n:href="redrawProduct! id => $v->id, slug => $slugv" class="ajax">
+                                <div class="variant-color" style="background-color: {$v->color|noescape}"></div>
+                            </a>
+                        </div>
+                    {/foreach}
+                </div>
+            {/if}
+        </div>
+        <div class="form-content">
+            {form addToBasketForm-main$product->id}
+                {input productId value => $product->id}
+                {input count value => '1'}
+
+                <div class="details">
+                    {if !$disableEshop}
+                        <div class="stock-container">
+                            {control stockExpedition $product, 0, 'text', 'div'}
+                        </div>
+                    {/if}
+                    <div class="bottom">
+                        <div class="price-container {if $productHelper->getLastPrice() != 0}priceSale{/if}">
+                            <div class="cena">
+                                <div class="cena_bez_dph">
+                                    {$productHelper->renderPriceWithoutDPH()} <span class="price_desc">{_'cena bez DPH'}</span>
+                                </div>
+                                <div class="cena_sleva">
+                                    {$productHelper->renderPrice()} <span class="price_desc">{_'cena s DPH'}</span>
+                                </div>
+                                <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                                    {$productHelper->renderLastPrice()} <span class="price_desc">{_'cena s DPH'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {if !$disableEshop}
+                            <div class="btn-container">
+                                {if !$product->saleTerminated}
+                                    <button n:name="addToBasket" class="buy_btn" data-href="{plink 'addToCart!'}">{_'Koupit'}</button>
+                                {/if}
+                            </div>
+                        {else}
+                            <div class="btn-container">
+                                {if $product->type == 2}
+                                    <a n:href="Page: id => '11', wslug => 'kde-koupit'" class="buy_btn_link">{_'Kde koupit'}</a>
+                                {else}
+                                    <a n:href="Page: id => '8', wslug => 'kde-muzete-koupit'" class="buy_btn_link">{_'Kde koupit'}</a>
+                                {/if}
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+            {/form}
+        </div>
+    </div>
+        {/snippet}
+
+        {snippet productImage}
+            <div id="picture">
+                {if file_exists($mainImg->path)}
+                    <a href="{imgLink $mainImg->path, '1920x1080', 'shrink_only', null}" data-lightbox="roadtrip" data-title="{$mainImg->alt}">
+                        <img id="productMainImg" n:img="$mainImg->path, '1024x680', 'shrink_only', null" title="{$mainImg->alt}" alt="{$mainImg->alt}"/>
+                    </a>
+                {else}
+                    <a href="{$basePath}/assets/img/produkty/no-photo.png" data-lightbox="roadtrip" data-title="{_'Bez obrázku'}">
+                        <img id="productMainImg" n:img="'/asstes/img/produkty/no-photo.png', '1024x680'" title="{_'Bez obrázku'}" alt="{_'Bez obrázku'}"/>
+                    </a>
+                {/if}
+            </div>
+        {/snippet}
+
+    <div id="description" n:if="$product->webDescription">
+        {$product->webDescription|noescape}
+    </div>
+
+    <div id="specifications" n:if="$product->specInfo || $product->specDimensions || $product->specComponents || $product->specInputs || $product->specOutputs || $product->specFrequency || $product->specFormats || $product->specPowerSupply || $product->specMultiroom || $product->specOther || $product->specManual">
+        <div class="title">{_'Specifikace'}</div>
+        <div id="accordion">
+            {if $product->specInfo}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseInfo">{_'Informace o produktu'}</a>
+                <div id="collapseInfo" class="collapse">
+                    {$product->specInfo|noescape}
+                </div>
+            {/if}
+            {if $product->specDimensions}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseDimensions">{_'Rozměry'}</a>
+                <div id="collapseDimensions" class="collapse">
+                    {$product->specDimensions|noescape}
+                </div>
+            {/if}
+            {if $product->specComponents}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseComponents">{_'Komponenty'}</a>
+                <div id="collapseComponents" class="collapse">
+                    {$product->specComponents|noescape}
+                </div>
+            {/if}
+            {if $product->specInputs}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseInputs">{_'Vstupy'}</a>
+                <div id="collapseInputs" class="collapse">
+                    {$product->specInputs|noescape}
+                </div>
+            {/if}
+            {if $product->specOutputs}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseOutputs">{_'Výstupy'}</a>
+                <div id="collapseOutputs" class="collapse">
+                    {$product->specOutputs|noescape}
+                </div>
+            {/if}
+            {if $product->specFrequency}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseFrequency">{_'Frekvence'}</a>
+                <div id="collapseFrequency" class="collapse">
+                    {$product->specFrequency|noescape}
+                </div>
+            {/if}
+            {if $product->specFormats}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseFormats">{_'Přehrávané formáty'}</a>
+                <div id="collapseFormats" class="collapse">
+                    {$product->specFormats|noescape}
+                </div>
+            {/if}
+            {if $product->specPowerSupply}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapsePowerSupply">{_'Napájení'}</a>
+                <div id="collapsePowerSupply" class="collapse">
+                    {$product->specPowerSupply|noescape}
+                </div>
+            {/if}
+            {if $product->specMultiroom}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseMultiroom">{_'Multiroom'}</a>
+                <div id="collapseMultiroom" class="collapse">
+                    {$product->specMultiroom|noescape}
+                </div>
+            {/if}
+            {if $product->specOther}
+                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseOther">{_'Ostatní'}</a>
+                <div id="collapseOther" class="collapse">
+                    {$product->specOther|noescape}
+                </div>
+            {/if}
+            {if $product->specManual}
+            <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseManual">{_'Manuál'}</a>
+            <div id="collapseManual" class="collapse">
+                {$product->specManual|noescape}
+            </div>
+            {/if}
+        </div>
+    </div>
+    </div>
+
+    {if isset($images) && count($images) >= 1}
+        <div class="title_gal">{_'Galerie'}</div>
+        <div id="product_images_slider">
+            <div class="sly_container">
+                <div class="zone">
+                    <div class="controls center">
+                        <button class="btn prev">&#8249;</button>
+                        <button class="btn next">&#8250;</button>
+                    </div>
+                    <div class="frame" id="basic">
+                        <ul class="clearfix">
+                            {foreach $images as $img}
+                                <li class="product_img">
+                                    {if file_exists($img->path)}
+                                        <a href="{$basePath}/{$img->path}" data-lightbox="roadtrip" data-title="{$img->alt}">
+                                            <img n:img="$img->path" title="{$img->alt}" alt="{$img->alt}"/>
+                                        </a>
+                                    {else}
+                                        <a href="{$basePath}/assets/img/produkty/no-photo.png" data-lightbox="roadtrip" data-title="{_'Bez obrázku'}">
+                                            <img id="productMainImg" n:img="'/asstes/img/produkty/no-photo.png', '1024x680'" title="{_'Bez obrázku'}" alt="{_'Bez obrázku'}"/>
+                                        </a>
+                                    {/if}
+                                </li>
+                            {/foreach}
+                        </ul>
+                    </div>
+                </div>
+                {*<ul class="pages"></ul>*}
+            </div>
+        </div>
+        <script type="text/javascript" n:syntax="off">
+            var container = $(document).find("#product_images_slider");
+            var item = container.applySly(container.find(".product_img"));
+        </script>
+    {/if}
+
+    <div id="articles" n:if="$product->articles">
+        <div class="title_gal">{_'Vlastnosti'}</div>
+        {foreach $product->articles as $a}
+            {continueIf !$a->active}
+            <div class="article" n:if="$a->type == 1 && (file_exists($a->image) || file_exists($a->video))">
+                <div class="full-img" n:if="file_exists($a->image)">
+                    <img data-src="{$basePath}/{$a->image}" alt="{$a->name}" class="lazy">
+                </div>
+                <div class="full-video" n:if="file_exists($a->video)">
+                    <video width="100%" height="400" class="lazy" controls>
+                        <source data-src="{$basePath}/{$a->video}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            <div class="article right-text" n:if="$a->type == 2">
+                <div class="img">
+                    {if file_exists($a->image)}
+                        <img data-src="{$basePath}/{$a->image}" alt="{$a->name}" class="lazy">
+                    {/if}
+                </div>
+                <div class="text">
+                    <div class="text-content">
+                        <h3>{$a->name|noescape}</h3>
+                        {$a->content|noescape}
+                    </div>
+                </div>
+            </div>
+            <div class="article left-text" n:if="$a->type == 3">
+                <div class="text">
+                    <div class="text-content">
+                        <h3>{$a->name|noescape}</h3>
+                        {$a->content|noescape}
+                    </div>
+                </div>
+                <div class="img">
+                    {if file_exists($a->image)}
+                        <img data-src="{$basePath}/{$a->image}" alt="{$a->name}" class="lazy">
+                    {/if}
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>

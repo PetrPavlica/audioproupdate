@@ -1,0 +1,95 @@
+{block title}{_'Sledování zásilek'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Sledování zásilek'}
+</h3>
+
+    <div class="row">
+{ifset $shipmentsArr}
+    {foreach $shipmentsArr as $s}
+        <div class="col-sm-6 col-md-4">
+            <div class="well well-lg">
+                <table class="table table-bordered">
+                    <tbody>
+                        {if isset($s->statusInfo) && $s->statusInfo}
+                        <tr>
+                            <th>Číslo zásilky v DPD</th>
+                            <td>{$s->statusReference->id}</td>
+                        </tr>
+                        <tr>
+                            <th>Datum vložení do DPD</th>
+                            <td>
+                                {if $s->statusInfo->shipDate}
+                                    {var $date = date_create_from_format("Ymd His", $s->statusInfo->shipDate.' '.$s->statusInfo->shipTime)}
+                                    {$date|date:'j. n. Y H:i'}
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Datum doručení</th>
+                            <td>
+                                {if $s->statusInfo->deliveryDate}
+                                    {var $date = date_create_from_format("Ymd His", $s->statusInfo->deliveryDate.' '.$s->statusInfo->deliveryTime)}
+                                    {$date|date:'j. n. Y H:i'}
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Číslo pro sledování</th>
+                            <td>{$s->statusInfo->parcelNo}</td>
+                        </tr>
+                        <tr>
+                            <th>Váha</th>
+                            <td>{$s->statusInfo->weight} kg</td>
+                        </tr>
+                        <tr>
+                            <th>Odkaz pro sledování</th>
+                            <td>{if $s->statusInfo->dpdUrl}<a href="{$s->statusInfo->dpdUrl}" target="_blank">ZDE</a>{/if}</td>
+                        </tr>
+                        {/if}
+                        <tr>
+                            <th>Chybová zpráva</th>
+                            <td>{if isset($s->error) && $s->error}{$s->error->text}{/if}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {ifset $s->scans}
+                    <hr>
+                    <strong>Provedené skeny na zásilce</strong><br><br>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Kód skenu</th>
+                                <th>Popis</th>
+                                <th>Kód země</th>
+                                <th>Město</th>
+                                <th>PSČ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    {foreach $s->scans as $sc}
+                        <td>
+                        {if $sc->date && $sc->time}
+                            {var $date = date_create_from_format("Ymd His", $sc->date.' '.$sc->time)}
+                            {$date|date:'j. n. Y H:i'}
+                        {/if}
+                        </td>
+                        <td>{$sc->scanCode}</td>
+                        <td>{$sc->scanDescription}</td>
+                        <td>{$sc->countryCode}</td>
+                        <td>{$sc->city}</td>
+                        <td>{$sc->zipCode}</td>
+                    {/foreach}
+                        </tbody>
+                    </table>
+                {else}
+                    <strong>Zásilka nemá žádné skeny z depa.</strong>
+                {/ifset}
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    {/foreach}
+{/ifset}
+    </div>

@@ -1,0 +1,53 @@
+{foreach $renderForm->components as $itm}
+    {if get_class($itm) == 'Nette\Forms\Controls\HiddenField'}
+        {ifset $itm->control->attrs['autocomplete']}
+            {var $attrs = $itm->control->attrs}
+            <div class="form-group">
+                <label for="{$itm->control->name}" class="col-sm-4 control-label">{ifset $attrs['title']} {$attrs['title']} {/}</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                    <input
+                        {foreach $attrs as $n => $v}
+                        {if $n == 'value-autocmp'}
+                            value={$v}
+                            readonly="true"
+                    {elseif $n != 'type' && $n != 'disabled' && $n != 'name'}
+                    {$n}={$v}
+                    {/if}
+                    {/foreach}
+                    data-source="{link dataSource $dataSource}" data-to-send="{$dataSend}"
+                    data-output=".{$itm->control->name}-autocomplete" type="text" name="text{$itm->control->name}"
+                    id="text{$itm->control->name}" >
+                    <input name="{$itm->control->name}" id="{$itm->control->name}" data-success="{$dataSucc}" class="{$itm->control->name}-autocomplete" value="{$itm->value}" type="hidden">
+                    <span class="input-group-addon" style="border-radius: 3px;">
+                        <div class="remove-autocomplete-value"><i class="fa fa-times"></i></div>
+                </span>
+                    </div>
+                </div>
+            </div>
+        {else}
+            {input $itm}
+        {/ifset}
+    {elseif get_class($itm) == 'Nette\Forms\Controls\Checkbox' }
+        <div class="form-group">
+            <label class="col-sm-4 control-label"> </label>
+            <div class="col-sm-8">
+                {input $itm}
+            </div>
+        </div>
+    {elseif get_class($itm) == 'Nette\Forms\Controls\SubmitButton' }
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="singlebutton"></label>
+            <div class="col-md-8">
+                {input $itm, class=>'btn btn-primary'}
+            </div>
+        </div>
+    {else}
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">{$itm->caption}</label>
+            <div class="col-md-8">
+                {input $itm}
+            </div>
+        </div>
+    {/if}
+{/foreach}

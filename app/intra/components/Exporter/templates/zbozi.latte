@@ -1,0 +1,61 @@
+{contentType application/xml}
+<?xml version="1.0" encoding="utf-8"?>
+<SHOP xmlns="http://www.zbozi.cz/ns/offer/1.0">
+
+    {var $lowPrice = NULL}
+    {foreach $deliveryMethods as $d}
+        {continueIf ($d->heurekaCode == NULL || $d->heurekaCode == '')}
+        {if $lowPrice > $d->selingPrice || $lowPrice == NULL}
+            {var $lowPrice = $d->selingPrice}
+        {/if}
+    {/foreach}
+
+    {foreach $products as $product}
+        {php $productHelper->setProduct($product, $currency, true)}
+        <SHOPITEM>
+            <ITEM_ID>{$product->id}</ITEM_ID>
+            <PRODUCTNAME>{$product->name}</PRODUCTNAME>
+            <PRODUCT>{$product->name}</PRODUCT>
+            <DESCRIPTION>{html_entity_decode(str_replace('\n', '', strip_tags($product->webDescription)))}</DESCRIPTION>
+
+            {ifset $product->categories[0]->category->categoryZbozi}<CATEGORYTEXT>{$product->categories[0]->category->categoryZbozi}</CATEGORYTEXT>{/ifset}
+
+            <EAN n:if="$product->ean">{$product->ean}</EAN>
+            <PRODUCTNO n:if="$product->code">{$product->code}</PRODUCTNO>
+            <MANUFACTURER n:if="$product->productMark">{$product->productMark->publicName}</MANUFACTURER>
+            <URL>{link ProductDetail:detail id => $product->id, slug => $control->getSlug($product->name)}</URL>
+
+            <DELIVERY_DATE n:if="$product->count > 0">0</DELIVERY_DATE>
+            <DELIVERY_DATE n:if="$product->count <= 0">3</DELIVERY_DATE>
+
+            <PARAM n:foreach="$product->parameters as $param">
+                <PARAM_NAME>{$param->name}</PARAM_NAME>
+                <VAL>{$param->value}</VAL>
+            </PARAM>
+
+            {foreach $product->images as $img}
+                <IMGURL n:if="$img->isMain">{$basePath}/{$img->path}</IMGURL>
+            {/foreach}
+
+            {foreach $product->images as $img}
+                <IMGURL n:if="!$img->isMain">{$basePath}/{$img->path}</IMGURL>
+            {/foreach}
+
+            {var $sellPrice = $productHelper->getPrice()}
+
+            <PRICE_VAT>{$sellPrice|number:0:'.':''}</PRICE_VAT>
+
+            <EXTRA_MESSAGE n:if="$lowPrice == 0">free_delivery</EXTRA_MESSAGE>
+
+            <MAX_CPC n:if="is_numeric($product->zboziCPC) && $product->zboziCPC > 0">{$product->zboziCPC|number:2:',':''}</MAX_CPC>
+            <MAX_CPC_SEARCH n:if="is_numeric($product->zboziSearchCPC) && $product->zboziSearchCPC > 0">{$product->zboziSearchCPC|number:2:',':''}</MAX_CPC_SEARCH>
+
+            {ifset $product->gifts[0]}
+                {var $gift = $product->gifts[0]}
+                <EXTRA_MESSAGE>free_gift</EXTRA_MESSAGE>
+                <FREE_GIFT_TEXT>{$gift->gift->name}</FREE_GIFT_TEXT>
+            {/ifset}
+        </SHOPITEM>
+        {php $em->clear()}
+    {/foreach}
+</SHOP>

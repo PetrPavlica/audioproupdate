@@ -1,0 +1,766 @@
+
+#horni_lista {
+    padding-right: 20px;
+}
+
+#horni_lista #basket_path {
+
+}
+
+#horni_lista #basket_path .item {
+    color: #ed9535;
+    font-size: 1.5em;
+    border: 0px;
+    padding: 0px;
+}
+
+#horni_lista #basket_path .item .content {
+    padding: 8px 15px;
+}
+
+#horni_lista #basket_path .item.active {
+    color: #575757
+}
+
+#horni_lista #basket_path .item .step-num > div {
+
+    display: inline-block;
+
+    margin-right: 15px;
+    background-color: #ed9535;
+    color: #fff;
+
+    font-size: 0.8em;
+    font-weight: bold;
+
+    padding: 2px 8px;
+
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#horni_lista #basket_path .item.active .step-num > div {
+    background-color: #575757;
+    color: #fff;
+}
+
+#horni_lista #basket_path .arrow {
+
+    height: 59px;
+    width: 22px;
+    background: url("../img/icons/basket/basket_steps_separator.png") no-repeat;
+    background-size: contain;
+
+    margin-left: 20px;
+}
+
+#basket_container {
+    padding: 40px 20px 20px 20px;
+}
+
+/* produkty v kosiku */
+
+#basket_container table.product tr {
+    vertical-align: middle;
+}
+
+#basket_container table.product tr td {
+    padding: 15px 10px;
+}
+
+#basket_container table.product tr.rest td {
+    border-bottom: 1px #c1c1c1 solid;
+}
+
+#basket_container table.product tr td:first-child img {
+    width: 120px;
+}
+
+#basket_container table.product tr:not(.rest) td:last-child {
+    vertical-align: middle;
+    padding-left: 20px;
+    padding-right: 0px;
+}
+
+#basket_container table.product .details .title h3 {
+    font-size: 1.2em;
+    color: #575757;
+}
+
+#basket_container table.product .details .skladem {
+    font-weight: bold;
+    font-size: 1em;
+}
+
+#basket_container table.product .details .pojisteni {
+    color: #7c7c7c;
+    font-size: 0.9em;
+}
+
+#basket_container table.product .details .pojisteni label {
+    margin-top: -3px;
+    padding-left: 10px;
+}
+
+#basket_container table.product .details .pojisteni span {
+    color: #575757;
+    font-weight: bold;
+}
+
+#basket_container table.product .details .cena_s_dph, #basket_container table.product .details .cena_bet_dph {
+    text-align: right;
+    line-height: 1em;
+}
+
+#basket_container table.product .details .cena_s_dph span, #basket_container table.product .details .cena_bet_dph span {
+
+}
+
+/* radek s pojistenim */
+
+#basket_container table.product tr.rest .pojisteniContainer .pojisteni {
+    padding: 5px 0px;
+    flex: 0 1 100%;
+}
+
+#basket_container table.product tr.rest .pojisteniContainer .pojisteni .cena_s_dph {
+    padding-left: 15px;
+}
+
+#basket_container table.product tr.rest .pojisteniContainer .pojisteni .pojisteni_s_dph_ks {
+    text-align: center;
+}
+
+/* jedntolive bloky v kosiku */
+
+/* nadpisy*/
+
+#basket_container .block .border > .nadpis {
+    margin-top: -30px;
+}
+
+#basket_container .block h1 {
+    font-size: 1.5em;
+    padding: 0px 20px;
+    background-color: #fff;
+    font-weight: bold;
+}
+
+#basket_container .block h1.indent {
+    margin-left: 30px;
+}
+
+#basket_container .block h2 {
+    font-size: 1.4em;
+}
+
+/* samotny bloky */
+
+#basket_container .block:not(:first-child):not(:nth-child(2)) {
+    margin-top: 35px;
+}
+
+#basket_container .block {
+    -webkit-box-flex: 0 1 50%;
+    -moz-box-flex: 0 1 50%;
+    -webkit-flex: 0 1 50%;
+    -ms-flex: 0 1 50%;
+    flex: 0 1 50%;
+
+    padding: 20px 0px;
+}
+
+#basket_container .block:nth-child(2n + 1) {
+    padding-right: 10px;
+}
+
+#basket_container .block:nth-child(2n + 2) {
+    padding-left: 10px;
+}
+
+#basket_container .block .border {
+    -webkit-box-flex: 0 1 100%;
+    -moz-box-flex: 0 1 100%;
+    -webkit-flex: 0 1 100%;
+    -ms-flex: 0 1 100%;
+    flex: 0 1 100%;
+
+    border: 1px #c1c1c1 solid;
+    padding: 10px 10px 20px 10px;
+}
+
+#basket_container .block img.info {
+    width: 15px;
+}
+
+#basket_container .block img, #basket_container .block img.info {
+    margin-left: 12px;
+    max-width: 100px;
+}
+
+#basket_container .block input:not([type=checkbox]):not([type=radio]), .nice-select, textarea {
+    margin-top: 6px;
+}
+
+#basket_container .block table tr {
+    vertical-align: middle;
+}
+
+#basket_container .block table tr td {
+    padding: 10px;
+}
+
+/* doprava a platba */
+
+#basket_container #doprava_platba #doprava .cena, #basket_container #doprava_platba #platba .cena {
+    color: #575757;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#basket_container #doprava_platba #doprava img.info, #basket_container #doprava_platba #platba img.info {
+    width: 15px;
+}
+
+/* pouze doprava */
+
+#basket_container #doprava_platba #doprava .dostupnost {
+    color: #ed9535;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* pouze platba */
+
+#basket_container #doprava_platba #platba .typ_platby {
+    color: #4a4a4a;
+    font-size: 0.9em;
+}
+
+#basket_container #doprava_platba #platba .typ_platby span {
+    color: #575757;
+    font-weight: bold;
+}
+
+#basket_container #doprava_platba #platba table tr td {
+    padding: 20px 10px;
+}
+
+/* Osobni udaje */
+
+#basket_container .other #advanced, #basket_container .other #summary {
+    -webkit-box-flex: 0 1 50%;
+    -moz-box-flex: 0 1 50%;
+    -webkit-flex: 0 1 50%;
+    -ms-flex: 0 1 50%;
+    flex: 0 1 50%;
+}
+
+#basket_container .other #slevovy_poukaz .button {
+    font-weight: normal;
+}
+
+#basket_container .other #advanced {
+    padding: 20px 10px 20px 0px;
+    color: #878787;
+}
+
+#basket_container .other #slevovy_poukaz p {
+    font-size: 1.1em;
+}
+
+#basket_container .other #summary {
+    color: #252525;
+    padding: 20px 0px 20px 20px;
+}
+
+#basket_container .other #summary {
+    width: 80%;
+    padding-right: 45px;
+}
+
+#basket_container .other #summary table tr td:last-child {
+    text-align: right;
+}
+
+#basket_container .other #summary table tr:nth-last-child(2) td {
+    padding-bottom: 8px;
+}
+
+#basket_container .other #summary table tr.celkem_s_dph td {
+    color: #575757;
+    font-weight: bold;
+    font-size: 1.2em;
+    border-top: 1px #c1c1c1 solid;
+
+    padding-top: 7px;
+}
+
+#basket_container > .fields_container {
+    -webkit-box-flex: 0 1 100%;
+    -moz-box-flex: 0 1 100%;
+    -webkit-flex: 0 1 100%;
+    -ms-flex: 0 1 100%;
+    flex: 0 1 100%;
+
+    margin-top: 40px;
+    padding: 0px;
+}
+
+#basket_container .pridat_zbozi, #horni_lista .fields_container .pridat_zbozi {
+    padding-left: 28px;
+    position: relative;
+}
+
+#basket_container .pridat_zbozi:before, #horni_lista .fields_container .pridat_zbozi:before {
+
+    width: 11px;
+    height: 11px;
+
+    background: url("../img/icons/basket/arrow_pridat_zbozi.png") no-repeat;
+    background-size: cover;
+}
+
+#basket_container .basket_zpet, #horni_lista .fields_container .basket_zpet {
+    padding-left: 28px;
+    position: relative;
+}
+
+#basket_container .basket_zpet:before, #horni_lista .fields_container .basket_zpet:before {
+
+    width: 13px;
+    height: 20px;
+
+    background: url("../img/icons/basket/arrow_back.png") no-repeat;
+    background-size: contain;
+}
+
+.recapitulation h1{
+    font-size: 2em;
+}
+
+.recapitulation .dragscroll{
+    padding: 0px 8px;
+    max-height: none !important;
+}
+
+.recapitulation table.product tr td{
+    position: relative;
+    padding-top: 4px !important;
+    padding-bottom: 5px !important;
+}
+
+.recapitulation table.product tr td.product-image{
+    min-width: 60px;
+}
+
+.recapitulation table.product tr td img{
+    width: 60px !important;
+}
+
+.product .details.services td{
+    font-size: 0.8em !important;
+}
+
+.recapitulation .osobni_data{
+    margin-top: 15px;
+}
+
+.recapitulation .osobni_data > div{
+
+    padding: 5px 8px;
+}
+
+.recapitulation .osobni_data table{
+    width: 100%;
+}
+
+.recapitulation .osobni_data table tr td{
+    font-size: 0.9em;
+}
+
+
+/*
+        responzivita
+*/
+
+@media (max-width: 1366px) {
+
+}
+
+@media (max-width: 1280px) {
+
+}
+
+@media (max-width: 1024px) {
+
+    #basket_container .other #summary {
+        padding-right: 35px;
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    #basket_container .other #summary {
+        padding-right: 40px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    #basket_path {
+        -webkit-box-flex: 0 1 100%;
+        -moz-box-flex: 0 1 100%;
+        -webkit-flex: 0 1 100%;
+        -ms-flex: 0 1 100%;
+        flex: 0 1 100%;
+
+        margin-top: 15px;
+    }
+
+    #horni_lista #basket_path .item {
+        -webkit-box-flex: 0 1 33.33%;
+        -moz-box-flex: 0 1 33.33%;
+        -webkit-flex: 0 1 33.33%;
+        -ms-flex: 0 1 33.33%;
+        flex: 0 1 33.33%;
+
+        font-size: 1.2em;
+    }
+
+    .fields_container {
+        margin-top: 15px;
+        font-size: 1.2em !important;
+    }
+
+    #horni_lista #basket_path .item .content {
+        -webkit-box-flex-wrap: wrap;
+        -moz-box-flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+
+        -webkit-box-justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        justify-content: center;
+    }
+
+    #horni_lista #basket_path .item .step-num {
+        -webkit-box-flex: 0 1 100%;
+        -moz-box-flex: 0 1 100%;
+        -webkit-flex: 0 1 100%;
+        -ms-flex: 0 1 100%;
+        flex: 0 1 100%;
+
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+
+        -webkit-box-justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
+        -ms-justify-content: center;
+        justify-content: center;
+    }
+
+    #horni_lista #basket_path .item .step-num > div {
+        margin-right: 0px;
+    }
+
+    #horni_lista #basket_path .arrow {
+        margin-left: 0px;
+        width: 19px;
+    }
+
+    #basket_container table.product tr td {
+        vertical-align: middle;
+    }
+
+    #basket_container table.product .details .cena_bez_dph, #basket_container table.product .details .cena_s_dph {
+        white-space: nowrap;
+    }
+
+    #basket_container table.product .details .cena_bez_dph .castka, #basket_container table.product .details .cena_s_dph .castka, #basket_container table.product .details .pojisteni_s_dph_value {
+        width: 100%;
+        display: block;
+        padding-bottom: 8px;
+    }
+
+    #basket_container .block, #basket_container .block .sub_block, #basket_container .other #summary, #basket_container .other #advanced {
+        -webkit-box-flex: 0 1 100%;
+        -moz-box-flex: 0 1 100%;
+        -webkit-flex: 0 1 100%;
+        -ms-flex: 0 1 100%;
+        flex: 0 1 100%;
+    }
+
+    #basket_container .block:nth-child(2n + 1) {
+        padding-right: 0px;
+    }
+
+    #basket_container .block:nth-child(2n + 2) {
+        padding-left: 0px;
+    }
+
+    #basket_container .block:not(:first-child):not(:nth-child(2)) {
+        margin-top: 0px;
+    }
+
+    #basket_container .block:not(:first-child) {
+        margin-top: 35px;
+    }
+
+    #doprava_platba .sub_block:nth-child(2) {
+        margin-top: 30px;
+    }
+
+    #basket_container .other #summary {
+        padding-right: 20px;
+    }
+
+    #basket_container .other #advanced {
+        order: 2;
+    }
+
+    #basket_container .other #summary {
+        order: 1;
+    }
+
+    #basket_container .other #summary table tr td:last-child {
+        white-space: nowrap;
+    }
+
+    #basket_container {
+        padding: 0px 10px 20px 10px;
+    }
+
+    #still_have_account h1 {
+        font-size: 1.3em;
+    }
+
+    .recapitulation .osobni_data > div{
+        -webkit-box-flex: 0 1 50%;
+        -moz-box-flex: 0 1 50%;
+        -webkit-flex: 0 1 50%;
+        -ms-flex: 0 1 50%;
+        flex: 0 1 50%;
+        margin-left: 0px !important;
+    }
+
+}
+
+@media (max-width: 640px) {
+
+    #horni_lista #basket_path .item {
+        font-size: 1em;
+        padding: 8px 5px;
+    }
+
+    #horni_lista #basket_path .item .content {
+        -webkit-box-flex: 0 1 100%;
+        -moz-box-flex: 0 1 100%;
+        -webkit-flex: 0 1 100%;
+        -ms-flex: 0 1 100%;
+        flex: 0 1 100%;
+
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+
+        align-items: center;
+        -webkit-box-align-content: center;
+        -webkit-align-content: center;
+        -moz-align-content: center;
+        -ms-align-content: center;
+        align-content: center;
+
+        padding: 8px;
+    }
+
+    #basket_container table.product .details .title h3 {
+        font-size: 1em;
+    }
+
+    #basket_container table.product .details .skladem {
+        font-size: 0.8em;
+        text-align: left;
+    }
+
+    #basket_container table.product .details .pojisteni {
+        text-align: left;
+    }
+
+    .fields_container {
+        font-size: 1.0em !important;
+    }
+
+    #basket_container table.product .details .skladem {
+        text-align: center;
+        font-size: 1em;
+    }
+
+    #basket_container table.product .details a {
+        font-size: 1em;
+    }
+
+    #basket_container table.product .new_row td {
+        border-bottom: 0px !important;
+        vertical-align: middle;
+    }
+
+    #basket_container table.product .new_row td:first-child {
+        width: 130px;
+    }
+
+    #basket_container table.product .new_row_title_div .title h3 {
+        font-size: 1em !important;
+        padding: 0px !important;
+    }
+
+    #basket_container table.product .new_row_image_div {
+        display: inline-block;
+        float: left;
+    }
+
+    #basket_container table.product .new_row_image_div img {
+        vertical-align: top;
+        width: 90px !important;
+        min-width: 90px;
+    }
+
+    #basket_container table.product .rest .pojisteni > div {
+        flex: 0 1 50%;
+    }
+
+    #basket_container table.product .rest .pojisteni .cena_s_dph {
+        white-space: nowrap;
+    }
+
+    #basket_container table.product .rest .pojisteni .pojisteni_s_dph_value {
+        display: inline-block;
+        width: auto;
+    }
+
+    #basket_container table.product .remove_row_td {
+        padding: 6px 0px !important;
+        background-color: #dfdfdf;
+    }
+
+    #basket_container table.product .remove_row_div {
+        padding: 0px !important;
+    }
+
+    #basket_container table.product .remove_row_div a {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    #basket_container table.product .remove_row_div img {
+        width: 20px !important;
+        min-width: 20px !important;
+        float: none !important;
+    }
+
+    #basket_container .other #summary table {
+        width: 100%;
+        margin-right: 0px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    #horni_lista #basket_path .item .content .text{
+        display: none;
+    }
+
+    #horni_lista #basket_path .arrow {
+        height: 20px;
+    }
+
+    #horni_lista .fields_container {
+        font-size: 0.8em;
+    }
+
+    #basket_container table.product tr td {
+        padding: 4px 0px;
+        font-size: 0.8em;
+    }
+
+    #basket_container .other #summary {
+        padding-right: 3px;
+    }
+
+    #still_have_account {
+        text-align: center;
+    }
+
+    #still_have_account h1 {
+        font-size: 1.1em;
+    }
+
+    #still_have_account .login_link {
+        margin-top: 5px;
+    }
+
+    #basket_container .other #advanced, #basket_container .other #summary {
+        padding: 3px 3px;
+    }
+
+    #basket_container > .fields_container {
+        margin-top: 8px;
+    }
+
+    #basket_container .other #advanced #slevovy_poukaz {
+        margin-top: 10px;
+    }
+
+    #basket_container .other #advanced #slevovy_poukaz .fields_container {
+        margin-top: 0px;
+    }
+
+    .recapitulation .osobni_data > div{
+        -webkit-box-flex: 0 1 100%;
+        -moz-box-flex: 0 1 100%;
+        -webkit-flex: 0 1 100%;
+        -ms-flex: 0 1 100%;
+        flex: 0 1 100%;
+        margin-left: 0px !important;
+    }
+
+    .recapitulation .product_items tr td{
+        min-width: 80px;
+    }
+
+    .recapitulation table.product tr td.product-image{
+        min-width: 100px;
+    }
+
+}
+
+@media (max-width: 320px) {
+
+    #basket_container .block img {
+        margin-left: 0px;
+    }
+
+}
+
+.img_left_arrow {
+    width: 8px;
+    transform: rotate(180deg);
+    margin-right: 5px;
+}
+
+.border-none {
+    border: none !important;
+}

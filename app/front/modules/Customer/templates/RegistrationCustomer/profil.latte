@@ -1,0 +1,734 @@
+{block title}
+    {if isset($customerArr)}
+        <h3>{_'Úprava profilu uživatele'}</h3>
+    {else}
+        <h3>{_'Registrace nového uživatele'}</h3>
+    {/if}
+{/block}
+{block content}
+
+<div id="content">
+    <br><br>
+    <div class="nadpis blue bold text-center">
+        <h1>{_'Můj účet'}</h1>
+        <br>
+        {if $user->isInRole('visitor')}
+            {$user->getIdentity()->data['name']} {$user->getIdentity()->data['surname']}
+        {else}
+            {$user->getIdentity()->data['name']}
+        {/if}
+        <br/><br/>
+    </div>
+
+    <div class="tabs_container">
+        {ifset $customerArr}
+            <div class="tabs">
+                <div class="tab active">{_'moje objednávky'}</div>
+                <div class="tab">{_'profil'}</div>
+                <div class="tab">{_'odstoupení od smlouvy'}</div>
+                <div class="tab">{_'reklamace'}</div>
+                <div class="clear"></div>
+                <div class="line"></div>
+            </div>
+        {/ifset}
+        <div class="tabs_content">
+            {ifset $customerArr}
+                <div class="tab_content visible">
+                    {if count($orders)}
+                        <table class="responziveTable" width="100%">
+                            <tr>
+                                <td class="bold">
+                                    {_'Datum'}
+                                </td>
+                                <td class="bold">
+                                    {_'Číslo objednávky / VS'}
+                                </td>
+                                <td class="bold" width="140">
+                                    {_'Částka'}
+                                </td>
+                                <td class="bold">
+                                    {_'Stav'}
+                                </td>
+                                <td class="bold">
+                                    {_'Dokumenty'}
+                                </td>
+                                <td class="bold">
+                                    {_'Kde se nachází zásilka?'}
+                                </td>
+                            </tr>
+                            {foreach $orders as $order}
+                                <tr>
+                                    <td>
+                                        <strong>{$order->foundedDate|date:'j. n. Y'} </strong>
+                                    </td>
+                                    <td>
+                                        <strong> {$order->variableSymbol} </strong>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            {$order->currency->markBefore} {$order->totalPrice|number:2:'.':' '} {$order->currency->markBehind}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <strong> {$order->orderState->nameForCustomer|translate} </strong>
+                                    </td>
+                                    <td>
+                                        <div n:if="!$order->codeInvoice">
+                                        <a n:href="printInvoice! idInvoice => $order->id, isProforma => 1">
+                                            <img style="height: 20px;" src="{$basePath}/assets/img/pdf-ico.png"/>
+                                            &nbsp;{_'Proforma faktura'}
+                                        </a>
+                                        </div>
+                                        <div n:if="$order->codeInvoice">
+                                        <a n:href="printInvoice! idInvoice => $order->id, isProforma => 0">
+                                                <img style="height: 20px;" src="{$basePath}/assets/img/pdf-ico.png"/>
+                                                &nbsp;{_'Faktura č.'} {$order->codeInvoice}
+                                            </a>
+                                            </div>
+                                            <div n:if="$order->codeCreditNote">
+                                            <a n:href="printInvoice! idInvoice => $order->id, isProforma => 0, isCreditNote => 1">
+                                                <img style="height: 20px;" src="{$basePath}/assets/img/pdf-ico.png"/>
+                                                &nbsp;{_'Dobropis č.'} {$order->codeCreditNote}
+                                            </a>
+                                            </div>
+                                    </td>
+                                    <td>
+                                        <a n:href=":RegistrationCustomer:trace id => $order->id" n:if="$allowTrace[$order->id]">
+                                            &nbsp;{_'Zobrazit sledování'}
+                                        </a>
+                                        {ifset $dpdTrack[$order->id]}
+                                            {if $allowTrace[$order->id]}<br><br>{/if}
+                                            {foreach $dpdTrack[$order->id] as $t}
+                                                <a href="{$t->dpdUrl}" target="_blank">Zásilka č. {$t->shipmentId}</a>
+                                                {if !$iterator->isLast()}<br>{/if}
+                                            {/foreach}
+                                        {/ifset}
+                                    </td>
+                                </tr>
+
+                                {*if count($order->refund)>1}
+                                    {foreach $order->refund as $refund}
+                                        <tr>
+                                            <td>
+                                                <strong>{$refund->foundedDate|date:'j. n. Y'} </strong>
+                                            </td>
+                                            <td>
+                                                <strong> {$iterator->getCounter()}
+                                                    . {_'částečná úhrada objednávky č.'} {$order->variableSymbol} </strong>
+                                            </td>
+                                            <td>
+                                                <strong>
+                                                    {$order->currency->markBefore} {$refund->value|number:2:'.':' '} {$order->currency->markBehind}
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                <strong> </strong>
+                                            </td>
+                                            <td>
+                                            </td>
+                                            <td>
+                                                <a n:href="printReceipt! idRefund => $refund->id">
+                                                    <img style="height: 20px;" src="{$basePath}/assets/img/pdf-ico.png"/>
+                                                    &nbsp;{_'stáhnout'}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                {/if*}
+                            {/foreach}
+                        </table>
+                    {else}
+                        <h3 class="text-center">{_'Ještě u nás nemáte žádné objednávky!'}</h3>
+                        <br/><br/><br/><br/><br/><br/>
+                    {/if}
+                </div>
+            {/ifset}
+
+            <div class="tab_content {if !isset($customerArr)} visible {/if}">
+
+                <div id="registrace">
+
+                    {form ownRegistrationForm}
+                        {input id}
+
+                        <div class="fields_container center">
+                            <div class="toggles_switch toggle toggle-modern" data-checkbox="#typ_podnikatele" data-show='{"target":".firmy_udaje","secondClick":"hide"}'></div>
+                            {input isCompany}
+                        </div>
+
+                        <div class="block flexElem flexWrap alignLeft">
+
+                            <div class="sub_block">
+
+                                <div class="nadpis blue bold">
+                                    <h3>{_'Osobní údaje'}</h3>
+                                </div>
+
+                                <table class="responzive form_table small_fields full_fields_size">
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Jméno'}:</label>
+                                        </td>
+                                        <td>
+                                            {input name}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Příjmení'}:</label>
+                                        </td>
+                                        <td>
+                                            {input surname}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Ulice'}</label>
+                                        </td>
+                                        <td>
+                                            {input street}
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Město'}:</label>
+                                        </td>
+                                        <td colspan="3">
+                                            {input city}
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'PSČ'}:</label>
+                                        </td>
+                                        <td>
+                                            {input zip}
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Stát'}:</label>
+                                        </td>
+                                        <td>
+                                            {input country}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Telefon'}:</label>
+                                        </td>
+                                        <td>
+                                            {input phone}
+                                        </td>
+                                    </tr>
+
+                                    <tr class="firmy_udaje" style="display: none;">
+                                        <td>
+                                            <label>{_'Název firmy'}:</label>
+                                        </td>
+                                        <td>
+                                            {input company}
+                                        </td>
+                                    </tr>
+                                    <tr class="firmy_udaje" style="display: none;">
+                                        <td>
+                                            <label>{_'IČO'}:</label>
+                                        </td>
+                                        <td>
+                                            {input idNo}
+                                        </td>
+                                    </tr>
+                                    <tr class="firmy_udaje" style="display: none;">
+                                        <td>
+                                            <label>{_'DIČ'}:</label>
+                                        </td>
+                                        <td>
+                                            {input vatNo}
+                                        </td>
+                                    </tr>
+                                    <tr class="firmy_udaje" style="display: none;">
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <div class="checkbox_container">
+                                                <div>
+                                                    {input vatPay}
+                                                </div>
+                                                <div>
+                                                    <label>{_'Plátce DPH?'}</label>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                            <div class="sub_block dodaci_adresa_udaje">
+
+                                <div class="nadpis blue bold">
+                                    <h3>{_'Údaje adresáta'}</h3>
+                                </div>
+
+                                <table class="responzive form_table small_fields full_fields_size">
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Jméno'}:</label>
+                                        </td>
+                                        <td>
+                                            {input nameDelivery}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Příjmení'}:</label>
+                                        </td>
+                                        <td>
+                                            {input surnameDelivery}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Ulice'}</label>
+                                        </td>
+                                        <td>
+                                            {input streetDelivery}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Město'}:</label>
+                                        </td>
+                                        <td colspan="3">
+                                            {input cityDelivery}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'PSČ'}:</label>
+                                        </td>
+                                        <td>
+                                            {input zipDelivery}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Stát'}:</label>
+                                        </td>
+                                        <td>
+                                            {input countryDelivery}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Telefon'}:</label>
+                                        </td>
+                                        <td>
+                                            {input phoneDelivery}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+                            <div class="flex100 checkbox_container flexElem" style="margin-top: 10px;">
+                                <div>
+                                    {input deliveryToOther}
+                                    {*<input id="dodaci_adresa_enable" class="scroll-to icheck" type="checkbox" value="1" data-scroll-to=".dodaci_adresa_udaje"/>*}
+                                </div>
+                                <div><label>{_'Dodací adresa jiná než fakturační'}</label></div>
+
+                            </div>
+
+                            <div class="sub_block">
+
+                                <div class="nadpis blue bold">
+                                    <h3>{_'Údaje k účtu'}</h3>
+                                </div>
+
+                                <table class="responzive form_table small_fields full_fields_size">
+                                    <tr>
+                                        <td>
+                                            <label class="">{_'Email'}:</label>
+                                        </td>
+                                        <td colspan="3">
+                                            {input email}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>{_'Změna hesla'}:</label>
+                                        </td>
+                                        <td>
+                                            {input password}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>{_'Potvrzení hesla'}:</label>
+                                        </td>
+                                        <td>
+                                            {input password2}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flexElem alignCenter">
+
+                            <div id="podminky_registrace" class="sub_block">
+
+                                <script type="text/javascript">
+
+                                    $(document).on("ifChanged", "#dodaci_adresa_enable", function () {
+
+                                        var fields = $(document).find(".dodaci_adresa_udaje").find("input,textarea,select");
+
+                                        if ($(this).is(":checked")) {
+                                            fields.prop("disabled", false);
+                                        } else {
+                                            fields.prop("disabled", true);
+                                        }
+
+                                        fields.filter("select").each(function () {
+                                            $(this).niceSelect("update");
+                                        });
+                                    });
+
+
+                                    $(document).ready(function () {
+                                        var check = $(document).find("#dodaci_adresa_enable");
+                                        var fields = $(document).find(".dodaci_adresa_udaje").find("input,textarea,select");
+
+                                        if (check.is(":checked")) {
+                                            fields.prop("disabled", false);
+                                        } else {
+                                            fields.prop("disabled", true);
+                                        }
+                                    });
+                                </script>
+
+                                <div class="fields_container left" style="padding-left: 138px;">
+                                    {input send, class=>"dialog-handler btn btn-default", data-dialog-options=>'{"applyAfterClicks":"3","content":"#contact_dialog"}'}
+                                </div>
+                            </div>
+                        </div>
+                    {/form}
+                </div>
+            </div>
+
+            <div class="tab_content {if !isset($customerArr)} visible {/if}">
+                <div id="registrace">
+                    <div id="content" class="clanekA">
+                        <div class="nadpis blue bold">
+                            <h1>{_'Formulář odstoupení od smlouvy:'}</h1>
+                            <br/><br/>
+                        </div>
+
+                        <div class="block flexElem flexWrap alignLeft">
+
+                            <div class="sub_block">
+
+                                {form backOutForm}
+
+                                    {input id}
+
+                                    <table class="responzive form_table small_fields full_fields_size">
+
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Jméno'}:</label>
+                                            </td>
+                                            <td>
+                                                {input name}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Příjmení'}:</label>
+                                            </td>
+                                            <td>
+                                                {input surname}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Ulice a číslo popisné'}</label>
+                                            </td>
+                                            <td>
+                                                {input street}
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Město'}:</label>
+                                            </td>
+                                            <td colspan="3">
+                                                {input city}
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'PSČ'}:</label>
+                                            </td>
+                                            <td>
+                                                {input zip}
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Telefon'}:</label>
+                                            </td>
+                                            <td>
+                                                {input phone}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Email'}:</label>
+                                            </td>
+                                            <td>
+                                                {input email}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Označení zboží'}:</label>
+                                            </td>
+                                            <td>
+                                                {input product}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Datum vzniku smlouvy'}:</label>
+                                            </td>
+                                            <td>
+                                                {input conclusion_date, data-date-settings=>'{"currentDate":"false"}'}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Datum převzetí převzetí zboží'}:</label>
+                                            </td>
+                                            <td>
+                                                {input taken_date, data-date-settings=>'{"currentDate":"false"}'}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Kupní cena'}:</label>
+                                            </td>
+                                            <td>
+                                                {input product_price}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Cena poštovného'}:</label>
+                                            </td>
+                                            <td>
+                                                {input postage_price}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Bankovní účet'}:</label>
+                                            </td>
+                                            <td>
+                                                {input bank_account}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="required">
+                                                <label>{_'Příloha koupního dokladu'}:</label>
+                                            </td>
+                                            <td>
+                                                {input attachment}
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="fields_container left" style="padding-left: 138px;">
+                                        {input send, class=>"dialog-handler btn btn-default", data-dialog-options=>'{"applyAfterClicks":"3","content":"#contact_dialog"}'}
+                                    </div>
+
+                                {/form}
+
+                            </div>
+
+                            <div class="sub_block">
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab_content {if !isset($customerArr)} visible {/if}">
+                <div id="registrace">
+                    <div id="content" class="clanekA">
+                        <div class="nadpis blue bold">
+                            <h1>{_'Reklamační formulář:'}</h1>
+                            <br/><br/>
+                        </div>
+
+                        <div class="block flexElem flexWrap alignLeft">
+
+
+                            {form reclamationForm}
+
+                                {input id}
+
+                                <table class="responzive form_table small_fields half_fields_size">
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Jméno'}:</label>
+                                        </td>
+                                        <td>
+                                            {input name}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Příjmení'}:</label>
+                                        </td>
+                                        <td>
+                                            {input surname}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Ulice a číslo popisné'}</label>
+                                        </td>
+                                        <td>
+                                            {input street}
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Město'}:</label>
+                                        </td>
+                                        <td colspan="3">
+                                            {input city}
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'PSČ'}:</label>
+                                        </td>
+                                        <td>
+                                            {input zip}
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Telefon'}:</label>
+                                        </td>
+                                        <td>
+                                            {input phone}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Email'}:</label>
+                                        </td>
+                                        <td>
+                                            {input email}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Reklamované zboží'}:</label>
+                                        </td>
+                                        <td>
+                                            {input product}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Datum prodeje'}:</label>
+                                        </td>
+                                        <td>
+                                            {input buy_date, data-date-settings=>'{"currentDate":"false"}'}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Číslo kupního dokladu'}:</label>
+                                        </td>
+                                        <td>
+                                            {input purchase_number}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Popis závady'}:</label>
+                                        </td>
+                                        <td>
+                                            {input description}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Obsah balení při předání'}:</label>
+                                        </td>
+                                        <td>
+                                            {input package_content}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Preferovaný způsob vyřízení reklamace'}:</label>
+                                            <span class="notice">(Před volbou způsobu vyřízení reklamace se seznamte s bodem „Práva a povinnosti z vadného plnění“ obchodních podmínek)</span>
+                                        </td>
+                                        <td>
+                                            {ifset $radios}
+                                            {foreach $radios->items as $key => $label}
+                                                <div class="radio_container">
+                                                    <div>
+                                                        <div>
+                                                            <input n:name="reclamation_way:$key" class="icheck icheck_blue radiolabel" {if $iterator->first}checked="true"{/if}>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text"> {$label} </div>
+                                                </div>
+                                            {/foreach}
+                                            {/ifset}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="required">
+                                            <label>{_'Datum uplatnění reklamace'}:</label>
+                                        </td>
+                                        <td>
+                                            {input reclamation_date}
+                                        </td>
+                                    </tr>
+
+                                </table>
+
+                                <div class="fields_container center">
+                                    {input send, class=>"dialog-handler btn btn-default", data-dialog-options=>'{"applyAfterClicks":"3","content":"#contact_dialog"}'}
+                                </div>
+
+                            {/form}
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

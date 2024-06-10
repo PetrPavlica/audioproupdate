@@ -1,0 +1,71 @@
+{block title}
+<h3>{_'Moje objednávky'}</h3>
+
+{/block}
+{block content}
+
+<div class="register_account">
+    <div class="wrap">
+        <h2>{_'Moje objednávky'}</h2>
+        <hr />
+        <br>
+        {if count($orders)}
+            <table class="basketContent responziveTable" width="100%">
+                <tr>
+                    <td class="bold">
+                        {_'Datum objednání'}
+                    </td>
+                    <td class="bold">
+                        {_'Číslo objednávky'}
+                    </td>
+                    <td class="bold">
+                        {_'Částka'}
+                    </td>
+                    <td class="bold">
+                        {_'Stav'}
+                    </td>
+                    <td class="bold">
+                        {_'Proforma faktura'}
+                    </td>
+                    <td class="bold">
+                        {_'Faktura - daňový doklad'}
+                    </td>
+                </tr>
+                {foreach $orders as $order}
+                    <tr>
+                        <td>
+                            <strong>{$order->foundedDate|date:'j. n. Y'} </strong>
+                        </td>
+                        <td>
+                            <strong> {$order->id} </strong>
+                        </td>
+                        <td>
+                            <strong>
+                                {$order->currency->markBefore} {$order->totalPrice|number:2:'.':' '} {$order->currency->markBehind}
+                            </strong>
+                        </td>
+                        <td>
+                            <strong> {$order->orderState->nameForCustomer|translate} </strong>
+                        </td>
+                        <td>
+                            TODO proforma
+                        </td>
+                        <td>
+                            TODO faktura
+                        </td>
+                    </tr>
+                {/foreach}
+            </table>
+        {else}
+            <h3>{_'Ještě u nás nemáte žádné objednávky!'}</h3>
+            <br /><br /><br /><br /><br /><br />
+        {/if}
+        <br />
+        <div class="basketBtns flexElem">
+            <div class="flex flexElem alignElemsLeft"><a class="basketBtn" n:href=":Products:list">{_'Zpět k nakupování'}</a></div>
+        </div>
+        <br /><br /><br /><br />
+        <br /><br /><br /><br /><br />
+    </div>
+</div>
+

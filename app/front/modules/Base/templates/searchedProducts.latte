@@ -1,0 +1,40 @@
+{var $slug = \Nette\Utils\Strings::webalize($product->name)}
+{if $type == 'addCompare'}
+<a href="{$link}">
+    {else}
+    <a href="{link 'ProductDetail:detail' id => $product->id, slug => $slug, locale => $locale}">
+        {/if}
+        <div class="flexElem valignCenter product product_searched">
+
+            <div class="photo">
+                <img n:img="$product->mainImage, '60x40', 'shrink_only', null" alt="">
+            </div>
+
+            <div class="details">
+
+                <div class="flexElem flexWrap480">
+
+                    <div class="flex100">
+                        <div class="flexElem">
+                            <div class="title">
+                                <h3>{$product->name}</h3>
+                            </div>
+                            <div class="article">
+                                <div class="content">&nbsp;{$product->code}</div>
+                            </div>
+                        </div>
+                        <div class="article">
+                            <div class="content">{$product->description|noescape}</div>
+                        </div>
+                    </div>
+
+                    <div class="cena flexElem valignCenter alignRight">
+                        <div class="cena_sleva">
+                            {php $productHelper->setProduct($product, $actualCurrency);}
+                            {$productHelper->renderPrice()}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>

@@ -1,0 +1,34 @@
+{**
+ * @param $row    Ublaboo\DataGrid\Row
+ * @param $status Ublaboo\DataGrid\Column\ColumnSelectCallback
+*}
+{var $active_option = $status->getCurrentOption($row)}
+{var $prompt_option = $status->getPromptOption($row)}
+
+<div class="dropdown">
+    {if $active_option}
+        {if $prompt_option}
+            {var $active_option = $prompt_option}
+        {/if}
+        <button class="dropdown-toggle {$active_option->getClass()} {$active_option->getClassSecondary()}" type="button" data-toggle="dropdown">
+            {if $active_option->getIcon()}<span class="{$icon_prefix}{$active_option->getIcon()}"></span> {/if}
+            {_$active_option->getText()} <i n:if="$status->hasCaret()" class="caret"></i>
+        </button>
+    {else}
+        {var $val = $row->getValue($status->getColumn())}
+        {if get_class($val) == 'DateTime'}
+            {$val|date:$status->dateFormat}
+        {else}
+            {$val}
+        {/if}
+    {/if}
+    <ul class="dropdown-menu">
+        <li n:foreach="$status->getOptions() as $option">
+            {if !($option->getValue() === NULL)}
+                <a class="{$option->getClassInDropdown()}" n:href="changeStatus!, id => $row->getId(), key => $status->getKey(), value => $option->getValue()">
+                    {_$option->getText()}
+                </a>
+            {/if}
+        </li>
+    </ul>
+</div>

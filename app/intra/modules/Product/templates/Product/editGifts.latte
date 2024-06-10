@@ -1,0 +1,53 @@
+<div class="col-xs-12 col-sm-12 col-md-12">
+    <br>
+    <legend>
+        <small>{_'Dárky'}</small>
+    </legend>
+    {ifset $product}
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            {control renderer $form, 'allProducts6', 'getProducts', '', ''}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <button name="addGift" type="submit" class="btn btn-primary ajax">
+                <i class="fa fa-plus"></i> {_'Přidat produkt'}</button>
+        </div>
+    {else}
+        {_'Dárek lze přidávat až pokud je produkt poprvé uložen.'}<br/><br/>
+    {/ifset}
+</div>
+{snippet eshop-gifts}
+    {ifset $product->gifts}
+        {if count($product->gifts)}
+            <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>ID produktu</th>
+                                <th>Kód</th>
+                                <th>Název</th>
+                                <th>Pořadí</th>
+                                <th>Akce</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $product->gifts as $gift}
+                                <tr>
+                                    <td>{$iterator->getCounter()}</td>
+                                    <td>{ifset $gift->gift->id}{$gift->gift->id}{/ifset}</td>
+                                    <td>{ifset $gift->gift->code}{$gift->gift->code}{/ifset}</td>
+                                    <td>{ifset $gift->gift->name}{$gift->gift->name}{/ifset}</td>
+                                    <td><input type="number" name="giftRank[{$gift->id}]" class="form-control" value="{$gift->rank}"></td>
+                                    <td>
+                                        <a n:href="deleteGift! idGift => $gift->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {/if}
+    {/ifset}
+{/snippet}

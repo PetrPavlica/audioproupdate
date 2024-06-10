@@ -1,0 +1,173 @@
+{if !isset($isBack)} {* toto se nenačte v administraci *}
+    {block title}{$menu->title}{/block}
+    {block keywords}{$menu->keywords}{/block}
+    {block description}{$menu->description}{/block}
+{/if}
+
+{block content}
+{if $articles}
+<div id="article">
+    {foreach $articles as $a}
+        {continueIf !$a->active}
+        <div class="wrapper" n:if="$a->type == 1">
+            <div class="text">
+                {if $a->showTitle}
+                    <h3>{$a->name|noescape}</h3>
+                {/if}
+                {$a->article|noescape}
+            </div>
+        </div>
+        <div class="img" n:if="$a->type == 2 && file_exists($a->image)">
+            <div class="full-img" n:if="file_exists($a->image)">
+                {if $a->link}
+                <a href="{$a->link}">
+                {/if}
+                    <img data-src="{$basePath}/{$a->image}" alt="{$a->name}" class="lazy">
+                {if $a->link}
+                </a>
+                {/if}
+            </div>
+        </div>
+        <div class="text-in-right" n:if="$a->type == 3">
+            <div class="gallery">
+                {if $images[$a->id] && count($images[$a->id])}
+                <div class="container">
+                    <div id="myCarousel{php echo $a->id}" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            {foreach $images[$a->id] as $k => $img}
+                                <li data-target="#myCarousel{php echo $a->id}" data-slide-to="{$k}" {if $k==0}class="active"{/if}></li>
+                            {/foreach}
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            {foreach $images[$a->id] as $k => $img}
+                                <div class="item {if $k==0}active{/if}">
+                                    <img src="{$basePath}/{$img->path}" alt="{$img->alt}" style="width:100%;">
+                                </div>
+                            {/foreach}
+                        </div>
+
+                        <!-- Left and right controls -->
+                        {*<a class="left carousel-control" href="#myCarousel{php echo $a->id}" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#myCarousel{php echo $a->id}" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                            <span class="sr-only">Next</span>
+                        </a>*}
+                    </div>
+                </div>
+                {/if}
+            </div>
+            <div class="text">
+                <div class="text-in">
+                    {if $a->showTitle}
+                        <h3>{$a->name|noescape}</h3>
+                    {/if}
+                    {$a->article|noescape}
+                </div>
+            </div>
+        </div>
+        <div class="text-in-left" n:if="$a->type == 4">
+            <div class="text">
+                <div class="text-in">
+                    {if $a->showTitle}
+                        <h3>{$a->name|noescape}</h3>
+                    {/if}
+                    {$a->article|noescape}
+                </div>
+            </div>
+            <div class="gallery">
+                {if $images[$a->id] && count($images[$a->id])}
+                    <div class="container">
+                        <div id="myCarousel{php echo $a->id}" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                {foreach $images[$a->id] as $k => $img}
+                                    <li data-target="#myCarousel{php echo $a->id}" data-slide-to="{$k}" {if $k==0}class="active"{/if}></li>
+                                {/foreach}
+                            </ol>
+
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                {foreach $images[$a->id] as $k => $img}
+                                    <div class="item {if $k==0}active{/if}">
+                                        <img src="{$basePath}/{$img->path}" alt="{$img->alt}" style="width:100%;">
+                                    </div>
+                                {/foreach}
+                            </div>
+
+                            <!-- Left and right controls -->
+                            {*<a class="left carousel-control" href="#myCarousel{php echo $a->id}" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarousel{php echo $a->id}" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <span class="sr-only">Next</span>
+                            </a>*}
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        </div>
+        <div  n:if="$a->type == 5">
+            <div class="gallery gallery-full">
+                {if $images[$a->id] && count($images[$a->id])}
+                    <div class="container">
+                        <div id="myCarousel{php echo $a->id}" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                {foreach $images[$a->id] as $k => $img}
+                                    <li data-target="#myCarousel{php echo $a->id}" data-slide-to="{$k}" {if $k==0}class="active"{/if}></li>
+                                {/foreach}
+                            </ol>
+
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                {foreach $images[$a->id] as $k => $img}
+                                    <div class="item {if $k==0}active{/if}">
+                                        <img src="{$basePath}/{$img->path}" alt="{$img->alt}" style="width:100%;">
+                                    </div>
+                                {/foreach}
+                            </div>
+
+                            <!-- Left and right controls -->
+                            {*<a class="left carousel-control" href="#myCarousel{php echo $a->id}" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarousel{php echo $a->id}" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <span class="sr-only">Next</span>
+                            </a>*}
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        </div>
+    {/foreach}
+    <div id="buy_logo" class="wrapper" n:if="isset($buyLogo) && $menu->id == 8">
+        {foreach $buyLogo as $l}
+            <div class="logo_item">
+                {if $l->link}
+                <a href="{$l->link}">
+                {/if}
+                    <div class="logo">
+                        <img n:if="file_exists($l->image)" data-src="{$basePath}/{$l->image}" alt="{$l->name}" class="lazy">
+                    </div>
+                    <div class="text">
+                        {$l->text|noescape}
+                    </div>
+                {if $l->link}
+                </a>
+                {/if}
+            </div>
+        {/foreach}
+    </div>
+</div>
+{/if}
+{/block}

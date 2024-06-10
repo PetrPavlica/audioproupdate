@@ -1,0 +1,17 @@
+<svg id="Vrstva_223" data-name="Vrstva 223" xmlns="http://www.w3.org/2000/svg" width="20.91" height="24.531" viewBox="0 0 20.91 24.531">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-miterlimit: 1.5;
+        stroke-width: 1.5px;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Vrstva_221" data-name="Vrstva 221" class="cls-1" d="M1757.42,28.865H1738V46h19.42V28.865Z" transform="translate(-1737.25 -22.219)"/>
+  <path id="Vrstva_222" data-name="Vrstva 222" class="cls-1" d="M1751.8,28.132c0.02-2.837-1.76-5.156-3.98-5.176s-4.04,2.267-4.06,5.1c0.03-3.507,2.06-4.95,4.03-4.932A4.334,4.334,0,0,1,1751.8,28.132Z" transform="translate(-1737.25 -22.219)"/>
+</svg>

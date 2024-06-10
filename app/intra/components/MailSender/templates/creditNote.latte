@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="WebRex, s.r.o.">
+</head>
+<body style="margin: 0;">
+    <div style="background-color: #f6f6f6; width: 100%; height: 100%; padding: 25px 0;">
+        <div style="font-family: 'Open Sans'; background-color: #f6f6f6; border: 1px solid #e0e0e0; width: 840px; margin: 0 auto;">
+            <div style="background-color: #fff; padding: 15px; color: #646464; font-size: 18px; font-weight: 400;">
+                <img src="{$baseUri}/front/design/icons/logo/logo.png" alt="Logo">
+                <br><br>
+                <div style="padding: 15px;">
+                    <p>{_'Vážený zákazníku'},<br>
+                    <p>{_'v příloze Vám zasíláme dobropis k vrácenému zboží'}.</p>
+                    <p>{_'Pokud máte jakýkoliv dotaz, tak nás neváhejte kontaktovat'}<br>{_'na email'} <a href="mailto: {$settings['company_email']}" style="color: #021f41; font-weight: bold;">{$settings['company_email']}</a> {_'nebo na telefonu'} <a href="tel: {$settings['company_phone1']}" style="text-decoration: none; color: #021f41; font-weight: bold;">{$settings['company_phone1']}</a>.</p>
+                </div>
+
+                {include contentOrder.latte}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

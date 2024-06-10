@@ -1,0 +1,167 @@
+{block title}
+    {_'Porovnávání produktů'}
+{/block}
+{block content}
+<link rel="stylesheet" href="{$basePath}/front/css/porovnavani.css?v={$ver}">
+
+<div id="content">
+
+    <div class="nadpis bold upper darkblue">
+        <h1>{_'Porovnávání produktů'}</h1>
+    </div>
+
+    <div class="flex flexElem align-left" style="margin-bottom: 50px;">
+        {form addProductForm}
+            <div>
+                <input placeholder="{_'Zadejte název produktu pro srování...'}"
+                       class="autocomplete-input"
+                       data-toggle="completer" data-preload="false" style="width: 300px;"
+                       data-suggest="true" data-minlen="3"
+                       data-source="{link preloadAddCompareTerms!}"
+                       data-disable-links="false"
+                       data-to-send="idNo_atcmplt2"
+                       data-output=".ico-autocomplete-val" type="text" name="idNo2"
+                       id="1_tatcmplt2"
+                       value=""/>
+
+                <input name="ico-autocomplete-val" id="ico-autocomplete-val"
+                       data-success=""
+                       class="ico-autocomplete-val" value="" type="hidden">
+                <input type="submit" value="Přidat" style="padding: 8px 15px;"/>
+            </div>
+        {/form}
+    </div>
+    {if isset($categories)}
+        {foreach $categories as $category}
+            <div class="dragscroll nice_scroll compare_container">
+                <table class="compare_table" width="100%" border="1">
+                    <tr>
+                        <td></td>
+                        {var $i = 0}
+                        {foreach $products as $product}
+                            {continueIf !isset($product->categories[0]->category->mainCategory->id) || $product->categories[0]->category->mainCategory->id != $category->id}
+                            {var $i = $i + 1}
+                            <td style="position: relative">
+                                <div class="remove_butt">
+                                    <a n:href="removeProduct! productId => $product->id">
+                                        <img style="width: 20px;" src="{$basePath}/front/design/icons/close2.png"
+                                             title="{_'Odebrat'}" alt="{_'Odebrat'}"/>
+                                    </a>
+                                </div>
+                                <div class="product">
+                                    {var $slug = \Nette\Utils\Strings::webalize($product->name)}
+                                    <a href="{link 'ProductDetail:detail' id => $product->id, slug => $slug}">
+
+                                        <div class="details">
+                                            <div class="title">
+                                                <h3>{$product->name}</h3>
+                                            </div>
+                                        </div>
+
+                                        <div class="photo" style="height: auto;">
+                                            {if $product->mainImage}
+                                                <img style="max-height: 150px; width: auto;"
+                                                     n:img="$product->mainImage, '200x150', 'shrink_only', null" alt="{$product->name}"
+                                                     title="{$product->name}"/>
+                                            {else}
+                                                <img style="max-height: 150px; width: auto;"
+                                                     n:img="'front/images/produkty/no-photo.png', '200x150', 'shrink_only', null"
+                                                     alt="{$product->name}" title="{$product->name}"/>
+                                            {/if}
+                                        </div>
+
+                                        <div class="hvezdicky flexElem valignCenter">
+                                            {var $jj = 5}
+                                            {for $ii = 0; $ii < round($product->totalRating); $ii++}
+                                                <div class="hvezda hvezda_plna"></div>
+                                            {/for}
+                                            {for $ii = 0; $ii < $jj - round($product->totalRating); $ii++}
+                                                <div class="hvezda"></div>
+                                            {/for}
+                                        </div>
+                                    </a>
+
+                                    <div class="details">
+                                        <div class="bar flexElem alignJustify">
+                                            <div>
+                                                <div class="cena flexElem valignCenter">
+                                                    <div class="cena_sleva">
+                                                        {php $productHelper->setProduct($product, $actualCurrency);}
+                                                        {$productHelper->renderPrice()}
+                                                    </div>
+                                                    <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                                                        {$productHelper->renderLastPrice()}
+                                                    </div>
+                                                </div>
+                                                {control stockExpedition $product, false}
+                                            </div>
+                                            {if !$product->saleTerminated}
+                                                {form addToBasketForm-$product->id}
+                                                    {input productId value => $product->id}
+                                                    {input count value => '1'}
+                                            <div class="flexElem valignBottom">
+                                                <button n:name="addToBasket" class="buy_btn" data-href="{plink 'addToCart!'}" style="border: 0; font-size: 0.95em; font-weight: normal;">{_'Koupit'}</button>
+                                                {*<a href="{link 'addToCart!' productId => $product->id}" n:if="!$product->saleTerminated"
+                                                   class="buy_btn">
+                                                    {_'Koupit'}
+                                                </a>*}
+                                            </div>
+                                            {/form}
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        {/foreach}
+
+                    </tr>
+
+                    <tr class="category">
+                        <td colspan="{$i+1}">{_'Kategorie:'} {$category->name}</td>
+                    </tr>
+
+                    {foreach $cData[$category->id] as $c}
+                        <tr>
+                            <td>{$c['name']}</td>
+                            {foreach $products as $product}
+                                {continueIf !isset($product->categories[0]->category->mainCategory->id) || $product->categories[0]->category->mainCategory->id != $category->id}
+                                <td>
+                                    {var $outputBr = []}
+                                    {var $output = []}
+                                    {foreach $c['filters'] as $filter}
+                                        {if isset($filters[$product->id][$filter['id']])}
+                                            {if $filter['slider']}
+                                                {if $filter['intervalV']}
+                                                    {var $outputBr[] = $filter['name'] . ' ' . $filters[$product->id][$filter['id']]->value .' - '. $filters[$product->id][$filter['id']]->valueMax}
+                                                {else}
+                                                    {var $outputBr[] = $filter['name'] .' - '. $filters[$product->id][$filter['id']]->value}
+                                                {/if}
+                                            {else}
+                                                {var $output[] = $filter['name']}
+                                            {/if}
+                                        {/if}
+                                    {/foreach}
+                                    {foreach $outputBr as $o}
+                                        {$o}{if !$iterator->isLast()} <br>{/if}
+                                    {/foreach}
+                                    {foreach $output as $o}
+                                        {$o}{if !$iterator->isLast()}, {/if}
+                                    {/foreach}
+                                </td>
+                            {/foreach}
+                        </tr>
+                    {/foreach}
+                </table>
+            </div>
+        {/foreach}
+    {else}
+        <div id="content">
+            <div class="nadpis blue">
+                <h1>{_'Váš seznam pro srovnání je prázdný!'}</h1>
+            </div>
+            <a class="button-link" n:href=":Front:default">{_'Zpět k nakupování'}</a>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+        </div>
+
+    {/if}
+</div>

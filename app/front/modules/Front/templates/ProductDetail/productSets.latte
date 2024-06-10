@@ -1,0 +1,165 @@
+{var $hidden = false}
+{foreach $productSets as $productSet}
+    {var $noSetSellPrice = 0}
+    {if $iterator->counter >= 2 && !$hidden}
+    <div class="productsSets hidden">
+    {var $hidden = true}
+    {/if}
+    <div class="productsSet flexElem">
+        <div class="{if $isMobile}top-table{else}dragscroll nice_scroll{/if}">
+            <table width="100%">
+                <tr>
+                    {foreach $productSet["items"] as $productInSet}
+                        {if $iterator->counter > 1}
+                            <td>
+                                <img src="{$basePath}/front/design/icons/operators/plus.png" title="plus" alt="plus"/>
+                            </td>
+                        {/if}
+                        <td>
+                            <div class="product">
+                                {var $slug = \Nette\Utils\Strings::webalize($productInSet->name)}
+                                <a href="{link 'ProductDetail:detail' id => $productInSet->id, slug => $slug}">
+
+                                    <div class="photo">
+                                        {if $productInSet->mainImage && file_exists($productInSet->mainImage)}
+                                            <img style="max-height: 150px; width: auto;" n:img="$productInSet->mainImage, '200x150', 'shrink_only', null" alt="{$productInSet->name}" title="{$productInSet->name}"/>
+                                        {else}
+                                            <img style="max-height: 150px; width: auto;" n:img="'front/images/produkty/no-photo.png', '200x150'" alt="{$productInSet->name}" title="{$productInSet->name}"/>
+                                        {/if}
+                                    </div>
+                                </a>
+
+                                <div class="hvezdicky flexElem valignCenter">
+                                    {var $jj = 5}
+                                    {for $ii = 0; $ii < round($productInSet->totalRating); $ii++}
+                                        <div class="hvezda hvezda_plna"></div>
+                                    {/for}
+                                    {for $ii = 0; $ii < $jj - round($productInSet->totalRating); $ii++}
+                                        <div class="hvezda"></div>
+                                    {/for}
+                                </div>
+
+                                <div class="details">
+                                    <div class="title">
+                                        {*<a href="{link 'ProductDetail:detail' id => $product->id, slug => $slug}">*}
+                                        <h3>{$productInSet->name}</h3>{*</a>*}
+                                    </div>
+
+                                    <div class="bar flexElem alignJustify">
+                                        <div>
+                                            <div class="cena flexElem valignCenter">
+
+                                                <div class="cena_sleva">
+                                                    {php $productHelper->setProduct($productInSet, $actualCurrency)}
+                                                    {var $noSetSellPrice = $noSetSellPrice + $productHelper->getPrice()}
+                                                    {$productHelper->renderPrice()}
+                                                </div>
+                                                <div class="cena_default" n:if="$productHelper->getLastPrice() != 0">
+                                                    {$productHelper->renderLastPrice()}
+                                                </div>
+                                            </div>
+                                            {control stockExpedition $productInSet, false}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    {/foreach}
+                </tr>
+            </table>
+        </div>
+        <div class="bottom-table" style="padding-left: 10px;">
+            <table width="100%" style="height: 100%;">
+                <tr>
+                    <td><img src="{$basePath}/front/design/icons/operators/equals.png" title="equals" alt="equals"/>
+                    </td>
+                    <td style="vertical-align: middle;">
+                        <div class="product summary">
+                            <div class="details">
+                                <div class="cena">
+                                    {if $isMobile}
+                                        <div class="cena set">
+                                            {php $productHelper->setProduct($productSet["set"], $actualCurrency)}
+                                            <span>
+                                            {$productHelper->renderPrice()}
+                                        </span>
+                                            <span>
+                                            {_'s DPH'}
+                                        </span>
+                                        </div>
+                                    <br/>
+                                        <div class="cena alone">{_'Cena samostatně'}
+                                        {$actualCurrency['markBefore']}
+                                        {$noSetSellPrice|number:$actualCurrency['countDecimal']:',':' '}
+                                        {$actualCurrency['markBehind']}
+                                        {_'s DPH'}
+                                        </div>
+                                    {else}
+                                        <div class="cena alone">{_'Cena samostatně'} <br/>
+                                        {$actualCurrency['markBefore']}
+                                        {$noSetSellPrice|number:$actualCurrency['countDecimal']:',':' '}
+                                        {$actualCurrency['markBehind']}
+                                        {_'s DPH'}
+                                        </div>
+                                        <br/>
+
+                                        <div class="cena set">
+                                    {php $productHelper->setProduct($productSet["set"], $actualCurrency)}
+                                        <span>
+                                            {$productHelper->renderPrice()}
+                                        </span><br/>
+                                        <span>
+                                        {_'s DPH'}
+                                        </span>
+                                        </div>
+                                    {/if}
+                                    <br/>
+                                    {var $cheaper = $noSetSellPrice - $productHelper->getPrice()}
+                                    <div class="cena cheaper">
+                                        {_'Ušetříte'} {$actualCurrency['markBefore']} {$cheaper|number:$actualCurrency['countDecimal']:',':' '} {$actualCurrency['markBehind']}
+                                    </div>
+                                </div>
+                                {if !$productSet["set"]->saleTerminated}
+                                    {var $productSetId = $productSet["set"]->id}
+                                    {form addToBasketForm-set$productSetId}
+                                        {input productId value => $productSetId}
+                                        {input count value => '1'}
+                                <div class="fields_container no-indent">
+                                    <div class="buy_btn_container flex100 flexElem valignCenter">
+                                        <div class="flex100">
+                                        <button n:name="addToBasket" class="buy_btn" data-href="{link 'addToCart!'}" style="border: 0; font-weight: normal; width: 100%;">
+                                            {*<a href="{link addToCart! productId => $productSet["set"]->id, pojisteni => 0}" class="buy_btn">*}
+                                                <div class="flexElem alignCenter">
+                                                    <div class="flexElem valignCenter">
+                                                        <img src="{$basePath}/front/design/icons/baket_white.png" title="{_'Koupit'}" alt="{_'Koupit'}"/>
+                                                    </div>
+                                                    <div>
+                                                        {_'Koupit'}
+                                                    </div>
+                                                </div>
+                                                </button>
+                                            {*</a>*}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/form}
+                                {/if}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {if $iterator->last && $hidden}
+        </div>
+    {/if}
+{/foreach}
+
+{if count($productSets) > 1}
+    <div class="fields_container center">
+        <a class="button no-link" data-show='{"target":"#productsSets .productsSets.hidden","secondClick":"slideUp","effect":"slideDown","newText":"{_'Zobrazit méně sad'}"}'>
+            {_'Zobrazit více sad'}
+        </a>
+    </div>
+{/if}

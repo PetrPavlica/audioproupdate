@@ -1,0 +1,296 @@
+{block title}{_'Editace kategorie produktu'}{/block}
+
+{block content}
+
+<h3 class="page-header">
+    {_'Editace kategorie produktu'}
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-12">
+
+    <div style="" class="col-xs-12 col-sm-12 col-md-12">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home">{_'Základní informace'}</a></li>
+            {*<li><a data-toggle="tab" href="#filter">{_'Filtry'}</a></li>
+            <li><a data-toggle="tab" href="#hide-filter">{_'Skrýt filtry'}</a></li>*}
+        </ul>
+        {snippet category-snip}
+            {form form}
+                <div class="tab-content">
+                    <div id="home" class="tab-pane fade in active">
+                        <div class="panel-body">
+                            <fieldset class="form-horizontal">
+                                {input id}
+                                <legend><small>{_'Základní informace'}</small></legend>
+                                <div class="row">
+                                    <div style="padding-bottom:20px" class="col-xs-12 col-sm-12 col-md-10">
+                                        {control renderer $form, 'name'}
+                                        {control renderer $form, 'url'}
+                                        {control renderer $form, 'parentCategory'}
+                                        {control renderer $form, 'orderCategory'}
+                                        {control renderer $form, 'active'}
+                                        {control renderer $form, 'description'}
+                                        {control renderer $form, 'seoTitle'}
+                                        {control renderer $form, 'seoDescription'}
+                                        {control renderer $form, 'categoryImg'}
+                                        {control renderer $form, 'webMenu'}
+                                        {snippet category-img}
+                                            {ifset $category}
+                                                <div n:if="$category->image" class="col-md-6 col-md-offset-4" style="padding-bottom: 20px">
+                                                    <img src="{$basePath}/{$category->image}" />
+                                                    <a n:href="deleteImg! categoryId => $category->id" class="btn btn-xs btn-danger"
+                                                       data-confirm="modal"
+                                                       data-ajax="on">
+                                                        <span class="fa fa-trash"></span>
+                                                    </a>
+                                                </div>
+                                            {/ifset}
+                                        {/snippet}
+                                        {control renderer $form, 'categoryZbozi', 'getCategoryZbozi', '', ''}
+                                        {control renderer $form, 'categoryHeureka', 'getCategoryHeureka', '', ''}
+                                        {control renderer $form, 'categoryGoogleMerchants', 'getCategoryGoogleMerchants', '', ''}
+                                        {control renderer $form, 'mallCategory', 'getCategoryMall', '', ''}
+                                        {control renderer $form, 'webDescription'}
+                                    </div>
+                                </div>
+                                </fieldset>
+                        </div>
+                    </div>
+
+                    {*<div id="filter" class="tab-pane fade">
+                        <div class="panel-body">
+                            {snippet category-filters}
+                                <legend><small>{_'Filtry'}</small></legend>
+                                {ifset $category}
+                                    {if $category->mainCategory && $category->mainCategory->id == $category->id}
+                                        {var $i = 0}
+                                        {var $j = 0}
+                                        <div style="padding-bottom: 20px;" class="col-xs-12 col-sm-12 col-md-12">
+                                            {if $filtersGroup != NULL }
+                                                {foreach $filtersGroup as $group}
+                                                    <div class="row"  style="padding-top: 20px;">
+                                                        <div class="col-md-4">
+                                                            {var $i = $iterator->getCounter()}
+                                                            <input type="text" class="form-control input-md" name="groupName[{$i}]" value="{$group->name}"/>
+                                                            <input type="hidden" name="groupId[{$i}]" value="{$group->id}"/>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="number" class="form-control input-md" name="groupOrder[{$i}]" value="{$group->orderState}"/>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="groupActive[{$i}]">
+                                                                <input type="checkbox" name="groupActive[{$i}]" value="{$group->active}" {if $group->active}checked{/if}/>
+                                                                {_'Aktivní?'}
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <label for="groupActive[{$i}]">
+                                                                <a n:href="removeProductGroupFilter! idGroup => $group->id" class="btn btn-link" data-confirm="modal" data-ajax="on"><i class="fa fa-trash" /></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="padding-top: 25px">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered table-stripped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-left" width="5%">
+                                                                            #
+                                                                        </th>
+                                                                        <th class="text-left" width="35%" style="min-width: 250px;">
+                                                                            {_'Název'}
+                                                                        </th>
+                                                                        <th class="text-center" style="min-width: 85px;">
+                                                                            {_'Pořadí'}
+                                                                        </th>
+                                                                        <th class="text-center" width="5%">
+                                                                            {_'Slider?'}
+                                                                        </th>
+                                                                        <th class="text-center" width="5%">
+                                                                            {_'Interval?'}
+                                                                        </th>
+                                                                        <th class="text-center" style="min-width: 85px;">
+                                                                            {_'Min. (slider)'}
+                                                                        </th>
+                                                                        <th class="text-center" style="min-width: 85px;">
+                                                                            {_'Krok (slider)'}
+                                                                        </th>
+                                                                        <th class="text-center" style="min-width: 85px;">
+                                                                            {_'Max (slider)'}
+                                                                        </th>
+                                                                        <th class="text-left" width="5%">
+                                                                        </th>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {if $group->filters}
+                                                                        {foreach $group->filters as $filter}
+                                                                            <tr>
+                                                                                <td>
+                                                                                    {$iterator->getCounter()}
+                                                                                    <input type="hidden" name="filterId[{$j}]" value="{$filter->id}"/>
+                                                                                </td>
+                                                                                <td><input type="text" class="form-control" name="filterName[{$j}]" value="{$filter->name}"/></td>
+                                                                                <td><input type="number" class="form-control" name="filterOrder[{$j}]" value="{$filter->orderState}"/></td>
+                                                                                <td>
+                                                                                    <label for="filterSlider[{$j}]">
+                                                                                        <input type="checkbox" name="filterSlider[{$j}]" value="{$filter->slider}" {if $filter->slider}checked{/if}/>
+                                                                                    </label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <label for="filterInterval[{$j}]">
+                                                                                        <input type="checkbox" name="filterInterval[{$j}]" value="{$filter->intervalV}" {if $filter->intervalV}checked{/if}/>
+                                                                                    </label>
+                                                                                </td>
+                                                                                <td><input type="text" class="form-control" name="filterMin[{$j}]" value="{$filter->minValue}"/></td>
+                                                                                <td><input type="text" class="form-control" name="filterStep[{$j}]" value="{$filter->step}"/></td>
+                                                                                <td><input type="text" class="form-control" name="filterMax[{$j}]" value="{$filter->maxValue}"/></td>
+                                                                                <td><a n:href="removeProductFilter! idFilter=>$filter->id" class="btn btn-link" data-confirm="modal" data-ajax="on"><i class="fa fa-trash" /></a>
+                                                                                </td>
+                                                                            </tr>
+                                                                            {var $j = $j + 1}
+                                                                        {/foreach}
+                                                                    {/if}
+                                                                    <tr>
+                                                                        <td><input type="hidden" name="filterGroupIdNew[{$i}]" value="{$group->id}" /></td>
+                                                                        <td><input type="text" class="form-control" name="filterNameNew[{$i}]" placeholder='Název'/></td>
+                                                                        <td><input type="text" class="form-control" name="filterOrderNew[{$i}]" placeholder='Pořadí'/></td>
+                                                                        <td>
+                                                                            <label for="filterSliderNew[{$i}]">
+                                                                                <input type="checkbox" name="filterSliderNew[{$i}]"/>
+                                                                            </label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <label for="filterIntervalNew[{$i}]">
+                                                                                <input type="checkbox" name="filterIntervalNew[{$i}]"/>
+                                                                            </label>
+                                                                        </td>
+                                                                        <td><input type="text" class="form-control" name="filterMinNew[{$i}]" placeholder='Min'/></td>
+                                                                        <td><input type="text" class="form-control" name="filterStepNew[{$i}]" placeholder='Krok'/></td>
+                                                                        <td><input type="text" class="form-control" name="filterMaxNew[{$i}]" placeholder='Max'/></td>
+
+                                                                        <td><button name="addFilter[{$i}]" type="submit" class="btn btn-link ajax"><i class="fa fa-plus" /></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <hr/>
+                                                        </div>
+                                                    </div>
+                                                {/foreach}
+                                            {/if}
+
+                                            <div class="row" style="padding-top: 20px;">
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control" name="groupNameNew" placeholder='Název' value=""/>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="number" class="form-control" name="groupOrderNew" placeholder='Pořadí' value=""/>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="groupActiveNew">
+                                                        <input type="checkbox" name="groupActiveNew" value=""/>
+                                                        {_'Aktivní?'}
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button name="addGroup" type="submit" class="btn btn-link ajax"><i class="fa fa-plus" /></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {else}
+                                        <label>{_'Filtry můžete vkládat pouze ke kořenové kategorii.'}</label>
+                                    {/if}
+
+                                {else}
+                                    <label>{_'Filtry můžete vkládat až bude kategorie poprvé uložena.'}</label>
+                                {/ifset}
+                            {/snippet}
+                        </div>
+                    </div>
+                    <div id="hide-filter" class="tab-pane fade">
+                        <div class="panel-body">
+                            <legend><small>{_'Skrýt filtry'}</small></legend>
+                            <p>{_'U každé kategorie lze určit, které filtry z hlavní kategorie se reálně zobrazí na eshopu, a které budou pouze v této kategorii skryté.'}</p>
+                            {ifset $category}
+                                <div class="row" style="padding-top: 25px">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-stripped">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-left" width="5%">
+                                                        #
+                                                    </th>
+                                                    <th class="text-left" width="35%" style="min-width: 250px;">
+                                                        {_'Název'}
+                                                    </th>
+                                                    <th class="text-center" width="5%">
+                                                        {_'Skrýt?'}
+                                                    </th>
+                                            </thead>
+                                            <tbody>
+                                                {if isset($hideFilters) && count($hideFilters)}
+                                                    {foreach $hideFilters as $filter}
+                                                        {var $val = FALSE}
+                                                        {ifset $hideGroups[$filter->id]}
+                                                            {var $val = TRUE}
+                                                        {/ifset}
+                                                        <tr>
+                                                            <td>
+                                                                {$iterator->getCounter()}
+                                                            </td>
+                                                            <td><label>{$filter->name}</label></td>
+                                                            <td>
+                                                                <label for="filterHide[{$filter->id}]">
+                                                                    <input type="checkbox" name="filterHide[{$filter->id}]" value="{$val}" {if $val}checked{/if}/>
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    {/foreach}
+                                                {/if}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {else}
+                                <label>{_'Filtry můžete skrývat až bude kategorie poprvé uložena.'}</label>
+                            {/ifset}
+
+                        </div>
+                    </div>*}
+
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12" style="padding-top: 60px; padding-bottom: 60px;">
+                    <a class="btn btn-link" href="{link ProductCategory:default}">
+                        <i class=" fa fa-arrow-left"></i> {_'Zpět'} </a>
+                    <span style="float: right; padding-right: 40px">
+                        <button name="sendBack" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit a zpět'}</button>
+                        <button name="send" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit'}</button>
+                        <button name="sendNew" type="submit" style="font-size: 120%" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o"></i> {_'Uložit a nový'}</button>
+                    </span>
+                </div>
+            {/form}
+        {/snippet}
+    </div>
+
+</div>
+
+<script>
+
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+    $(document).ready(function () {
+        delay(function () {
+            $(document).find('[data-toggle="complete"]').completer();
+            console.log('Init');
+        }, 2500);
+    });
+
+</script>

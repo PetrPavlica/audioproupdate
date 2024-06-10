@@ -1,0 +1,38 @@
+{block title}{_'Přehled objednávky na Balíkobodu č. '}{$order->id}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Přehled objednávky na Balíkobodu č. '}{$order->id}
+</h3>
+
+<div class="col-md-12" style="font-size: 110%; ">
+    <table style="line-height: 2; margin-bottom: 40px;">
+        <tr>
+            <td>
+                {_'Č. objednávky u Balíkobotu: '}
+            </td>
+            <td>
+                {$order->order_id}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {_'Předávací protokol apod.:'}
+            </td>
+            <td>
+                <a class="" href="{$order->handover_url}" target="_blank"><i class="fa fa-file-pdf-o"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {_'Štítky:'}
+            </td>
+            <td>
+                <a class="" href="{$order->labels_url}" target="_blank"><i class="fa fa-file-pdf-o"></i></a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+{control tablePackage}
+

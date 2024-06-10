@@ -1,0 +1,158 @@
+{block title}
+    <h3>{_'Reklamační formulář'}</h3>
+{/block}
+
+{block content}
+
+<div id="content">
+
+    <div class="nadpis blue bold">
+        <h1>{_'Reklamační formulář:'}</h1>
+        <br/><br/>
+    </div>
+
+    <div class="block flexElem flexWrap alignLeft">
+
+        <div class="sub_block">
+
+            {form reclamationForm}
+
+                {input id}
+
+                <table class="responzive form_table small_fields half_fields_size">
+
+                    <tr>
+                        <td class="required">
+                            <label>{_'Jméno'}:</label>
+                        </td>
+                        <td>
+                            {input name}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Příjmení'}:</label>
+                        </td>
+                        <td>
+                            {input surname}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Ulice a číslo popisné'}</label>
+                        </td>
+                        <td>
+                            {input street}
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Město'}:</label>
+                        </td>
+                        <td colspan="3">
+                            {input city}
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'PSČ'}:</label>
+                        </td>
+                        <td>
+                            {input zip}
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Telefon'}:</label>
+                        </td>
+                        <td>
+                            {input phone}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Email'}:</label>
+                        </td>
+                        <td>
+                            {input email}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Reklamované zboží'}:</label>
+                        </td>
+                        <td>
+                            {input product}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Datum prodeje'}:</label>
+                        </td>
+                        <td>
+                            {input buy_date, data-date-settings=>'{"currentDate":"false"}'}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Číslo kupního dokladu'}:</label>
+                        </td>
+                        <td>
+                            {input purchase_number}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Popis závady'}:</label>
+                        </td>
+                        <td>
+                            {input description}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="required">
+                            <label>{_'Obsah balení při předání'}:</label>
+                        </td>
+                        <td>
+                            {input package_content}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="required">
+                            <label>{_'Preferovaný způsob vyřízení reklamace'}:</label>
+                            <span class="notice">(Před volbou způsobu vyřízení reklamace se seznamte s bodem „Práva a povinnosti z vadného plnění“ obchodních podmínek)</span>
+                        </td>
+                        <td>
+                            {foreach $radios->items as $key => $label}
+
+                                <div class="radio_container">
+                                    <div> <div><input n:name="reclamation_way:$key" class="icheck radiolabel" {if $iterator->first}checked="true"{/if}></div> </div>
+                                    <div class="text"> {$label} </div>
+                                </div>
+
+                            {/foreach}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="required">
+                            <label>{_'Datum uplatnění reklamace'}:</label>
+                        </td>
+                        <td>
+                            {input reclamation_date}
+                        </td>
+                    </tr>
+
+                </table>
+
+                <div class="fields_container center">
+                    {input send, class=>"dialog-handler", data-dialog-options=>'{"applyAfterClicks":"3","content":"#contact_dialog"}'}
+                </div>
+
+            {/form}
+
+        </div>
+
+    </div>
+
+    {*control backOutForm*}
+
+</div>

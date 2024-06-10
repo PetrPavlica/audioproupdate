@@ -1,0 +1,47 @@
+{
+  "name": "audiopro",
+  "version": "1.0.0",
+  "description": "Nette Sandbox\r =============",
+  "main": "index.js",
+  "scripts": {
+    "dev": "SET NODE_ENV=development & node node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "SET NODE_ENV=development & node node_modules/webpack/bin/webpack.js --progress --hide-modules --watch --watch-poll --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "SET NODE_ENV=development & node webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "node node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fancyapps/fancybox": "^3.5.2",
+    "bootstrap": "^3.3.7",
+    "bootstrap-datepicker": "^1.8.0",
+    "bootstrap-select": "^1.13.3",
+    "copy-webpack-plugin": "^5.0.4",
+    "font-awesome": "^4.7.0",
+    "image-map-resizer": "^1.0.10",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-webp-webpack-plugin": "^3.2.1",
+    "imagemin-webpack-plugin": "^2.4.2",
+    "jquery": "^3.4.1",
+    "jquery-sortable": "^0.9.13",
+    "jquery-ui": "^1.12.1",
+    "jquery-ui-sortable-npm": "^1.0.0",
+    "laravel-mix": "^4.1.2",
+    "live-form-validation": "^1.9.0",
+    "npm": "^6.10.1",
+    "responsive-slides": "^1.55.0",
+    "select2": "^4.0.6-rc.1",
+    "toastr": "^2.1.4",
+    "vanilla-cookieconsent": "^2.9.2",
+    "vanilla-lazyload": "^12.3.0"
+  },
+  "devDependencies": {
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "resolve-url-loader": "^3.1.0",
+    "sass": "^1.35.1",
+    "sass-loader": "^7.3.1",
+    "vue-template-compiler": "^2.6.10"
+  }
+}

@@ -1,0 +1,51 @@
+{var $delivery = ""}
+{var $lowPrice = NULL}
+{capture $delivery}
+    {foreach $deliveryMethods as $d}
+        {continueIf ($d->heurekaCode == NULL || $d->heurekaCode == '')}
+        <DELIVERY>
+            <DELIVERY_ID>{$d->heurekaCode}</DELIVERY_ID>
+            <DELIVERY_PRICE>{$d->selingPrice/$currency->exchangeRate|number:2:'.':''}</DELIVERY_PRICE>
+            <DELIVERY_PRICE_COD>{$d->selingPrice/$currency->exchangeRate|number:2:'.':''}</DELIVERY_PRICE_COD>
+            {if $lowPrice > $d->selingPrice || $lowPrice == NULL}
+                {var $lowPrice = $d->selingPrice}
+            {/if}
+        </DELIVERY>
+    {/foreach}
+{/capture}
+{php $productHelper->setProduct($product, $currencyArr, true)}
+<SHOPITEM>
+    <ITEM_ID>{$product->id}</ITEM_ID>
+    <PRODUCTNAME>{$product->name}</PRODUCTNAME>
+    <PRODUCT>{$product->name}</PRODUCT>
+    <DESCRIPTION>{str_replace('\n', '', strip_tags($product->webDescription))}</DESCRIPTION>
+    <URL>{link ProductDetail:detail id => $product->id, slug => $control->getSlug($product->name), locale => $locale}</URL>
+
+    {foreach $product->images as $img}
+        <IMGURL n:if="$img->isMain">{$basePath}{$img->path}</IMGURL>
+        <IMGURL_ALTERNATIVE n:if="!$img->isMain">{$basePath}{$img->path}</IMGURL_ALTERNATIVE>
+    {/foreach}
+
+    {var $sellPrice = $productHelper->getPrice()}
+
+    <PRICE_VAT>{$sellPrice|number:2:'.':''}</PRICE_VAT>
+    <VAT>{$product->vat->value}%</VAT>
+    <HEUREKA_CPC n:if="is_numeric($product->heurekaCPC) && $product->heurekaCPC > 0">{$product->heurekaCPC|number:2:',':''}</HEUREKA_CPC>
+    <MANUFACTURER n:if="$product->productMark">{$product->productMark->publicName}</MANUFACTURER>
+    {ifset $product->categories[0]->category->categoryHeureka}<CATEGORYTEXT>{$product->categories[0]->category->categoryHeureka}</CATEGORYTEXT>{/ifset}
+    <EAN n:if="$product->ean">{$product->ean}</EAN>
+    <PRODUCTNO n:if="$product->code">{$product->code}</PRODUCTNO>
+
+    {foreach $product->parameters as $param}
+    <PARAM>
+        <PARAM_NAME>{$param->name}</PARAM_NAME>
+        <VAL>{$param->value}</VAL>
+    </PARAM>
+    {/foreach}
+
+    <DELIVERY_DATE n:if="$product->count > 0">0</DELIVERY_DATE>
+    <DELIVERY_DATE n:if="$product->count <= 0">3</DELIVERY_DATE>
+    <DELIVERY_COST n:if="$lowPrice">{$lowPrice/$currency->exchangeRate|number:2:'.':''}</DELIVERY_COST>
+    {$delivery|noescape}
+    <ACCESSORY n:foreach="$product->accessoriesProducts as $alter">{$alter->id}</ACCESSORY>
+</SHOPITEM>

@@ -1,0 +1,38 @@
+{block title}{$settings['homepage_title']}{/block}
+{block keywords}{$settings['homepage_description']}{/block}
+{block description}{$settings['homepage_description']}{/block}
+{block content}
+
+<div id="content">
+    <div id="registrace">
+        <div class="nadpis blue">
+            <h1>{_'Děkujeme Vám za Vaší objednávku!'}</h1>
+        </div>
+        <div class="flexElem flexWrap alignLeft">
+            <div class="sub_block">
+                <div class="nadpis blue bold">
+                    <h3>{_'Prosím vyčkejte, během několika málo sekund budete přesměrování.'}</h3>
+                </div>
+                <div class="fields_container" style="padding-bottom: 40px">
+                    <a class="button-link" href="{$toUrl}">{_'Pokud se nic neděje, tak klikněte ZDE'}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
+    $(document).ready(function () {
+        delay(function () {
+            window.location.href ={$toUrl};
+        }, 2000);
+    });
+</script>

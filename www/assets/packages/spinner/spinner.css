@@ -1,0 +1,95 @@
+
+.spinnerContainer{
+    /*padding: 2px;*/
+    display: inline-block;
+    border: 1px #c1c1c1 solid;
+    background-color: #fcfdff;
+    max-width: 80px;
+    margin: 0px auto;
+
+    min-width: 60px;
+
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.spinner .spinner-input{
+    min-width: 40px;
+}
+
+.spinner .spinner-input input{
+    border: 0px !important;
+    background-color: transparent;
+    width: 100%;
+    padding: 5px 7px 5px 7px;
+    text-align: center;
+
+}
+
+.spinner .spinner-btns{
+}
+
+.spinner .spinner-btns .btn{
+
+    width: 100%;
+    height: 16px;
+    cursor: pointer;
+    padding: 15px 12px;
+
+    border-left: 1px #c1c1c1 solid;
+    border-bottom: 1px #c1c1c1 solid;
+}
+
+.spinner .spinner-btns .btn:last-child{
+    border-bottom: 0px;
+}
+
+.spinner .spinner-btns .btn:hover{
+
+    background-color: #ccc;
+    -webkit-transition: background-color 500ms linear;
+    -moz-transition: background-color 500ms linear;
+    -o-transition: background-color 500ms linear;
+    -ms-transition: background-color 500ms linear;
+    transition: background-color 500ms linear;
+
+}
+
+
+.spinner .spinner-btns .btn.disabled {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+    filter: alpha(opacity=60);
+    -moz-opacity: 0.6;
+    -khtml-opacity: 0.6;
+    opacity: 0.6;
+}
+
+
+.spinner .spinner-btns .btn-up{
+
+    background: url("images/plus.png") no-repeat;
+    background-position: center center;
+
+}
+
+.spinner .spinner-btns .btn-down{
+
+    background: url("images/minus.png") no-repeat;
+    background-position: center center;
+
+}
+
+@media (max-width:768px){
+
+
+    .spinnerContainer{
+        margin: 7px auto;
+        max-width: 90px;
+    }
+
+    .spinner .spinner-btns .btn{
+        padding: 14px 15px;
+    }
+
+}

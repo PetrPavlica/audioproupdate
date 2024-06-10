@@ -1,0 +1,58 @@
+{block title}{_'Úvodní strana'}{/block}
+{block content}
+
+<div class="row">
+    <div class="col-md-10" style="padding-top: 40px">
+        <div class="well well-lg" n:if="count($productAlerts)">
+            <h4>{_'Pozor! tyto produkty mají nízký stav skladu'}</h4>
+            <br>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td><strong>#</strong></td>
+                        <td><strong>{_'Produkt'}</strong></td>
+                        <td><strong>{_'Počet na skladu'}</strong></td>
+                        <td><strong>{_'Rezervace'} </strong></td>
+                        <td><strong>{_'Min. zásoba'}</strong></td>
+                        <td><strong>{_'Max. zásoba'}</strong></td>
+                        <td><strong>{_'Rozdíl do max. zásoby'}</strong></td>
+                        <td><strong>{_'Detail'}</strong></td>
+                    </tr>
+                    {foreach $productAlerts as $product}
+                        <tr>
+                            <td>
+                                {$iterator->getCounter()}
+                            </td>
+                            <td>
+                                <a target="_blank" n:href=":Product:edit id => $product->id">
+                                    {$product->name}
+                                </a>
+                            </td>
+                            <td>
+                                {$product->count|number:0:',':' '}
+                            </td>
+                            <td>
+                                {$product->rezerveCount|number:0:',':' '}
+                            </td>
+                            <td>
+                                {$product->minCount|number:0:',':' '}
+                            </td>
+                            <td>
+                                {$product->maxCount|number:0:',':' '}
+                            </td>
+                            <td>
+                                {var $count = ($product->maxCount - $product->count + $product->rezerveCount)}
+                                {$count|number:0:',':' '}
+                            </td>
+                            <td>
+                                <a n:href=":Product:edit id => $product->id">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

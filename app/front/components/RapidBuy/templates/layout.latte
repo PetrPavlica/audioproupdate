@@ -1,0 +1,243 @@
+{snippet rapid-buy-snipp}
+
+    <div id="rapidBuyDialog" style="min-width: 600px;">
+
+        <div class="nadpis center bold upper">
+            <h2>{_'Koupit zrychleně'}</h2>
+        </div>
+
+        {form rapidBuyForm}
+            <div class="block flexElem flexWrap" style="padding: 0px 30px;">
+                <div class="sub_block">
+                    <table class="responzive form_table small_fields full_fields_size">
+                        {if isset($productToBuy)}
+
+                            <tr class="details details_product">
+                                <td>
+                                    {if !empty($productToBuy->mainImage)}
+                                        <img width="150" src="{$basePath}/{$productToBuy->mainImage}" title="" alt="">
+                                    {else}
+                                        <img width="150" src="{$basePath}/front/images/produkty/no-photo.png" title="{_'Bez obrázku'}" alt="{_'Bez obrázku'}">
+                                    {/if}
+                                </td>
+                                <td>
+                                    <div class="title"><h3> {$productToBuy->name} </h3></div>
+                                    {control stockExpedition $productToBuy, false}
+                                    <br/>
+                                </td>
+                            </tr>
+
+                            <tr class="details details_product">
+                                <td style="text-align: center;">
+                                    <input class="amount number" min="1" max="99999999" value="1" id="countRapid" name="count[{$productToBuy->id}]" type="text"/>
+                                </td>
+                                <td>
+                                    <div class="cena_s_dph" style="text-decoration: none">
+                                        {var $priceSDph = $productHelper->getPrice()}
+                                        <input class="cena_s_dph_input" id="price_with_dph" type="hidden" value="{round($priceSDph, $actualCurrency['countDecimal'])}" name="sDPH[{$productToBuy->id}]"/>
+                                        {$actualCurrency['markBefore']}
+                                        <strong>
+                                            <span class="cena_s_dph_value castka">
+                                                {$priceSDph|number,$actualCurrency['countDecimal'],',',' '}
+                                            </span>
+                                        </strong>
+                                        {$actualCurrency['markBehind']} {_'s DPH'}
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>
+
+                                    <div class="checkbox_container" style="padding-left: 0px;">
+                                        <div>
+                                            {var $pojisteniPrice = $productHelper->getPrice() * 0.1}
+                                            <input name="pojisteni[{$productToBuy->id}]" class="icheck pojisteni_check" type="checkbox" id="isPojisteni" value="{$pojisteniPrice/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''}" checked/>
+                                        </div>
+                                        <div>
+                                            <label>&nbsp;{_'Prodloužení záruky na 36 měsíců'} &nbsp;
+                                                <span class="blue_price">
+                                                    {$actualCurrency['markBefore']}
+                                                    <span id="pojisteni-price">
+                                                    {$pojisteniPrice/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:',':' '}
+                                                    </span>
+                                                    {$actualCurrency['markBehind']}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="checkbox_container" style="padding-left: 0px;" n:if="$productToBuy->installSettingAdd">
+                                        <div>
+                                            <input name="nastaveni[{$productToBuy->id}]" class="icheck pojisteni_check" type="checkbox" id="isInstall" value="{$productToBuy->priceInstallSettingAdd/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:'.':''}"/>
+                                        </div>
+                                        <div>
+                                            <label>&nbsp;{_'Instalace a nastavení produktu'} &nbsp;
+                                                <span class="blue_price">
+                                                    {$actualCurrency['markBefore']}
+                                                    <span id="pojisteni-price">
+                                                    {$productToBuy->priceInstallSettingAdd/$actualCurrency['exchangeRate']|number:$actualCurrency['countDecimal']:',':' '}
+                                                    </span>
+                                                    {$actualCurrency['markBehind']}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                        {/if}
+                        <tr>
+                            <td>
+                                <label>{_'Způsob placení'}</label>
+                            </td>
+                            <td>
+                                {input payMethod}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>{_'Metoda dodání'}</label>
+                            </td>
+                            <td>
+                                {input deliveryMethod}
+                            </td>
+                        </tr>
+                        <tr id="dpdPickup" {if isset($customer->deliveryMethod->id) && $customer->deliveryMethod->id != 2}style="display:none"{/if}>
+                            <td>
+                                <label>{_'DPD Pickup'}</label>
+                            </td>
+                            <td>
+                                <select name="dpdPickup" class="selectpicker" style="width:90%;">
+                                    {foreach $dpdPickups as $k => $d}
+                                        <option value="{$k}">{$d}</option>
+                                    {/foreach}
+                                </select>
+                            </td>
+                        </tr>
+                        {*<tr id="ulozenkaPickup" {if $customer->deliveryMethod->id != 5}style="display:none"{/if}>
+                            <td>
+                                <label>{_'Uloženka'}</label>
+                            </td>
+                            <td>
+                                <select name="ulozenkaPickup" class="selectpicker" style="width:90%;">
+                                    {foreach $ulozenkaPickups as $k => $d}
+                                        <option value="{$k}">{$d}</option>
+                                    {/foreach}
+                                </select>
+                            </td>
+                        </tr>*}
+                        <tr>
+                            <td>
+                                <label>{_'Ceková cena:'}</label><br>
+                            </td>
+                            <td>
+                                <div class="cena_s_dph" style="text-decoration: none">
+                                    {$actualCurrency['markBefore']}
+                                    <strong>
+                                        <span class="cena_s_dph_value castka" id="rapid_price_count">
+                                            123456
+                                        </span>
+                                    </strong>
+                                    {$actualCurrency['markBehind']} {_'s DPH'}
+                                </div>
+                            </td>
+                        </tr>
+                        {*if isset($rapidCustomer)}
+                            <tr>
+                                <td>
+                                    <label>{_'Fakturační údaje'}</label><br>
+                                </td>
+                                <td>
+                                    {$rapidCustomer}
+
+                                </td>
+                            </tr>
+
+                            <tr n:if="$rapidCustomer->deliveryToOther">
+                                <td>
+                                    <label>{_'Dodací údaje'}</label><br>
+                                </td>
+                                <td>
+                                    <span n:if="$rapidCustomer->nameDelivery">{$rapidCustomer->nameDelivery}</span>
+                                    <span n:if="$rapidCustomer->surnameDelivery">{$rapidCustomer->surnameDelivery}</span>
+                                    <span n:if="$rapidCustomer->streetDelivery">{$rapidCustomer->streetDelivery}</span>
+                                    <span n:if="$rapidCustomer->zipDelivery">{$rapidCustomer->zipDelivery} {$rapidCustomer->cityDelivery}</span>
+                                </td>
+                            </tr>
+                        {/if*}
+
+                        <tr>
+                            <td colspan="2">
+                                <div class="fields_container center half_fields_size">
+                                    {input send, style=>'height: 40px;'}
+                                </div>
+                            </td>
+                        </tr>
+                        {input id}
+                        {input currency}
+                        {input product}
+                        {input isRapid}
+                    </table>
+
+                    <br/><br/>
+
+                    {control freeTransport $freeDelivery, $productHelper->getPrice(), $currency, true}
+
+                </div>
+            </div>
+        {/form}
+
+        <script type="text/javascript">
+
+            function getPayPrice(id) {
+                var arr = [];
+                {if isset($payMethods)}
+                {foreach $payMethods as $idx => $val}
+                arr[{$idx}] = {$val};
+                {/foreach}
+                {/if}
+                if (arr[id] !== undefined) {
+                    return arr[id];
+                }
+                return 0;
+            }
+            function getDeliveryPrice(id) {
+                var arr = [];
+                {if isset($delMethods)}
+                {foreach $delMethods as $idx => $val}
+                arr[{$idx}] = {$val};
+                {/foreach}
+                {/if}
+                if (arr[id] !== undefined) {
+                    return arr[id];
+                }
+                return 0;
+            }
+
+            function getDPDMethodId() {
+                {if isset($delMethods) && count($delMethodDPD)}
+                return {$delMethodDPD->id};
+                {else}
+                return 0;
+                {/if}
+            }
+
+            function getUlozenkaMethodId() {
+                {if isset($delMethods) && count($delMethodUlozenka)}
+                return {$delMethodUlozenka->id};
+                {else}
+                return 0;
+                {/if}
+            }
+
+        </script>
+
+    </div>
+
+    <script src="{$basePath}/front/js/rapidBuy.js?v={php echo filemtime('front/js/rapidBuy.js')}"></script>
+
+{/snippet}
+

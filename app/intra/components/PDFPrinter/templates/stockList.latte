@@ -1,0 +1,265 @@
+{var $currency = $invoice->currency}
+
+<html>
+<head>
+    <meta http-equiv="Content-Language" content="cs">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{$basePath}/intra/css/pdf_print.css">
+</head>
+
+<body style="font-family: Arial;">
+<div style="float:left; width: 80%; padding-top: 15px;">
+    <table style="font-size: 70%; color: #5A7AAD;">
+        <tr>
+            <td width="160px;">{$settings['company_name']}</td>
+            <td width="160px;">{_'Tel.:'} {$settings['company_phone1']}</td>
+            <td width="160px;">{_'WWW:'} <a href="http://{$settings['company_www']}"
+                                            target="_blank">{$settings['company_www']}</a></td>
+        </tr>
+        <tr>
+            <td width="160px;">Táborská 31</td>
+            <td width="160px;">{*Tel.: {$settings['company_phone2']*}</td>
+            <td width="160px;">{_'E-mail:'} <a href="mailto:{$settings['company_email']}"
+                                               target="_blank">{$settings['company_email']}</a></td>
+        </tr>
+        <tr>
+            <td width="160px;">140 00 Praha</td>
+            <td width="160px;"></td>
+            <td width="160px;"></td>
+        </tr>
+        <tr>
+            <td width="160px;">{$settings['company_country']}</td>
+            <td width="160px;"></td>
+            <td width="160px;"></td>
+        </tr>
+    </table>
+
+</div>
+<div style="float:right">
+    <img src='{$basePath}/assets/img/logob.png' border='0'/>
+</div>
+<div class="clear"><br/></div>
+<div>
+    <div style="text-align: right; border-bottom: 2px solid #000000; color: #1A5DAC; font-weight: bold; font-size: 20px;">
+        {_'Dodací list pro sklad'}
+    </div>
+    <table>
+        <tr>
+            <td width="60%">
+                <span style="color: #1A5DAC; font-weight: bold; font-size: 12px;">{_'Dodavatel'}:</span>
+                <table style="font-weight: bold; margin-bottom: 15px; margin-top: 10px;  font-size: 12px;">
+                    <tr>
+                        <td>{$settings['company_name']}</td>
+                    </tr>
+                    <tr>
+                        <td>{$settings['company_street']}</td>
+                    </tr>
+                    <tr>
+                        <td>{$settings['company_city']}</td>
+                    </tr>
+
+                </table>
+
+                <table style="margin-bottom: 15px; font-size: 12px;">
+                    <tr>
+                        <td>{_'IČ:'}</td>
+                        <td>{$settings['company_IC']}</td>
+                    </tr>
+                    <tr>
+                        <td>{_'DIČ:'}</td>
+                        <td>{$settings['company_DIC']}</td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; font-size: 12px; margin-bottom: 15px">
+                    <tr n:if="$settings['company_account_NO'] && $invoice->currency->code == 'CZK'">
+                        <td>{_'Číslo účtu (CZK)'}:</td>
+                        <td>{$settings['company_account_NO']}</td>
+                    </tr>
+                    <tr n:if="$settings['company_account_NO_2'] && $invoice->currency->code == 'CZK'">
+                        <td>{_'Číslo účtu (CZK)'}:</td>
+                        <td>{$settings['company_account_NO_2']}</td>
+                    </tr>
+                    <tr n:if="$settings['company_account_NO_EUR'] && $invoice->currency->code == 'EUR'">
+                        <td>{_'Číslo účtu (EUR)'}:</td>
+                        <td>{$settings['company_account_NO_EUR']}</td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; font-size: 12px; padding-bottom: 30px">
+                    <tr>
+                        <td style="width: 50%">{_'Forma úhrady:'}</td>
+                        <td style="text-align: left;">{$invoice->paymentMethod->name}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">{_'Datum vystavení:'}</td>
+                        <td style="text-align: left;">{$invoice->foundedDate|date:'j. n. Y'}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">{_'Datum zdanitelného plnění:'}</td>
+                        <td style="text-align: left;">{$invoice->foundedDate|date:'j. n. Y'}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">{_'Datum splatnosti:'}</td>
+                        <td style="text-align: left;">{$invoice->dueDate|date:'j. n. Y'}</td>
+                    </tr>
+
+                </table>
+            </td>
+            <td width="60%" align="right">
+                <table style="margin-bottom: 15px; font-size: 12px;">
+                    <tr>
+                        <td style="text-align: right;">{_'Variabilní symbol:'}</td>
+                        <td style="text-align: right;"><strong>{$invoice->variableSymbol}</strong></td>
+                    </tr>
+                    <tr n:if="$invoice->specificSymbol">
+                        <td style="text-align: right;">{_'Specifický symbol:'}</td>
+                        <td style="text-align: right;"><strong>{$invoice->specificSymbol}</strong></td>
+                    </tr>
+                    <tr n:if="$invoice->constantSymbol">
+                        <td style="text-align: right;">{_'Konstantní symbol:'}</td>
+                        <td style="text-align: right;"><strong>{$invoice->constantSymbol}</strong></td>
+                    </tr>
+
+                </table>
+
+                <table style="border: 3px solid #000000; font-size: 12px;">
+                    <tr>
+                        <td width="350" style="text-align: left;">
+                            <span style="color: #1A5DAC; font-weight: bold; font-size: 12px;">&nbsp; {_'Odběratel'}
+                                :</span>
+                            <table style="font-weight: bold; font-size: 12px; margin-left: 10px;  margin-top: 10px; ">
+                                {if $invoice->deliveryToOther}
+                                    <tr>
+                                        <td>
+                                    {if $invoice->contactPerson}
+                                        {$invoice->contactPerson}
+                                    {elseif $invoice->company}
+                                        {$invoice->company}
+                                    {else}
+                                        {$invoice->name}
+                                    {/if}
+                                        </td>
+                                    </tr>
+                                    <tr n:if="$invoice->streetDelivery">
+                                        <td>{$invoice->streetDelivery}</td>
+                                    </tr>
+                                    <tr n:if="$invoice->zipDelivery || $invoice->cityDelivery">
+                                        <td>{$invoice->zipDelivery} {$invoice->cityDelivery}</td>
+                                    </tr>
+                                    <tr n:if="$invoice->countryDelivery">
+                                        <td>{$invoice->countryDelivery}</td>
+                                    </tr>
+                                {else}
+                                    {if $invoice->company}
+                                        <tr>
+                                            <td>{$invoice->company}</td>
+                                        </tr>
+                                    {else}
+                                        <tr>
+                                            <td>{$invoice->name}</td>
+                                        </tr>
+                                    {/if}
+                                    <tr n:if="$invoice->street">
+                                        <td>{$invoice->street}</td>
+                                    </tr>
+                                    <tr n:if="$invoice->zip || $invoice->city ">
+                                        <td>{$invoice->zip}   {$invoice->city}</td>
+                                    </tr>
+                                    <tr n:if="$invoice->country">
+                                        <td>{$invoice->country}</td>
+                                    </tr>
+                                {/if}
+                            </table>
+
+                            <table style="margin-bottom: 10px; margin-left: 10px;">
+                                <tr n:if="$invoice->idNo">
+                                    <td>{_'IČ:'}</td>
+                                    <td>{$invoice->idNo}</td>
+                                </tr>
+                                <tr n:if="$invoice->vatNo">
+                                    <td>{_'DIČ:'}</td>
+                                    <td>{$invoice->vatNo}</td>
+                                </tr>
+                                <tr n:if="$invoice->vatNo2">
+                                    <td>{_'IČ DPH:'}</td>
+                                    <td>{$invoice->vatNo2}</td>
+                                </tr>
+                                <tr n:if="$invoice->accountNumber">
+                                    <td>{_'Číslo účtu:'}</td>
+                                    <td>{$invoice->accountNumber}</td>
+                                </tr>
+                                <tr n:if="$invoice->phone">
+                                    <td>{_'Telefon:'}</td>
+                                    <td>{$invoice->phone}</td>
+                                </tr>
+                                <tr n:if="$invoice->email">
+                                    <td>{_'Email:'}</td>
+                                    <td>{$invoice->email}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div style="border: 1px solid #BEC8CE; clear: both; margin-bottom: 15px;">
+        <table style="width: 100%; font-size: 12px;">
+            <tr>
+                <td>&nbsp;#</td>
+                <td><strong>{_'Položka'}</strong></td>
+                <td style="text-align: center;"><strong>{_'Počet'}</strong></td>
+            </tr>
+            {var $total = $bezDPHTotal = $i = 0}
+            {var $currency = $invoice->currency}
+
+            {foreach $products as $item}
+                <tr>
+                    <td>
+                        {var $i = $iterator->getCounter()}
+                        &nbsp;{$i}
+                    </td>
+                    <td>
+                        {$item->name} ({$item->unit}) {if $item->product->ean}- {_'EAN'}: {$item->product->ean}{/if}
+                    </td>
+                    <td style="text-align: center;">
+                        {$item->count}
+                    </td>
+                </tr>
+            {/foreach}
+            {* Pay method - only if price is not 0 *}
+            {if $invoice->payMethodPrice != 0}
+                <tr>
+                    <td>
+                        {var $i = $i+1}
+                        &nbsp;{$i}
+                    </td>
+                    <td>
+                        {$invoice->paymentMethod->name}
+                    </td>
+                    <td style="text-align: center;">
+                        1
+                    </td>
+                </tr>
+            {/if}
+            {* Delivery method - only if price is not 0 *}
+            {if $invoice->payDeliveryPrice != 0}
+                <tr>
+                    <td>
+                        {var $i = $i+1}
+                        &nbsp;{$i}
+                    </td>
+                    <td>
+                        {$invoice->deliveryMethod->name}
+                    </td>
+                    <td style="text-align: center;">
+                        1
+                    </td>
+                </tr>
+            {/if}
+        </table>
+    </div>
+</div>
+</body>
+</html>

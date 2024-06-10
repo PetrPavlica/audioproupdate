@@ -1,0 +1,73 @@
+{if !isset($isBack)} {* toto se nenačte v administraci *}
+    {block title}{$menu->title}{/block}
+    {block keywords}{$menu->keywords}{/block}
+    {block description}{$menu->description}{/block}
+{/if}
+
+{block content}
+{if !isset($isBack)}
+    {include 'breadcrumb.latte'}
+{/if}
+<div id="content" class="clanekA">
+    <div class="nadpis blue bold upper">
+        {control inline 'h1', 'h1_main', $allowEdit, $resource, $menu->id, 'content'}
+    </div>
+    <div id="registrace">
+        {control inline 'div', 'div', $allowEdit, $resource, $menu->id, 'content'}
+        <br/><br/>
+    </div>
+</div>
+
+{if $menu->id == 11 && !isset($isBack)}
+    {form inquiryForm class => 'form-horizontal inquiry_frm'}
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3">
+                {label name class => 'control-label'}
+                {input name class => 'form-control'}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3">
+                {label company class => 'control-label'}
+                {input company class => 'form-control'}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3">
+                {label email class => 'control-label'}
+                {input email class => 'form-control'}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3">
+                {label phone class => 'control-label'}
+                {input phone class => 'form-control'}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3">
+                {label adress class => 'control-label'}
+                {input adress class => 'form-control'}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3">
+                {label inquiry class => 'control-label'}
+                {input inquiry class => 'form-control'}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3 checkbox checkbox-primary">
+                {input gdpr class => 'form-control'}
+                {label gdpr class => 'control-label'}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-md-6 col-md-offset-3">
+                {input send class => 'btn btn-default btn-lg'}
+            </div>
+        </div>
+    {/form}
+    <br><br>
+{/if}
+{/block}

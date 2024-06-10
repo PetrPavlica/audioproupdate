@@ -1,0 +1,77 @@
+{block title}{_'Správa hodnocení produktů'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {_'Prozatím neschválené hodnocení produktů'}
+</h3>
+
+<link rel="stylesheet" type="text/css" href="{$basePath}/core/css/dataTableBootstrap.css" />
+
+<div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+    <table id="categoryTbl" class="table table-striped table-bordered" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Plusy</th>
+                <th>Mínusy</th>
+                <th>Hodnocení</th>
+                <th>Produkt</th>
+                <th>Datum</th>
+                <th>Autor</th>
+                <th>Přezdívka</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {var $i = 1}
+            {foreach $ratings as $item}
+                <tr>
+                    <td>
+                        {$i}
+                        {var $i = $i + 1}
+                    </td>
+                    <td><pre style="
+                             background-color: transparent;
+                             border: none;
+                             border-radius: 0px;
+                             font-family: sans-serif;
+                             ">{$item->plus}</pre>
+                    </td>
+                    <td><pre style="
+                             background-color: transparent;
+                             border: none;
+                             border-radius: 0px;
+                             font-family: sans-serif;
+                             ">{$item->minus}</pre>
+                    </td>
+                    <td>{$item->rating}</td>
+                    <td><a n:href=":ProductDetail:detail id => $item->product->id" target="_blank">{$item->product->name}</a></td>
+                    <td>{$item->foundedDate|date:'j. n. Y'}</td>
+                    <td>
+                        <span n:if="$item->customer">
+                            {$item->customer->name}
+                        </span>
+                    </td>
+                    <td>{$item->nickname}</td>
+                    <td>
+                        <a n:href="approve! idRating=>$item->id" class="btn btn-xs btn-success"><span class="fa fa-check"></span></a>
+                        <a class="btn btn-xs btn-default" n:href=":ProductRating:edit id => $item->id, returnTo => 'all'"><i class="fa fa-pencil"/></i></a>
+                        <a n:href="delete! idRating=>$item->id" class="btn btn-xs btn-danger confirmLink"><span class="fa fa-trash"></span></a>
+                    </td>
+                </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript" src="{$basePath}/core/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="{$basePath}/core/js/dataTable.bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#categoryTbl').DataTable();
+    });
+</script>
+
+

@@ -1,0 +1,31 @@
+{block title}{_'Editace diskuze produktu'}{/block}
+{block content}
+
+<h3 class="page-header">
+    {ifset $parent}
+        {_'Přidání/editace odpovědi u produktu: '}
+    {else}
+        {_'Editace diskuze u produtku'}
+    {/ifset}
+    - <a n:href=":ProductDetail:detail id=>$product->id" target="_blank">{$product->name}</a>
+</h3>
+
+<div style="" class="col-xs-12 col-sm-12 col-md-6">
+    {form form, class=>"form-horizontal"}
+        {control renderer $form}
+    {/form}
+    <a n:href=":ProductDiscussion:default id => $product->id" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span>
+        {_'Zpět'}
+    </a>
+</div>
+
+<div n:if="isset($parent)" style="" class="col-xs-12 col-sm-12 col-md-6">
+    <h4>{_'Původní otázka'}</h4>
+    <p> <span style="
+             background-color: transparent;
+             border: none;
+             border-radius: 0px;
+             font-family: sans-serif;
+             ">{$parent->text}</span></p>
+</div>

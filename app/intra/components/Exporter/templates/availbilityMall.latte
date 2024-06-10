@@ -1,0 +1,13 @@
+{contentType application/xml}
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<AVAILABILITIES>
+    {foreach $products as $product}
+        {continueIf $product->count <= 0}
+        <AVAILABILITY>
+            <ID>{$product->id}</ID>
+            <IN_STOCK>{if $product->count > 0}{$product->count}{else}0{/if}</IN_STOCK>
+            <ACTIVE>true</ACTIVE>
+        </AVAILABILITY>
+        {php $em->clear()}
+    {/foreach}
+</AVAILABILITIES>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="{$locale}">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta charset="UTF-8">
+    <title>{ifset title}{include title|stripHtml} | {/ifset} {_'AudioPro'}</title>
+    <meta name="Keywords"
+          content="{ifset keywords}{include keywords|stripHtml}{else}{$settings['base_keywords']}{/ifset}"/>
+    <meta name="robots" content="{ifset robots}{include robots|stripHtml}{else}index, follow{/ifset}"/>
+    <meta name="googlebot" content="{ifset robots}{include robots|stripHtml}{else}index, follow{/ifset}"/>
+    <meta name="Description"
+          content="{ifset description}{include description|stripHtml}{else}{$settings['base_description']}{/ifset}"/>
+    <meta name="author" content="WebRex, s. r. o.">
+    {ifset metas}
+        {include metas}
+    {/ifset}
+
+    {* Favicon - generated from http://www.favicon-generator.org/ *}
+    <link rel="apple-touch-icon" sizes="57x57" href="{$basePath}/assets/design/favicon/apple-icon-57x57.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{$basePath}/assets/img/favicon/apple-icon-60x60.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{$basePath}/assets/img/favicon/apple-icon-72x72.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{$basePath}/assets/img/favicon/apple-icon-76x76.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{$basePath}/assets/img/favicon/apple-icon-114x114.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{$basePath}/assets/img/favicon/apple-icon-120x120.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{$basePath}/assets/img/favicon/apple-icon-144x144.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{$basePath}/assets/img/favicon/apple-icon-152x152.png?v={$ver}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{$basePath}/assets/img/favicon/apple-icon-180x180.png?v={$ver}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{$basePath}/assets/img/favicon/android-icon-192x192.png?v={$ver}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{$basePath}/assets/img/favicon/favicon-32x32.png?v={$ver}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{$basePath}/assets/img/favicon/favicon-96x96.png?v={$ver}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{$basePath}/assets/img/favicon/favicon-16x16.png?v={$ver}">
+    <link rel="manifest" href="{$basePath}/assets/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    {* Favicon end *}
+
+    <link rel="stylesheet" href="{$basePath}/assets/css/app.css?v={php echo filemtime('assets/css/app.css')}">
+
+    <script type="text/javascript">
+
+        var PATHS = {
+            basePath: "" + {$basePath}+"",
+            front: "" + {$basePath}+"/assets/",
+            icons: "" + {$basePath}+"/assets/img/icons/",
+            packages: "" + {$basePath}+"/assets/packages/"
+        };
+
+        var CONSTANTS = {
+            holidays: "" + {$settings["holidays"]}+""
+        };
+
+    </script>
+
+    <script src="{$basePath}/assets/js/app.bundle.js?v={php echo filemtime('assets/js/app.bundle.js')}"></script>
+
+    <script type="text/javascript">
+
+        {if $basketNoticeDialog}
+
+        $(document).ready(function () {
+
+            $.nette.ajax({
+                url: {link basketContentInfo!},
+                type: "GET",
+                off: {
+                    snippets: true
+                },
+                data: {}
+            }).done(function (payload) {
+
+                if (payload["completed"] == 1) {
+
+                    new BasicDialog({
+                        content: payload["data"]
+                    }, function (dialog) {
+
+                        if (isObject(dialog)) {
+                            var progress = new Progress();
+                            progress.progressBar(dialog.find(".freeDeliveryBar"));
+                        }
+
+                    });
+
+                }
+
+            });
+
+        });
+
+        {/if}
+
+        //reinicializing all after ajax
+        $(function () {
+            $.ajaxSetup({
+                complete: function (xhr, textStatus) {
+
+                    preparePlugins($(document));
+                    $(document).find('.selectpicker').select2();
+
+                    if (flashesRendered == false) {
+                        flashesRendered = true;
+                        handleFlashess();
+                    }
+
+                    $.each(fixedBarInstances, function (i, v) {
+                        v.refresh();
+                    });
+
+                    {if $user->loggedIn && $user->isInRole('visitor')}
+                    if (isFunction("recountRapidBasket")) {
+                        recountRapidBasket();
+                        handleDPDPickup($(this));
+                        handleUlozenkaPickup($(this));
+                    }
+                    {/if}
+
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '',
+                cookie: true,
+                xfbml: true,
+                version: 'v2.10'
+            });
+
+            FB.AppEvents.logPageView();
+        };
+
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+
+                if (response.status == "connected") {
+
+                    $.nette.ajax({
+                        url: {link :SignCustomer:FBLogin},
+                        type: "POST",
+                        data: {"userId": response.authResponse.userID, "key": response.authResponse.accessToken}
+                    }).done(function (payload) {
+
+                    });
+
+                }
+            });
+        }
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/cs_CZ/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+
+    {if $bannerOnFront && !isset($frontBanner->bannerOnFront)}
+        {var $frontBanner->bannerOnFront = true}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('body').click(function(){
+                $.fancybox.close();
+            });
+            $.fancybox({
+                href: "#b-on-front",
+                modal: false
+            });
+        });
+    </script>
+    {/if}
+
+    {if $isProduction}
+        {*<script n:syntax="off" type="text/plain" data-cookiecategory="analytics">
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', '', 'auto');
+            ga('send', 'pageview');
+        </script>*}
+    {/if}
+
+    {ifset header-scripts}
+        {include header-scripts}
+    {/ifset}
+
+</head>
+<body class="{ifset $basket}basket-bg{/ifset}">
+
+    {if $bannerOnFront}
+    <div id="b-on-front" style="display:none;">
+        {if $bannerOnFront->link}
+        <a href="{$bannerOnFront->link}">
+            {/if}
+            <img src="{$basePath}/{$bannerOnFront->image}" alt="{$bannerOnFront->name}">
+            {if $bannerOnFront->link}
+        </a>
+        {/if}
+    </div>
+    {/if}
+
+<div id="fb-root"></div>
+
+<div id="edit_full_background"></div>
+
+<header {if !$homepage}class="sub"{/if}>
+    <div class="wrapper">
+        <div class="top-content">
+            <div class="left-content">
+                <a n:href="Front:">
+                    <div class="logo-img"></div>
+                </a>
+            </div>
+            <div class="right-content">
+                {if !$disableEshop}
+                <div class="user">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="customerMenu" data-toggle="dropdown" aria-expanded="false">
+                            <span class="user-img"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="customerMenu">
+                            <li n:if="!$user->isLoggedIn()"><a n:href="SignCustomer:login">{_'Přihlásit se'}</a></li>
+                            <li n:if="!$user->isLoggedIn()"><a n:href="RegistrationCustomer:registration">{_'Registrovat se'}</a></li>
+                            <li class="dropdown-header" n:if="$user->isLoggedIn()">
+                                {if $user->isInRole('visitor')}
+                                    {$user->getIdentity()->data['name']} {$user->getIdentity()->data['surname']}
+                                {else}
+                                    {$user->getIdentity()->data['name']}
+                                {/if}
+                            </li>
+                            <li n:if="$user->isLoggedIn()"><a n:href="RegistrationCustomer:profil">{_'Profil'}</a></li>
+                            <li role="separator" class="divider" n:if="$user->isLoggedIn()"></li>
+                            <li n:if="$user->isLoggedIn()"><a n:href="logout!">{_'Odhlásit se'}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="basket" n:snippet="basket-snipp">
+                    <a n:href="Basket:one">
+                        <div class="cart-img"></div>
+                    </a>
+                    {ifset $basketOverView}
+                                <div class="drop_down_container">
+                        <div class="arrow_hover" data-no-prevent="true">
+                            {/ifset}
+
+                                        {if isset($basketOverView) && $basketOverView[ 'totalCount' ] > 0}
+                                            <div class="items_amount">{$basketOverView[ 'totalCount' ]}</div>
+                                        {/if}
+
+                                        {ifset $basketOverView}
+                        </div>
+                        <div class="drop_down right">
+                            {foreach $basketOverView["products"] as $item}
+                                            <div class="row" style="margin-left: 5px; margin-right: 10px">
+                                <div class="flexElem valignCenter product product_searched">
+                                    <div class="photo">
+                                        <img n:img="$item['img'], '60x40', 'shrink_only', null" alt="">
+                                    </div>
+                                    <div class="details">
+                                        <div class="flexElem flexWrap480">
+                                            <div class="flex100">
+                                                <div class="flexElem">
+                                                    <div class="title">
+                                                        <h3>{$item["name"]}
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class="article">
+                                                    <div class="content">
+                                                        {$item["count"]}
+                                                            *
+                                                        {$actualCurrency['markBefore']}
+                                                                        {$item["price"]|number,$actualCurrency['countDecimal'],',',' '}
+                                                                        {$actualCurrency['markBehind']}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                        {/foreach}
+                        </div>
+                    </div>
+                                {/ifset}
+                </div>
+                {/if}
+                <div class="menu"></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="sidebar-overlay">
+        <div class="wrapper">
+            <div class="exit-btn">
+                <img src="{$basePath}/assets/img/close-icon-white.svg" alt="">
+            </div>
+            <div class="logo">
+                <a n:href="Front:">
+                    <img src="{$basePath}/assets/img/logob.png" alt="Logo">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li>
+                        {if isset($webSubMenuHome) && count($webSubMenuHome)}
+                            <div id="accordion" class="subMenu">
+                                <a data-toggle="collapse" id="collapsed" class="collapsed" data-parent="#accordion" href="#collapseMenuHome">Audio Pro HOME</a>
+                                <div id="collapseMenuHome" class="collapse">
+                                    <a n:href="changeType! type => 'home'" style="font-size: 1rem; font-weight: normal;">Produkty</a>
+                                    {foreach $webSubMenuHome as $wsm}
+                                        <a n:href="Page: id => $wsm->id, wslug => $wsm->slug" style="font-size: 1rem; font-weight: normal;">{$wsm->name}</a>
+                                    {/foreach}
+                                </div>
+                            </div>
+                        {else}
+                            <a n:href="changeType! type => 'home'">Audio Pro HOME</a>
+                        {/if}
+                    </li>
+                    <li>
+                        {if isset($webSubMenuBusiness) && count($webSubMenuBusiness)}
+                            <div id="accordion" class="subMenu">
+                                <a data-toggle="collapse" id="collapsed" class="collapsed" data-parent="#accordion" href="#collapseMenuBusiness">Audio pro Business</a>
+                                <div id="collapseMenuBusiness" class="collapse">
+                                    <a n:href="changeType! type => 'business'" style="font-size: 1rem; font-weight: normal;">Produkty</a>
+                                    {foreach $webSubMenuBusiness as $wsm}
+                                        <a n:href="Page: id => $wsm->id, wslug => $wsm->slug" style="font-size: 1rem; font-weight: normal;">{$wsm->name}</a>
+                                    {/foreach}
+                                </div>
+                            </div>
+                        {else}
+                            <a n:href="changeType! type => 'business'">Audio pro Business</a>
+                        {/if}
+                    </li>
+                    {ifset $webMenu}
+                    {foreach $webMenu as $m}
+                        <li>
+                            {if isset($webSubMenu) && $webSubMenu[$m->id]}
+                                <div id="accordion" class="subMenu">
+                                    <a data-toggle="collapse" id="collapsed" class="collapsed" data-parent="#accordion" href="#collapseMenu{php echo $m->id}">{$m->name}</a>
+                                    <div id="collapseMenu{php echo $m->id}" class="collapse">
+                                        <a n:href="Page: id => $m->id, wslug => $m->slug" style="font-size: 1rem; font-weight: normal;">{$m->name}</a>
+                                        {foreach $webSubMenu[$m->id] as $wsm}
+                                            <a n:href="Page: id => $wsm->id, wslug => $wsm->slug" style="font-size: 1rem; font-weight: normal;">{$wsm->name}</a>
+                                        {/foreach}
+                                    </div>
+                                </div>
+                            {else}
+                                <a n:href="Page: id => $m->id, wslug => $m->slug">{$m->name}</a>
+                            {/if}
+                        </li>
+                    {/foreach}
+                    {/ifset}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+<main {if !$homepage}class="sub"{/if}>
+    {ifset $banners}
+    {include Front/templates/Front/slider.latte}
+    {/ifset}
+    {snippet products-filter}
+    <div id="filter" n:if="isset($banners) && $homepage">
+        <a n:href="changeType! type => 'home'" class="{if $productsType == 1}active{/if} change-product-type">Home</a>
+        <a n:href="changeType! type => 'business'" class="{if $productsType == 2}active{/if} change-product-type">Business</a>
+    </div>
+    {/snippet}
+    <div {if !isset($slugProd)}class="wrapper"{/if}>
+        {include content}
+    </div>
+</main>
+
+<footer>
+    <div class="wrapper">
+        <nav n:ifset="$footerMenu">
+            <ul>
+                {foreach $footerMenu as $m}
+                <li>
+                    <a n:href="Page: id => $m->id, wslug => $m->slug">{$m->name}</a>
+                </li>
+                {/foreach}
+            </ul>
+        </nav>
+        <div class="logo">
+            <a n:href="Front:">
+                <img src="{$basePath}/assets/img/logo.png" alt="Logo">
+            </a>
+        </div>
+        <div class="newsletter">
+            <div class="title">Mám zájem o zasílání newsletteru</div>
+            {form addNewsletterEmailForm}
+                <div class="group">
+                    {input email}
+                    <button n:name="send">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+            </div>
+            {/form}
+        </div>
+        <div class="social-icons">
+            <div class="icon">
+                <a href="{$settings['facebook_url']}" target="_blank">
+                    <img src="{$basePath}/assets/img/fb-icon.png" alt="Facebook">
+                </a>
+            </div>
+            <div class="icon">
+                <a href="{$settings['instagram_url']}" target="_blank">
+                    <img src="{$basePath}/assets/img/ig-icon.png" alt="Instagram">
+                </a>
+            </div>
+        </div>
+        <div class="copyright">
+            Výhradní dovozce pro českou republiku <a href="https://hifiguide.cz/" target="_blank">HIFI GUIDE s.r.o.</a>
+        </div>
+    </div>
+</footer>
+    <div class="wrapper">
+        <div class="text-center">
+            <a href="https://web.thepay.cz/" target="_blank" rel="noopener" ><img src="https://gate.thepay.cz/img/thepay-v2-210830-bw.svg?pid=19" ></a>
+        </div>
+    </div>
+
+<a id="back-to-top" style="display: inline;">
+    <i class="fa fa-chevron-up"></i>
+</a>
+
+{include login.latte}
+{snippet compare-snipp}
+    {include compareDialog.latte}
+{/snippet}
+{include contactDialog.latte}
+
+{*if $user->loggedIn && $user->isInRole('visitor')}
+    {control rapidBuy $actualCurrency}
+{/if*}
+
+    {*<div id="notification-bell" class="hidden" title="Povolte si webové upozornění pro rychlý přehled novinek, akcí...">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+    </div>*}
+
+{snippet flashess}
+    <script type="text/javascript">
+
+        var flashesRendered = false;
+
+        function handleFlashess() {
+            {foreach $flashes as $flash}
+
+            {if $flash->message === 'show_modal_login'}
+
+            new BasicDialog({
+                content: $("#login_dialog").html(),
+                bar: {
+                    title: " "
+                }
+            });
+
+            {elseif $flash->type == 'warning'}
+            toastr.warning({$flash->message|translate});
+            {elseif $flash->type == 'error'}
+            toastr.error({$flash->message|translate});
+            {elseif $flash->type == 'success'}
+            toastr.success({$flash->message|translate});
+            {else}
+            toastr.info({$flash->message|translate});
+            {/if}
+
+            {/foreach}
+        }
+    </script>
+{/snippet}
+
+{******* Nette JS *******}
+    <script src="{$basePath}/assets/js/live-form-validation.js"></script>
+<script>var basePath = {$basePath};</script>
+<script src="{$basePath}/core/js/ajax-form-own.js?v={$ver}"></script>
+    <!-- re-Captcha -->
+    <script src="https://www.google.com/recaptcha/api.js?render=explicit"></script>
+    <script src="{$basePath}/core/js/invisibleRecaptcha.js"></script>
+<script  type="text/plain" data-cookiecategory="ads">
+    var google_tag_params = {
+        {ifset $GARemarketing['productId']}ecomm_prodid: {$GARemarketing['productId']},{/ifset}
+        {ifset $GARemarketing['page']}ecomm_pagetype: {$GARemarketing['page']},{/ifset}
+        {ifset $GARemarketing['totalValue']}ecomm_totalvalue: {$GARemarketing['totalValue']|number:$actualCurrency['countDecimal']:'.':''}{/ifset}
+    };
+</script>
+
+{if $isProduction}
+
+{if isset($sess) && isset($sess->orderFinish)}
+    {*<script type="text/plain" data-cookiecategory="analytics">
+        ga('require', 'ecommerce');
+        ga('ecommerce:addTransaction', {
+            'id': '{$sess->orderFinish['variableSymbol']}',
+            'affiliation': 'AudioPro',
+            'revenue': '{$sess->orderFinish['price']}',
+            'shipping': '{$sess->orderFinish['delivery']}',
+            'tax': '{$sess->orderFinish['dph']}'
+        });
+        {ifset $sess->orderFinish['products']}
+        {foreach $sess->orderFinish['products'] as $p}
+        ga('ecommerce:addItem', {
+            'id': '{$sess->orderFinish['variableSymbol']}',
+            'name': '{$p['name']}',
+            'price': '{$p['price']}',
+            'quantity': '{$p['count']}',
+        });
+        {/foreach}
+        {/ifset}
+        ga('ecommerce:send');
+    </script>*}
+    {*<script type="text/plain" data-cookiecategory="ads">
+        var _hrq = _hrq || [];
+        _hrq.push(['setKey', '']);
+        _hrq.push(['setOrderId', '{$sess->orderFinish['variableSymbol']}']);
+        {foreach $sess->orderFinish['products'] as $id => $p}
+        _hrq.push(['addProduct', '{$p['name']}', {$p['price']}, {$p['count']}]);
+        {/foreach}
+        _hrq.push(['trackOrder']);
+
+        (function() {
+            var ho = document.createElement('script'); ho.type = 'text/javascript'; ho.async = true;
+            ho.src = 'https://im9.cz/js/ext/1-roi-async.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ho, s);
+        })();
+    </script>
+    <script type="text/plain" data-cookiecategory="analytics">
+        (function(w, d, s, u, n, k, c, t) {
+            w.ZboziConversionObject = n;
+            w[n] = w[n] || function() {
+                (w[n].q = w[n].q || []).push(arguments)
+            };
+            w[n].key = k;
+            c = d.createElement(s);
+            t = d.getElementsByTagName(s)[0];
+            c.async = 1;
+            c.src = u;
+            t.parentNode.insertBefore(c, t)
+        })(window, document, "script", "https://www.zbozi.cz/conversion/js/conv.js", "zbozi", "");
+
+        zbozi("setOrder",{
+            "orderId": '{$sess->orderFinish['variableSymbol']}',
+            "totalPrice": {$sess->orderFinish['price']}
+        });
+        zbozi("send");
+    </script>
+    <!-- Měřicí kód Sklik.cz -->
+    <script type="text/plain" data-cookiecategory="ads">
+        var seznam_cId = ;
+        var seznam_value = {$sess->orderFinish['price']};
+    </script>
+    <script type="text/plain" data-cookiecategory="ads" src="https://www.seznam.cz/rs/static/rc.js" async></script>*}
+{php unset($sess->orderFinish);}
+{/if}
+
+    {*if isset($category) && !empty($category->categoryZbozi)}
+        <script type="text/plain" data-cookiecategory="ads">
+            /* <![CDATA[ */
+            var seznam_retargeting_id = ;
+            var seznam_category = '{$category->categoryZbozi}';
+            var seznam_pagetype = "category";
+            /* ]]> */
+        </script>
+        <script type="text/plain" data-cookiecategory="ads" src="//c.imedia.cz/js/retargeting.js"></script>
+    {else}
+        <script type="text/plain" data-cookiecategory="ads">
+            /* <![CDATA[ */
+            var seznam_retargeting_id = ;
+            /* ]]> */
+        </script>
+
+        <script type="text/plain" data-cookiecategory="ads" src="//c.imedia.cz/js/retargeting.js"></script>
+    {/if*}
+{/if}
+
+<script>
+    LiveForm.setOptions({
+        messageErrorPrefix: '',
+        wait: 500
+    });
+</script>
+
+{************************}
+
+{* CK Editor + inline edit *}
+{if $allowEdit == TRUE}
+    <script src="{$basePath}/intra/packages/ckeditor/ckeditor.js?v={$ver}"></script>
+    <script type="text/javascript" src="{$basePath}/intra/js/inline.js?v={$ver}"></script>
+{/if}
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    {*<script src="{$basePath}/assets/js/webPush.js?v={php echo filemtime('assets/js/webPush.js')}"></script>*}
+</body>
+</html>

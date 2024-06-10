@@ -1,0 +1,51 @@
+{if get_class($item) == 'Nette\Forms\Controls\HiddenField'}
+    {ifset $item->control->attrs['autocomplete'] }
+        {var $attrs = $item->control->attrs}
+        <div class="form-group">
+            <label for="{$item->control->name}" class="col-sm-4 control-label">{ifset $attrs['title']} {$attrs['title']} {/}</label>
+            <div class="col-sm-8">
+                <div class="input-group">
+                <input
+                    {foreach $attrs as $n => $v}
+                    {if $n == 'value-autocmp'}
+                        value={$v}
+                        readonly="true"
+                {elseif $n != 'type' && $n != 'disabled' && $n != 'name'}
+                {$n}={$v}
+                {/if}
+                {/foreach}
+                data-source="{link dataSource $dataSource}" data-to-send="{$dataSend}"
+                data-output=".{$item->control->name}-autocomplete" type="text" name="text{$item->control->name}"
+                id="text{$item->control->name}" >
+                <input name="{$item->control->name}" id="{$item->control->name}" data-success="{$dataSucc}" class="{$item->control->name}-autocomplete" value="{$item->value}" type="hidden">
+                <span class="input-group-addon" style="border-radius: 3px;">
+                    <div class="remove-autocomplete-value"><i class="fa fa-times"></i></div>
+                </span>
+                </div>
+            </div>
+        </div>
+    {else}
+        {input $item}
+    {/ifset}
+{elseif get_class($item) == 'Nette\Forms\Controls\Checkbox' }
+    <div class="form-group">
+        <label class="col-sm-4 control-label"> </label>
+        <div class="col-sm-8">
+            {input $item}
+        </div>
+    </div>
+{elseif get_class($item) == 'Nette\Forms\Controls\SubmitButton' }
+    <div class="form-group">
+        <label class="col-sm-4 control-label"></label>
+        <div class="col-sm-8">
+            {input $item, class=>'btn btn-primary'}
+        </div>
+    </div>
+{else}
+    <div class="form-group">
+        <label class="col-sm-4 control-label">{$item->caption}</label>
+        <div class="col-sm-8">
+            {input $item}
+        </div>
+    </div>
+{/if}

@@ -1,0 +1,56 @@
+<div class="col-xs-12 col-sm-12 col-md-12">
+    <br>
+    <legend>
+        <small>{_'Články'}</small>
+    </legend>
+    {ifset $product}
+        <a n:href="Product:editArticle idProduct => $product->id">Přidat článek</a>
+    {else}
+        {_'Články lze přidávat až pokud je produkt poprvé uložen.'}<br/><br/>
+    {/ifset}
+</div>
+{snippet articles}
+            <div style="padding-top: 20px" class="col-xs-12 col-sm-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Název</th>
+                            <th>Typ</th>
+                            <th>Pořadí</th>
+                            <th>Aktivní</th>
+                            <th width="75">Akce</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {ifset $product}
+                        {foreach $product->articles as $article}
+                            <tr>
+                                <td>{$iterator->getCounter()}</td>
+                                <td>{$article->name}</td>
+                                <td>{$article->getTypeText()}</td>
+                                <td>{$article->orderArticle}</td>
+                                <td>
+                                    {if $article->active}
+                                        <span class=" label label-success ">
+                                            <span class="fa fa-check"></span>
+                                        </span>
+                                    {else}
+                                        <span class=" label label-danger ">
+                                            <span class="fa fa-times"></span>
+                                        </span>
+                                    {/if}
+                                </td>
+                                <td width="75">
+                                    <a n:href="Product:editArticle id => $article->id" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a>
+                                    <a n:href="deleteArticle! idArticle => $article->id" class="btn btn-xs btn-danger" data-confirm="modal" data-ajax="on"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        {/foreach}
+                            {/ifset}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+{/snippet}
