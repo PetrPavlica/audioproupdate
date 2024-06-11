@@ -52,7 +52,7 @@ class PDFPrinterControl extends UI\Control {
         $template->refund = $this->orderFac->gEMOrderRefund()->findOneBy(['orders' => $invoiceId], ['id' => 'ASC']);
 
         $template->setFile(__DIR__ . '/templates/invoice.latte');
-        $mpdf = new \mPDF();
+        $mpdf = new \Mpdf\Mpdf();
         $stylesheet = file_get_contents('intra/css/pdf_print.css'); // external css
         $mpdf->WriteHTML($stylesheet, 1);
         $mpdf->WriteHTML($template, 2);

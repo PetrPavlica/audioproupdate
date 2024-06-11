@@ -56,7 +56,7 @@ class FrontFacade extends BaseFacade
     public function addNewsletterEmail($values)
     {
         $email = $this->gem(NewsletterEmail::class)->findOneBy(['email' => $values[ 'email' ]]);
-        if (count($email)) {
+        if ($email != null) {
             $email->setActive(true);
             $this->save();
         } else {
