@@ -169,7 +169,8 @@ class BasketFacade extends BaseFacade
                 $overView['totalPrice'] += ($productInOrder->selingPrice * $productInOrder->count);
             }
         }
-        if ($overView[ 'freeDelivery' ] == false && $order && $overView[ 'totalPrice' ] >= ($this->setting('delivery_free') / $order->currency->exchangeRate)) { // nastavení dopravy zdarma
+        
+        if ($overView[ 'freeDelivery' ] == false && $order && $overView[ 'totalPrice' ] >= (int)($this->setting('delivery_free') / $order->currency->exchangeRate)) { // nastavení dopravy zdarma
             $overView[ 'freeDelivery' ] = true;
         }
         return $overView;
