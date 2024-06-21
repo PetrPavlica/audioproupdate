@@ -170,7 +170,7 @@ class BasketFacade extends BaseFacade
             }
         }
         
-        if ($overView[ 'freeDelivery' ] == false && $order && $overView[ 'totalPrice' ] >= (int)($this->setting('delivery_free') / $order->currency->exchangeRate)) { // nastavení dopravy zdarma
+        if ($overView[ 'freeDelivery' ] == false && $order && $overView[ 'totalPrice' ] >= (float)($this->setting('delivery_free') / $order->currency->exchangeRate)) { // nastavení dopravy zdarma
             $overView[ 'freeDelivery' ] = true;
         }
         return $overView;
